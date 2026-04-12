@@ -1,11 +1,12 @@
 <script setup>
 const props = defineProps({ next: Function })
 
-import useSnackbarStore from '@/stores/snackbar'
+// import useSnackbarStore from '@/stores/snackbar'
 import useAuthStore from '@/stores/auth'
 import { ref, computed } from 'vue'
+import { useToast } from 'bootstrap-vue-next'
 
-const snackbar = useSnackbarStore()
+const { create: showToast } = useToast()
 const auth = useAuthStore()
 const sending = ref(false)
 const errors = ref({})
@@ -15,7 +16,6 @@ const formDefault = {
   password: null,
 }
 const form = ref({ ...formDefault })
-const icon = computed(() => type.value === 'password' ? 'eye' : 'eye-slash')
 const label = computed(() => sending.value ? 'Autenticando' : 'Iniciar sesión')
 const validate = () => {
   errors.value = {}
@@ -30,7 +30,7 @@ const submit = () => {
 }
 const process = (res) => {
   if (res) props.next()
-  else snackbar.add('Credenciales no válidas.')
+  else showToast({ body: 'Credenciales no válidas.', variant: 'warning' })
 }
 const toggleType = () => type.value = type.value === 'password' ? 'text' : 'password'
 </script>
@@ -42,30 +42,27 @@ const toggleType = () => type.value = type.value === 'password' ? 'text' : 'pass
       <h6 class="text-muted">Credenciales del dominio "etecsa.cu"</h6>
       <form @submit.prevent>
         <div class="position-relative mb-3">
-          <img src="@/assets/images/person.svg" alt="" class="p-icon" />
+          <UIcon name="bi-person" class="p-icon" />
           <input type="text" class="form-control" name="username" placeholder="Nombre de usuario"
             v-model="form.username" @input="errors.username = null" />
           <div class="invalid-feedback d-block" v-text="errors.username" />
         </div>
         <div class="position-relative mb-3">
-          <img src="@/assets/images/lock.svg" alt="" class="p-icon" />
+          <UIcon name="bi-lock" class="p-icon" />
           <input :type="type" class="form-control" name="password" placeholder="Contraseña" v-model="form.password"
             @input="errors.password = null">
           <div class="invalid-feedback d-block" v-text="errors.password" />
           <div class="position-absolute top-0 end-0" @click.stop="toggleType">
-            <bs-icon :name="icon" fs="1.1rem" style="margin:10px" />
+            <UIcon :name="type === 'password' ? 'bi-eye' : 'bi-eye-slash'" class="eye-icon" />
           </div>
         </div>
         <div class="mt-4">
-          <bs-btn @click="submit" :label="label" color="primary" :disabled="sending" class="w-100 lh-lg" />
+          <BButton @click="submit" variant="primary" :disabled="sending" class="w-100 lh-lg">{{ label }}</BButton>
         </div>
       </form>
       <div class="alert bg-light bg-gradient small mt-4 d-flex gap-3">
         <span>
-          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" width="20" fill="currentColor">
-            <path
-              d="M8.982 1.566a1.13 1.13 0 0 0-1.96 0L.165 13.233c-.457.778.091 1.767.98 1.767h13.713c.889 0 1.438-.99.98-1.767L8.982 1.566zM8 5c.535 0 .954.462.9.995l-.35 3.507a.552.552 0 0 1-1.1 0L7.1 5.995A.905.905 0 0 1 8 5zm.002 6a1 1 0 1 1 0 2 1 1 0 0 1 0-2z" />
-          </svg>
+          <UIcon name="bi-exclamation-triangle-fill" font-size="1.2em" />
         </span>
         El registro de usuario siempre es realizado por un administrador
       </div>
@@ -99,5 +96,9 @@ const toggleType = () => type.value = type.value === 'password' ? 'text' : 'pass
   position: absolute;
   top: 9px;
   left: 10px;
+}
+
+.eye-icon {
+  margin: 10px;
 }
 </style>

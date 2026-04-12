@@ -46,15 +46,6 @@ const routesConfigurar = [
     name: 'configurar',
     component: () => import('@/views/configurar/ConfigurarIndex.vue'),
     meta: { requiresAuth: true },
-    props: route => ({
-      tab: route.matched.some(record => record.name === 'configurar-grupos')
-        ? 'grupos'
-        : route.matched.some(record => record.name === 'configurar-suscriptores')
-          ? 'suscriptores'
-          : route.matched.some(record => record.name === 'configurar-users')
-            ? 'users'
-            : ''
-    }),
     children: [
       {
         path: '',
@@ -338,25 +329,18 @@ const routesSms = [
   {
     path: '/sms',
     name: 'sms',
-    component: () => import('@/views/sms/SmsIndex.vue'),
+    component: () => import('@/views/sms/index.vue'),
     meta: { requiresAuth: true },
-    props: route => ({
-      tab: route.matched.some(record => record.name === 'sms-componer')
-        ? 'componer'
-        : route.matched.some(record => record.name === 'sms-coleccion')
-          ? 'coleccion'
-          : ''
-    }),
     children: [
       {
         path: '',
         name: 'sms-home',
-        component: () => import('@/views/sms/home/SmsHome.vue')
+        component: () => import('@/views/sms/home.vue')
       },
       {
         path: 'componer',
         name: 'sms-componer',
-        component: () => import('@/views/sms/componer/Componer.vue'),
+        component: () => import('@/views/sms/componer/index.vue'),
         props: route => ({
           previo: {
             id: route.query.previo ? parseInt(route.query.previo) : null,
@@ -367,7 +351,7 @@ const routesSms = [
           {
             path: 'origen',
             name: 'sms-componer-origen',
-            component: () => import('@/views/sms/componer/ComponerOrigen.vue'),
+            component: () => import('@/views/sms/componer/origen.vue'),
             props: () => ({
               back: () => router.push({ name: 'sms-componer' })
             })
@@ -375,7 +359,7 @@ const routesSms = [
           {
             path: 'notificados',
             name: 'sms-componer-notificados',
-            component: () => import('@/views/sms/componer/ComponerNotificados.vue'),
+            component: () => import('@/views/sms/componer/notificados.vue'),
             props: () => ({
               back: () => router.push({ name: 'sms-componer' })
             })
@@ -383,15 +367,7 @@ const routesSms = [
           {
             path: 'suscriptores',
             name: 'sms-componer-suscriptores',
-            component: () => import('@/views/sms/componer/ComponerSuscriptores.vue'),
-            props: () => ({
-              back: () => router.push({ name: 'sms-componer' })
-            })
-          },
-          {
-            path: 'previos',
-            name: 'sms-componer-previos',
-            component: () => import('@/views/sms/componer/ComponerPrevios.vue'),
+            component: () => import('@/views/sms/componer/suscriptores.vue'),
             props: () => ({
               back: () => router.push({ name: 'sms-componer' })
             })
@@ -401,7 +377,7 @@ const routesSms = [
       {
         path: 'coleccion',
         name: 'sms-coleccion',
-        component: () => import('@/views/sms/coleccion/Coleccion.vue')
+        component: () => import('@/views/sms/coleccion.vue')
       }
     ]
   }
@@ -412,7 +388,14 @@ const routesApp = [
     path: '/index',
     name: 'index',
     component: () => import('@/views/app/AppIndex.vue'),
-    meta: { requiresAuth: true }
+    meta: { requiresAuth: true },
+    children: [
+      {
+        path: '',
+        name: 'app-home',
+        component: () => import('@/views/app/home/AppHome.vue')
+      }
+    ]
   },
 ]
 
@@ -431,7 +414,7 @@ export const router = createRouter({
     },
     {
       path: '/:pathMatch(.*)*',
-      component: () => import('@/views/NotFound.vue')
+      component: () => import('@/views/app/not_found/AppNotFound.vue')
     }
   ]
 })

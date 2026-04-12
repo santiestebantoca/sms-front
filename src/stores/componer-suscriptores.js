@@ -2,7 +2,6 @@ import axios from './axios'
 import { ref, watch, nextTick } from 'vue'
 import { defineStore } from 'pinia'
 
-
 export default defineStore('suscriptores', () => {
   const status = ref({
     loaded: false,

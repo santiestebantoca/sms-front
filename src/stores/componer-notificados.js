@@ -7,7 +7,7 @@ const useSuscriptores = defineStore('componer-notificados-suscriptores', () => {
   const notificados = useNotificados()
   const ids = computed(() =>
     notificados.data
-      .filter(d => d.checked)
+      // .filter(d => d.checked)
       .reduce((a, d) => [...a, ...d.suscriptores.filter(d => d.checked)], [])
       .map(d => d.id)
   )
@@ -29,6 +29,7 @@ const useNotificados = defineStore('componer-notificados', () => {
     data.value.forEach(d => {
       d.checked = true
       d.suscriptores.forEach(d => d.checked = true)
+      d.tipo = 'grupo'
     })
   }
   const get = params => {
@@ -47,7 +48,8 @@ const useNotificados = defineStore('componer-notificados', () => {
     data.value = []
     nextTick(() => status.value.resetting = false) // otherwise, resetting is false in query watcher
   }
-  const counter = computed(() => data.value.reduce((a, c) => a + (c.checked ? 1 : 0), 0))
+  // const counter = computed(() => data.value.reduce((a, c) => a + (c.checked ? 1 : 0), 0))
+  const counter = computed(() => data.value.length)
   return { data, counter, get, status, $reset, suscriptores }
 })
 

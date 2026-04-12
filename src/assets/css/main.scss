@@ -1,0 +1,116 @@
+:root {
+  /* Definir las variables que Bootstrap no incluye por defecto */
+  --bs-yellow-100: #fff3cd;
+  --bs-yellow-200: #ffe69b;
+  --bs-yellow-300: #ffda6a;
+  --bs-yellow-400: #ffcd39;
+  --bs-yellow-500: #ffc107;
+  --bs-yellow-600: #e0a800;
+  --bs-yellow-700: #c69500;
+  --bs-yellow-800: #9a6e00;
+  --bs-yellow-900: #664d03;
+  --bs-info-100: #cff4fc;
+  --bs-info-200: #9eeaf9;
+  --bs-info-300: #6edff6;
+  --bs-info-400: #3dd5f3;
+  --bs-info-500: #0dcaf0;
+  --bs-info-600: #0aa2c0;
+  --bs-info-700: #087a90;
+  --bs-info-800: #055160;
+  --bs-info-900: #032830;
+}
+
+.dropdown-menu {
+  box-shadow: var(--bs-dropdown-box-shadow);
+}
+
+@media(max-width: 575.98px) {
+  // .dropdown-menu {
+  //   --width: calc(100vw - 8px);
+  //   min-width: var(--width) !important;
+  //   max-width: var(--width) !important;
+  //   width: var(--width) !important;
+  // }
+}
+
+
+
+/* General */
+.pre-wrap {
+  white-space: pre-wrap;
+}
+
+*:not(:hover)>.d-hover {
+  display: none;
+}
+
+/* nav-item-underlined */
+// [class^="nav-item-underlined"]
+// .tabs :deep(.nav-link) {
+//   font-size: .875em !important;
+//   text-transform: uppercase !important;
+// }
+// .nav-item-underlined {
+//   --nav-item-underlined-nav-link-after-top: unset;
+//   --nav-item-underlined-nav-link-after-bottom: 2px;
+//   --nav-item-underlined-nav-link-after-left: 0;
+//   --nav-item-underlined-nav-link-after-height: 2px;
+//   --nav-item-underlined-nav-link-after-width: 100%;
+//   --nav-item-underlined-nav-link-after-background-color: transparent;
+// }
+
+// .nav-item-underlined.nav-item-underlined-vertical {
+//   --nav-item-underlined-nav-link-after-top: 0;
+//   --nav-item-underlined-nav-link-after-bottom: unset;
+//   --nav-item-underlined-nav-link-after-left: 2px;
+//   --nav-item-underlined-nav-link-after-height: 100%;
+//   --nav-item-underlined-nav-link-after-width: 2px;
+// }
+
+// .nav-item-underlined .nav-link {
+//   position: relative;
+//   height: 52px;
+//   display: flex;
+//   align-items: center;
+// }
+
+// .nav-item-underlined .nav-link.active {
+//   background-color: transparent !important;
+//   color: var(--bs-nav-link-color) !important;
+// }
+
+// .nav-item-underlined .nav-link::after {
+//   display: block;
+//   content: '';
+//   position: absolute;
+//   top: var(--nav-item-underlined-nav-link-after-top);
+//   bottom: var(--nav-item-underlined-nav-link-after-bottom);
+//   left: var(--nav-item-underlined-nav-link-after-left);
+//   height: var(--nav-item-underlined-nav-link-after-height);
+//   width: var(--nav-item-underlined-nav-link-after-width);
+//   background-color: var(--nav-item-underlined-nav-link-after-background-color);
+//   transition: all .3s;
+// }
+
+// .nav-item-underlined .nav-link.active::after {
+//   --nav-item-underlined-nav-link-after-background-color: var(--bs-primary) !important;
+// }
+
+// .nav-item-underlined .nav-link:hover::after {
+//   --nav-item-underlined-nav-link-after-background-color: var(--bs-gray-300);
+// }
+
+/* BootstrapVueNext */
+.dropdown-item svg {
+  position: relative;
+  top: -2px;
+}
+
+.spinner-border {
+  // --bs-spinner-border-width: 0.25em;
+  // border: var(--bs-spinner-border-width) solid currentcolor;
+  // border-right-color: transparent;
+  --bs-spinner-border-width: 2px !important;
+  border: var(--bs-spinner-border-width) solid var(--bs-gray-500) !important;
+  border-right-color: var(--bs-gray-300) !important;
+}

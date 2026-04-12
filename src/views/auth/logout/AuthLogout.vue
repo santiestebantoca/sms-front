@@ -1,10 +1,15 @@
+<script setup lang="ts">
+import { BButton } from 'bootstrap-vue-next';
+
+</script>
+
 <template>
   <div class="grid">
     <div class="card border-0 shadow p-3 mb-5">
       <p>Sesión terminada por el usuario.</p>
       <br>
       <div class="text-end">
-        <bs-btn :to="{ name: 'auth-login' }" label="Iniciar sesión" color="primary" />
+        <BButton :to="{ name: 'auth-login' }" variant="primary">Iniciar sesión</BButton>
       </div>
     </div>
   </div>

@@ -11,7 +11,17 @@ const useNavStore = defineStore('coleccion-nav', () => {
       .get('/coleccion/nav')
       .then(res => data.value = res.data)
       .catch(() => { })
-  return { data, get }
+  // Smart polling
+  get()
+  let subscribers = ref(0)
+  let intervalId = null
+  watch(() => subscribers.value > 0, val => {
+    if (val) intervalId = setInterval(get, 6000)
+    else clearInterval(intervalId)
+  })
+  const startPolling = () => subscribers.value++
+  const stopPolling = () => subscribers.value--
+  return { data, get, startPolling, stopPolling }
 })
 
 const useNotificados = defineStore('coleccion-sms-notificados', () => {

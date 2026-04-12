@@ -6,7 +6,6 @@ this compo is shown only if `grupos.grupo.status.loaded`
 const props = defineProps({ back: Function })
 
 import useHandleSubmit from '@/use/useHandleSubmit.js'
-import TreeItemCheckable from '../base/TreeItemCheckable.vue'
 import useGrupos from '@/stores/config-grupos'
 import { ref, computed, watch, inject, provide } from 'vue'
 
@@ -46,7 +45,7 @@ const submit = async () => {
       <bs-dialog-header label="Notifica" />
       <bs-dialog-body>
         <ul class="ul">
-          <TreeItemCheckable v-for="data in grupos.data" :data="data" :key="data.id" />
+          <!-- <TreeItemCheckable v-for="data in grupos.data" :data="data" :key="data.id" /> -->
         </ul>
       </bs-dialog-body>
       <bs-dialog-footer>
@@ -55,63 +54,3 @@ const submit = async () => {
     </bs-dialog>
   </Teleport>
 </template>
-
-<style scoped>
-:deep(*:not(:hover)>.d-hover) {
-  display: none;
-}
-
-.ul {
-  margin: 0;
-  padding: 0;
-}
-
-:deep(.li) {
-  list-style-type: none;
-}
-
-:deep(.li-win) {
-  --border-color: transparent;
-  border: solid 1px var(--border-color);
-  --bg-color: transparent;
-  background-color: var(--bg-color);
-}
-
-:deep(.li-win:hover) {
-  --bg-color: rgba(var(--bs-info-rgb), .1);
-}
-
-:deep(.li-win.active) {
-  --bg-color: rgba(var(--bs-info-rgb), .2);
-}
-
-:deep(.li-win.active:hover) {
-  --border-color: rgba(var(--bs-info-rgb), .3);
-}
-
-:deep(.li) {
-  height: 32px;
-  padding: 1px 6px;
-  display: flex;
-  gap: 6px;
-  cursor: pointer;
-  text-decoration: none;
-}
-
-:deep(.bi-chevron) {
-  font-size: .875em;
-  color: var(--bs-secondary);
-}
-
-:deep(.bi-chevron:hover) {
-  color: var(--bs-primary);
-}
-
-:deep(.bi-chevron::before) {
-  content: "\f285";
-}
-
-:deep(.open>.bi-chevron::before) {
-  content: "\f282";
-}
-</style>

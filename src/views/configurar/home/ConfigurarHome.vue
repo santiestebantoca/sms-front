@@ -1,15 +1,15 @@
 <script setup>
-import useNavOptions from '../base/nav'
+import useNavigation from '@/composables/useNavigation'
 
-const nav = useNavOptions().options
+const nav = useNavigation().options
 </script>
 <template>
   <div class="grid">
     <div style="margin-top: 10%;">
       <h5 class="text-muted mb-3">Configurar</h5>
-      <router-link v-for="{ to, icon, label } in nav" :to="to" class="text-decoration-none d-block py-2">
-        <bs-icon :name="icon" class="me-2 mb-1" />
-        <span v-text="label" />
+      <router-link v-for="{ to, label, icon } in nav.configurar" :to="to" class="text-decoration-none d-block py-2">
+        <UIcon :name="icon" class="me-2 mb-1" />
+        {{ label }}
       </router-link>
     </div>
   </div>
@@ -21,6 +21,5 @@ const nav = useNavOptions().options
   display: grid;
   grid-template-columns: auto;
   justify-items: center;
-  /* align-content: center; */
 }
 </style>

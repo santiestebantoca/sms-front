@@ -1,5 +1,5 @@
 import axios from './axios'
-import { ref, nextTick } from 'vue'
+import { ref, computed, nextTick } from 'vue'
 import { defineStore } from 'pinia'
 
 export default defineStore('componer-previo', () => {
@@ -26,5 +26,6 @@ export default defineStore('componer-previo', () => {
     data.value = {}
     nextTick(() => status.value.resetting = false) // otherwise, resetting is false in query watcher
   }
-  return { data, get, status, $reset }
+  const counter = computed(() => (data.value.notificados ?? []).length)
+  return { data, get, status, counter, $reset }
 })

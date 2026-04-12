@@ -2,15 +2,15 @@
 const props = defineProps({ id: Number, setId: Function, compose: Object })
 
 import useGrupos from '@/stores/config-grupos'
-import GruposTree from './GruposTree.vue'
-import GruposNew from './GruposNew.vue'
-import { ref, watch, provide } from 'vue'
+// import GruposNew from './GruposNew.vue'
+import { ref, watch, provide, watchEffect } from 'vue'
 
 const grupos = useGrupos()
-const active = ref(props.id) // `id` source of true is `GruposTree`, except on reload 
+const active = ref(null)
+watch(active, val => props.setId(val))
+watchEffect(() => active.value = props.id)  // source of true is route id
 grupos.get()
-watch(active, val => val && props.setId(val)) // can be null on `grupo` deleted
-provide('grupos:id', active)
+provide('gruposTree:active', active)
 // onUnmounted(() => grupos.$reset())
 const to = ref({ query: { compose: 'new' } })
 </script>
@@ -21,18 +21,26 @@ const to = ref({ query: { compose: 'new' } })
       <div class="hstack sticky-top bg-white" style="height: 40px;padding-left: 12px;">
         <span class="small fw-semibold">GRUPOS</span>
         <div class="mx-auto" />
-        <bs-btn-icon :to="to" :round="false" flat color="dark" outline icon="plus-lg" size="24px">
-          <bs-tooltip offset="0,10" placement="bottom"> Nuevo Grupo </bs-tooltip>
-        </bs-btn-icon>
+        <BButton :to="to" variant="primary" v-tippy="'Nuevo Grupo'" class="btn-sm p-1" style="height:32px">
+          <UIcon name="bi-plus" font-size="20" />
+        </BButton>
       </div>
       <template v-if="grupos.status.loaded">
-        <GruposTree :data="grupos.data" v-model="active" />
+        <RootTree v-model="active" selectable>
+          <TreeNode v-for="data in grupos.data" :data="data" :key="data.id">
+            <template #default="{ data }">
+              <UIcon name="bi-subtract" style="color:var(--bs-yellow)" />
+              <span v-text="data.nombre" class="text-truncate" />
+            </template>
+          </TreeNode>
+        </RootTree>
       </template>
     </div>
     <div class="p-1 overflow-auto">
-      <router-view />
+      <!-- <router-view />  -->
+      {{ active }}
     </div>
-    <GruposNew v-if="compose.new" :back="compose.back" :pertenece="null" />
+    <!-- <GruposNew v-if="compose.new" :back="compose.back" :pertenece="null" /> -->
   </div>
 </template>
 

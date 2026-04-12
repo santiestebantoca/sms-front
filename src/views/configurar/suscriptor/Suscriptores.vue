@@ -53,11 +53,6 @@ const to = ref({ query: { compose: 'new' } })
   overflow: hidden;
 }
 
-.ul {
-  margin: 0;
-  padding: 0;
-}
-
 .li {
   list-style-type: none;
   --paddind-times: 0;
@@ -66,34 +61,6 @@ const to = ref({ query: { compose: 'new' } })
 
 .li.level-1 {
   --paddind-times: 1;
-}
-
-.li-win {
-  --border-color: transparent;
-  border: solid 1px var(--border-color);
-  --bg-color: transparent;
-  background-color: var(--bg-color);
-}
-
-.li-win:hover {
-  --bg-color: rgba(var(--bs-info-rgb), .1);
-}
-
-.li-win.active {
-  --bg-color: rgba(var(--bs-info-rgb), .2);
-}
-
-.li-win.active:hover {
-  --border-color: rgba(var(--bs-info-rgb), .3);
-}
-
-.li {
-  height: 32px;
-  padding: 1px 6px;
-  display: flex;
-  gap: 6px;
-  cursor: pointer;
-  text-decoration: none;
 }
 
 .badge-danger {
