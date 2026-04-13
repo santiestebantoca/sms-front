@@ -37,8 +37,7 @@ const to = ref({ query: { compose: 'new' } })
       </template>
     </div>
     <div class="p-1 overflow-auto">
-      <!-- <router-view />  -->
-      {{ active }}
+      <router-view />
     </div>
     <!-- <GruposNew v-if="compose.new" :back="compose.back" :pertenece="null" /> -->
   </div>

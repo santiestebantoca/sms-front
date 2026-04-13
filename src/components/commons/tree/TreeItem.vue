@@ -40,18 +40,24 @@ const handleClick = () => {
 li {
   position: relative;
   --li-bg-color: transparent;
+  --li-border-color: transparent;
   background-color: var(--li-bg-color) !important;
+  border-color: var(--li-border-color) !important;
   padding-left: var(--li-padding-left) !important;
 }
 
 li.active,
 li:active {
-  border-color: var(--bs-info-300) !important;
   --li-bg-color: var(--bs-info-100);
 }
 
 li:hover {
-  --li-bg-color: var(--bs-info-100);
+  --li-bg-color: var(--bs-info-50);
+}
+
+li.active:hover,
+li:active:hover {
+  --li-border-color: var(--bs-info-200);
 }
 
 /* .collapse */

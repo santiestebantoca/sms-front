@@ -31,9 +31,13 @@ import BiArrowRight from '~icons/bi/arrow-right'
 import BiTrash from '~icons/bi/trash'
 import BiPlusLg from '~icons/bi/plus-lg'
 import BiPlus from '~icons/bi/plus'
+import BiPencil from '~icons/bi/pencil'
+import BiCheck2Square from '~icons/bi/check2-square'
 
 export const iconMap = {
     // 'mdi-home': MdiHome,
+    'bi-check2-square': BiCheck2Square,
+    'bi-pencil': BiPencil,
     'bi-plus': BiPlus,
     'bi-plus-lg': BiPlusLg,
     'bi-trash': BiTrash,

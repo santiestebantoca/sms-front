@@ -49,7 +49,7 @@ const props = defineProps({ down: Boolean, closeDrawer: Function, options: Objec
   transition: all .3s;
 }
 
-.up :deep(.nav-link.active::after) {
+.up :deep(.nav-link.router-link-active::after) {
   --up-after-background-color: var(--bs-primary) !important;
 }
 

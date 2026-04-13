@@ -59,9 +59,9 @@ export default function useNavigation() {
     ]
   }))
 
-  coleccion.startPolling()
+  // coleccion.startPolling()
 
-  onUnmounted(() => coleccion.stopPolling())
+  // onUnmounted(() => coleccion.stopPolling())
 
   return { options }
 }

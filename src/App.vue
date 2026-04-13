@@ -12,6 +12,9 @@ const mobile = breakpoints.smaller('md') // @media (min-width: 768px)
 provide('app:mobile', mobile)
 provide('app:loading', loading)
 const defaults = ref({
+  BModal: {
+    scrollable: true,
+  },
   BPopover: {
     delay: { show: 500, hide: 5 },
   },
