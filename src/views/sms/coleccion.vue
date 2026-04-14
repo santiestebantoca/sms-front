@@ -3,7 +3,7 @@ Filter options
 Mi turno: mensaje.de = me, mensaje.en = (today, yesterday, before yesterday)
 -->
 <script setup>
-import { toSQLString } from '@/use/useDates'
+import { toSQLString } from '@/composables/useDates'
 import useColeccionStore from '@/stores/coleccion'
 import MensajeCard from '@/components/features/sms/coleccion/MensajeCard.vue'
 import { tidy, filter, groupBy } from '@tidyjs/tidy'

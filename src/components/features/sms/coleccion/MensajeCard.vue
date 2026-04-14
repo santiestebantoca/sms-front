@@ -3,9 +3,9 @@ const props = defineProps({ data: Object })
 
 import useAuthStore from '@/stores/auth'
 import useColeccionStore from '@/stores/coleccion'
-import useHandleSubmit from '@/use/useHandleSubmit.js'
+import useHandleSubmit from '@/composables/useHandleSubmit.js'
 import { useClipboard } from '@vueuse/core'
-import { shortTime } from '@/use/useDates'
+import { shortTime } from '@/composables/useDates'
 import { ref, computed, watch, inject } from 'vue'
 import ListaNotificados from '@/components/features/sms/ListaNotificados.vue'
 

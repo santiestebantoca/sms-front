@@ -1,7 +1,7 @@
 <script setup>
 const props = defineProps({ back: Function, cancel: Function })
 
-import useHandleSubmit from '@/use/useHandleSubmit.js'
+import useHandleSubmit from '@/composables/useHandleSubmit.js'
 import useUsers from '@/stores/config-users'
 import { ref, computed, inject } from 'vue'
 

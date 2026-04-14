@@ -1,6 +1,6 @@
 <script setup>
 import useAuthStore from '@/stores/auth'
-import { useTeleportTarget } from '@/use/useTeleportTarget'
+import { useTeleportTarget } from '@/composables/useTeleportTarget'
 import { computed, inject } from 'vue'
 
 const auth = useAuthStore()

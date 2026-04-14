@@ -4,7 +4,7 @@ This compo uses a dialog and tabs: best UX is to scroll top on tab switch
 <script setup>
 const props = defineProps({ back: Function })
 
-import useHandleSubmit from '@/use/useHandleSubmit.js'
+import useHandleSubmit from '@/composables/useHandleSubmit.js'
 import useSuscriptores from '@/stores/config-suscriptores'
 import useGrupos from '@/stores/config-grupos'
 import GrupoSel from './GrupoSel.vue'

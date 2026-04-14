@@ -1,7 +1,7 @@
 <script setup>
 const props = defineProps({ id: Number, back: Function })
 
-import useHandleSubmit from '@/use/useHandleSubmit.js'
+import useHandleSubmit from '@/composables/useHandleSubmit.js'
 import useGrupos from '@/stores/config-grupos'
 import { ref, computed } from 'vue'
 

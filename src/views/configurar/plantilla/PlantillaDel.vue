@@ -1,7 +1,7 @@
 <script setup>
 const props = defineProps({ id: Number, back: Function })
 
-import useHandleSubmit from '@/use/useHandleSubmit.js'
+import useHandleSubmit from '@/composables/useHandleSubmit.js'
 import usePlantillas from '@/stores/config-plantillas'
 import { ref, inject } from 'vue'
 
