@@ -23,13 +23,13 @@ watch(() => notificados.suscriptores?.counter, val => {
 </script>
 
 <template>
-  <BModal v-model="model" @hidden="back" scrollable title="Grupos notificados">
+  <BModal v-model="model" @hidden="back" title="Grupos notificados">
     <RootTree :childrenNames="['suscriptores']">
       <TreeNode v-for="data in notificados.data" :data="data" :key="data.id">
         <template #default="{ data }">
           <template v-if="data.tipo === 'grupo'">
             <input type="checkbox" v-model="data.checked" @input="checkChildren(data.id, $event.target.checked)" />
-            <UIcon name="bi-subtract" style="color:var(--bs-yellow)" />
+            <UIcon name="bi-subtract" style="color:var(--bs-yellow);flex-shrink: 0;" />
             <span v-text="data.apodo || data.nombre" class="text-truncate" />
           </template>
           <template v-else>

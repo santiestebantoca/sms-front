@@ -29,6 +29,7 @@ app.use(VueTippy, {
         animation: 'fade',        // Animación por defecto
         duration: 100,
         delay: [1000, 100],           // Duración de la animación
+        trigger: 'mouseenter'
     },
 })
 app.mount('#app')

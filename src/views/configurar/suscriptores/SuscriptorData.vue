@@ -45,8 +45,8 @@ const tab = ref('general')
           <div class="label-value">
             <label>Grupo</label>
             <div v-if="data.grupo" class="hstack" style="height: 32px;">
-              <i class="bi-subtract me-2" style="color:var(--bs-yellow)" />
-              <span v-text="data.grupo.nombre" />
+              <i class="bi-subtract me-2" style="color:var(--bs-yellow);flex-shrink: 0;" />
+              <span v-text="data.grupo.nombre" class="text-truncate" />
             </div>
             <div v-else>-</div>
           </div>

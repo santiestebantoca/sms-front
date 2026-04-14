@@ -49,7 +49,7 @@ const submit = async () => {
 
 <template>
   <Teleport to="body">
-    <bs-dialog v-model="model" @hidden="back" scrollable>
+    <bs-dialog v-model="model" @hidden="back">
       <bs-dialog-header label="Editar usuario" />
       <bs-dialog-body>
         <form @submit.prevent="submit">

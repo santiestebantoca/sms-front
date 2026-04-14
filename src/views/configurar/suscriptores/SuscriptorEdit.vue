@@ -78,7 +78,7 @@ watch(tab, () => dialogBody.value.$el.scrollTop = 0)
 
 <template>
   <Teleport to="body">
-    <bs-dialog v-model="model" @hidden="back" scrollable>
+    <bs-dialog v-model="model" @hidden="back">
       <bs-dialog-header label="Editar suscriptor" />
       <bs-dialog-body ref="dialogBody">
         <form @submit.prevent="submit">
@@ -108,8 +108,8 @@ watch(tab, () => dialogBody.value.$el.scrollTop = 0)
                 <label class="form-label">Grupo</label>
                 <div class="form-control hstack" style="height: 38px;" @click="tab = 'grupos'" type="button">
                   <template v-if="grupo">
-                    <i class="bi-subtract me-2" style="color:var(--bs-yellow)" />
-                    <span v-text="grupo.nombre" />
+                    <i class="bi-subtract me-2" style="color:var(--bs-yellow);flex-shrink: 0;" />
+                    <span v-text="grupo.nombre" class="text-truncate" />
                   </template>
                   <bs-icon name="chevron-right" class="ms-auto" />
                 </div>

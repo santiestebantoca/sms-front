@@ -57,15 +57,13 @@ const routesConfigurar = [
         name: 'configurar-grupos',
         component: () => import('@/views/configurar/grupos/index.vue'),
         props: route => ({
-          id: route.params.id ? parseInt(route.params.id) : 1, // null
-          setId: id => router.push({ name: 'configurar-grupo', params: { id } }),
-          compose: {
-            new: route.query.compose === 'new',
-            back: () => router.replace({
-              query: {
-                compose: undefined,
-              }
-            })
+          id: route.params.id ? parseInt(route.params.id) : null,
+          setId: id => id && router.push({ name: 'configurar-grupo', params: { id } }),
+          crear: () => router.replace({ query: { crear: 'true' } }),
+          flows: {
+            crear: route.query.crear === 'true',
+            back: () => router.replace({ query: { crear: undefined } }),
+            forward: id => router.push({ name: 'configurar-grupo', params: { id } })
           }
         }),
         children: [
@@ -96,8 +94,8 @@ const routesConfigurar = [
                     name: 'configurar-grupo-detalles-eliminar',
                     component: () => import('@/views/configurar/grupos/[id]/detalles/eliminar.vue'),
                     props: () => ({
-                      back: () => router.push({ name: 'configurar-grupos' }),
-                      cancel: () => router.push({ name: 'configurar-grupo' }),
+                      forward: () => router.push({ name: 'configurar-grupos' }),
+                      back: () => router.push({ name: 'configurar-grupo' }),
                     })
                   },
                   {
@@ -171,7 +169,7 @@ const routesConfigurar = [
       {
         path: 'suscriptores',
         name: 'configurar-suscriptores',
-        component: () => import('@/views/configurar/suscriptor/Suscriptores.vue'),
+        component: () => import('@/views/configurar/suscriptores/index.vue'),
         props: route => ({
           id: route.params.id ? parseInt(route.params.id) : null,
           setId: id => router.push({ name: 'configurar-suscriptor', params: { id } }),
@@ -189,7 +187,7 @@ const routesConfigurar = [
             path: ':id',
             name: 'configurar-suscriptor',
             redirect: { name: 'configurar-suscriptor-data' },
-            component: () => import('@/views/configurar/suscriptor/Suscriptor.vue'),
+            component: () => import('@/views/configurar/suscriptores/Suscriptor.vue'),
             props: route => ({
               id: parseInt(route.params.id),
             }),
@@ -197,12 +195,12 @@ const routesConfigurar = [
               {
                 path: '',
                 name: 'configurar-suscriptor-data',
-                component: () => import('@/views/configurar/suscriptor/SuscriptorData.vue'),
+                component: () => import('@/views/configurar/suscriptores/SuscriptorData.vue'),
                 children: [
                   {
                     path: 'edit',
                     name: 'configurar-suscriptor-edit',
-                    component: () => import('@/views/configurar/suscriptor/SuscriptorEdit.vue'),
+                    component: () => import('@/views/configurar/suscriptores/SuscriptorEdit.vue'),
                     props: () => ({
                       back: () => router.push({ name: 'configurar-suscriptor' })
                     })
@@ -210,7 +208,7 @@ const routesConfigurar = [
                   {
                     path: 'del',
                     name: 'configurar-suscriptor-del',
-                    component: () => import('@/views/configurar/suscriptor/SuscriptorDel.vue'),
+                    component: () => import('@/views/configurar/suscriptores/SuscriptorDel.vue'),
                     props: () => ({
                       back: () => router.push({ name: 'configurar-suscriptores' }),
                       cancel: () => router.push({ name: 'configurar-suscriptor' }),

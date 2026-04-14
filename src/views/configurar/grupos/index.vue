@@ -1,8 +1,13 @@
 <script setup>
-const props = defineProps({ id: Number, setId: Function, compose: Object })
+const props = defineProps({
+  id: { type: Number, default: null },
+  setId: Function,
+  crear: Function,
+  flows: Object
+})
 
 import useGrupos from '@/stores/config-grupos'
-// import GruposNew from './GruposNew.vue'
+import CrearGrupo from '@/views/configurar/grupos/_flows/crear.vue'
 import { ref, watch, provide, watchEffect } from 'vue'
 
 const grupos = useGrupos()
@@ -10,9 +15,9 @@ const active = ref(null)
 watch(active, val => props.setId(val))
 watchEffect(() => active.value = props.id)  // source of true is route id
 grupos.get()
-provide('gruposTree:active', active)
+// provide('gruposTree:active', active)
 // onUnmounted(() => grupos.$reset())
-const to = ref({ query: { compose: 'new' } })
+// const to = ref({ query: { compose: 'new' } })
 </script>
 
 <template>
@@ -21,7 +26,7 @@ const to = ref({ query: { compose: 'new' } })
       <div class="hstack sticky-top bg-white" style="height: 40px;padding-left: 12px;">
         <span class="small fw-semibold">GRUPOS</span>
         <div class="mx-auto" />
-        <BButton :to="to" variant="primary" v-tippy="'Nuevo Grupo'" class="btn-sm p-1" style="height:32px">
+        <BButton @click="crear" variant="primary" v-tippy="'Crear grupo'" class="btn-sm p-1" style="height:32px">
           <UIcon name="bi-plus" font-size="20" />
         </BButton>
       </div>
@@ -29,7 +34,7 @@ const to = ref({ query: { compose: 'new' } })
         <RootTree v-model="active" selectable>
           <TreeNode v-for="data in grupos.data" :data="data" :key="data.id">
             <template #default="{ data }">
-              <UIcon name="bi-subtract" style="color:var(--bs-yellow)" />
+              <UIcon name="bi-subtract" style="color:var(--bs-yellow);flex-shrink: 0;" />
               <span v-text="data.nombre" class="text-truncate" />
             </template>
           </TreeNode>
@@ -39,7 +44,7 @@ const to = ref({ query: { compose: 'new' } })
     <div class="p-1 overflow-auto">
       <router-view />
     </div>
-    <!-- <GruposNew v-if="compose.new" :back="compose.back" :pertenece="null" /> -->
+    <CrearGrupo v-if="flows.crear" :back="flows.back" :forward="flows.forward" />
   </div>
 </template>
 

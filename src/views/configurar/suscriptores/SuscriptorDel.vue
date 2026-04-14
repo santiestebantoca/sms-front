@@ -23,7 +23,7 @@ const submit = async () => {
       () => { }))
   loading.value--
 }
-const backIf = () => {
+const hidden = () => {
   if (deleted.value) {
     active.value = null
     props.back()
@@ -34,7 +34,7 @@ const backIf = () => {
 
 <template>
   <Teleport to="body">
-    <bs-dialog v-model="model" @hidden="backIf">
+    <bs-dialog v-model="model" @hidden="hidden">
       <bs-dialog-header label="Eliminar suscriptor" />
       <bs-dialog-body>
         <p>

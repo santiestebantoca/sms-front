@@ -3,7 +3,7 @@ const props = defineProps({ notificados: Array, loading: Boolean })
 </script>
 
 <template>
-  <BModal scrollable title="Notificados" no-footer>
+  <BModal title="Notificados" no-footer>
     <div v-if="loading" class="text-center py-4">
       <BSpinner />
     </div>

@@ -20,14 +20,6 @@ const defaults = ref({
   },
   BToast: {
     noProgress: true,
-  },
-  BTooltip: {
-    delay: { show: 500, hide: 5 },
-    tooltipClass: 'tooltip-fade-in-only', // Parece que no funciona con la directiva
-    focus: false,
-    hover: true,
-    placement: 'bottom', // No funciona con la directiva
-    offset: 16,
   }
 })
 </script>

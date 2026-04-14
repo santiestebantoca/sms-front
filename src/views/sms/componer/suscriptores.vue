@@ -15,7 +15,7 @@ const treeData = computed(() => notificados.data
 </script>
 
 <template>
-  <BModal v-model="model" @hidden="back" scrollable title="Suscriptores notificados">
+  <BModal v-model="model" @hidden="back" title="Suscriptores notificados">
     <RootTree list>
       <TreeNode v-for="data in treeData" :data="data" :key="data.id">
         <template #default="{ data }">

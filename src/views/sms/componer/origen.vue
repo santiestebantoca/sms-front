@@ -26,13 +26,13 @@ onUnmounted(() => grupos.$reset())
 </script>
 
 <template>
-  <BModal title="Seleccionar origen" v-model="model" @hidden="back" scrollable>
+  <BModal title="Seleccionar origen" v-model="model" @hidden="back">
     <RootTree>
       <TreeNode v-for="data in grupos.data" :data="data" :key="data.id">
         <template #default="{ data, leaf }">
           <input v-if="leaf" type="checkbox" v-model="active" :value="data.id" />
-          <UIcon v-else name="bi-subtract" style="color:var(--bs-yellow)" />
-          {{ data.nombre }}
+          <UIcon v-else name="bi-subtract" style="color:var(--bs-yellow);flex-shrink: 0;" />
+          <span v-text="data.nombre" class="text-truncate" />
         </template>
       </TreeNode>
     </RootTree>
