@@ -2,22 +2,18 @@
 const props = defineProps({
   id: { type: Number, default: null },
   setId: Function,
-  crear: Function,
   flows: Object
 })
 
 import useGrupos from '@/stores/config-grupos'
 import CrearGrupo from '@/views/configurar/grupos/_flows/crear.vue'
-import { ref, watch, provide, watchEffect } from 'vue'
+import { ref, watch, watchEffect } from 'vue'
 
 const grupos = useGrupos()
 const active = ref(null)
 watch(active, val => props.setId(val))
-watchEffect(() => active.value = props.id)  // source of true is route id
+watchEffect(() => active.value = props.id)
 grupos.get()
-// provide('gruposTree:active', active)
-// onUnmounted(() => grupos.$reset())
-// const to = ref({ query: { compose: 'new' } })
 </script>
 
 <template>
@@ -26,7 +22,8 @@ grupos.get()
       <div class="hstack sticky-top bg-white" style="height: 40px;padding-left: 12px;">
         <span class="small fw-semibold">GRUPOS</span>
         <div class="mx-auto" />
-        <BButton @click="crear" variant="primary" v-tippy="'Crear grupo'" class="btn-sm p-1" style="height:32px">
+        <BButton @click="flows.crear.go" variant="primary" v-tippy="'Crear grupo'" class="btn-sm p-1"
+          style="height:32px">
           <UIcon name="bi-plus" font-size="20" />
         </BButton>
       </div>
@@ -42,9 +39,12 @@ grupos.get()
       </template>
     </div>
     <div class="p-1 overflow-auto">
-      <router-view />
+      <div v-if="!id" class="mt-5 text-center">
+        Seleccione un grupo para mostrarlo aquí.
+      </div>
+      <router-view v-else />
     </div>
-    <CrearGrupo v-if="flows.crear" :back="flows.back" :forward="flows.forward" />
+    <CrearGrupo v-if="flows.crear.active" :back="flows.crear.back" :forward="flows.crear.forward" />
   </div>
 </template>
 

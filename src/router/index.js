@@ -59,11 +59,13 @@ const routesConfigurar = [
         props: route => ({
           id: route.params.id ? parseInt(route.params.id) : null,
           setId: id => id && router.push({ name: 'configurar-grupo', params: { id } }),
-          crear: () => router.replace({ query: { crear: 'true' } }),
           flows: {
-            crear: route.query.crear === 'true',
-            back: () => router.replace({ query: { crear: undefined } }),
-            forward: id => router.push({ name: 'configurar-grupo', params: { id } })
+            crear: {
+              active: route.query.crear === 'true',
+              go: () => router.replace({ query: { crear: 'true' } }),
+              back: () => router.replace({ query: { crear: undefined } }),
+              forward: id => router.push({ name: 'configurar-grupo', params: { id } })
+            }
           }
         }),
         children: [
