@@ -4,8 +4,16 @@ const props = defineProps({ data: Object })
 import { ref } from 'vue'
 
 const acciones = ref([
-  { texto: "Editar", to: { name: 'configurar-grupo-detalles-editar' }, icon: "bi-pencil" },
-  { texto: "Eliminar", to: { name: 'configurar-grupo-detalles-eliminar' }, icon: "bi-trash" },
+  {
+    texto: "Editar",
+    to: { name: 'configurar-grupo-editar' },
+    icon: "bi-pencil"
+  },
+  {
+    texto: "Eliminar",
+    to: { name: 'configurar-grupo-eliminar' },
+    icon: "bi-trash"
+  },
 ])
 </script>
 

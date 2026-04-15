@@ -23,10 +23,6 @@ watch(data, d => {
     dataReady.value = true
   }
 }, { immediate: true })
-// provide('tree:active', computed({
-//   get: () => form.value.grupo_b,
-//   set: val => form.value.grupo_b = val
-// }))
 onMounted(() => mounted.value = true)
 watchEffect(() => model.value = mounted.value && dataReady.value)
 //

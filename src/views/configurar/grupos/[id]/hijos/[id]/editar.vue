@@ -1,22 +1,38 @@
 <script setup>
-const props = defineProps({ pertenece: Number, back: Function })
+const props = defineProps({ grupoId: Number, hijoId: Number, back: Function })
 
 import useHandleSubmit from '@/composables/useHandleSubmit.js'
 import useGrupos from '@/stores/config-grupos'
-import { ref } from 'vue'
+import { ref, computed, watch, onMounted, watchEffect } from 'vue'
 
 // const loading = inject('app:loading')
 const process = useHandleSubmit()
-const model = ref(true)
+const model = ref(null)
+const mounted = ref(null)
+const dataReady = ref(null)
 const grupos = useGrupos()
+const data = computed(() => grupos.grupo.background.data)
+// loading.value++
+grupos.grupo.background.get(props.hijoId)
+// .then(() => loading.value--)
 const form = ref({
   nombre: null,
   apodo: null,
   label: null,
-  descripcion: null,
-  pertenece: props.pertenece,
+  descripcion: null
 })
 const errors = ref({})
+watch(data, d => {
+  if (d.id === props.hijoId) {
+    form.value.nombre = d.nombre
+    form.value.apodo = d.apodo
+    form.value.label = d.label
+    form.value.descripcion = d.descripcion
+    dataReady.value = true
+  }
+}, { immediate: true })
+onMounted(() => mounted.value = true)
+watchEffect(() => model.value = mounted.value && dataReady.value)
 //
 const validate = () => {
   errors.value = {}
@@ -26,21 +42,21 @@ const validate = () => {
 const submit = async () => {
   if (!validate()) return
   // loading.value++
-  await grupos.post(form.value)
-    .then(res => process.POST(res.data,
-      () => Promise.all([
-        grupos.get(),
-        ...props.pertenece === grupos.grupo.data.id
-          ? [grupos.grupo.get(props.pertenece)]
-          : []
-      ]).then(() => model.value = false),
+  await grupos.grupo.background.put({ id: props.hijoId, data: form.value })
+    .then(res => process.PUT(res.data,
+      () => {
+        Promise.all([
+          grupos.get(),
+          grupos.grupo.get(props.grupoId),
+        ]).then(() => model.value = false)
+      },
       errs => errors.value = errs))
   // loading.value--
 }
 </script>
 
 <template>
-  <BModal v-model="model" title="Nuevo grupo" @hidden="back">
+  <BModal v-model="model" title="Editar grupo" @hidden="back">
     <form @submit.prevent="submit">
       <div class="mb-3">
         <label class="form-label">Nombre</label>
@@ -62,7 +78,7 @@ const submit = async () => {
       </div>
     </form>
     <template #footer>
-      <BButton @click="submit" variant="primary">
+      <BButton variant="primary" @click="submit">
         Aceptar
       </BButton>
     </template>

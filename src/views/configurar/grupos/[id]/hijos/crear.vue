@@ -1,5 +1,5 @@
 <script setup>
-const props = defineProps({ grupo: Number, back: Function })
+const props = defineProps({ grupoId: Number, back: Function })
 
 import useHandleSubmit from '@/composables/useHandleSubmit.js'
 import useGrupos from '@/stores/config-grupos'
@@ -11,36 +11,36 @@ const model = ref(true)
 const grupos = useGrupos()
 const form = ref({
   nombre: null,
-  cargo: null,
-  telefono: null,
-  correo: null,
-  grupo: props.grupo
+  apodo: null,
+  label: null,
+  descripcion: null,
+  pertenece: props.grupoId,
 })
 const errors = ref({})
 //
 const validate = () => {
-  const telefono = /^(\+53|53)?\d{8}$/
-  const correo = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/
   errors.value = {}
   if (!form.value.nombre) errors.value.nombre = 'Este campo no puede estar vacío'
-  if (!form.value.telefono) errors.value.telefono = 'Este campo no puede estar vacío'
-  else if (!telefono.test(form.value.telefono)) errors.value.telefono = 'Formato no válido'
-  if (form.value.correo && !correo.test(form.value.correo)) errors.value.correo = 'Formato no válido'
   return !Object.keys(errors.value).length
 }
 const submit = async () => {
   if (!validate()) return
   // loading.value++
-  await grupos.grupo.suscriptores.post(form.value)
+  await grupos.post(form.value)
     .then(res => process.POST(res.data,
-      () => grupos.grupo.get(props.grupo).then(() => model.value = false),
+      () => Promise.all([
+        grupos.get(),
+        ...props.grupoId === grupos.grupo.data.id
+          ? [grupos.grupo.get(props.grupoId)]
+          : []
+      ]).then(() => model.value = false),
       errs => errors.value = errs))
   // loading.value--
 }
 </script>
 
 <template>
-  <BModal v-model="model" title="Nuevo suscriptor" @hidden="back">
+  <BModal v-model="model" title="Nuevo grupo" @hidden="back">
     <form @submit.prevent="submit">
       <div class="mb-3">
         <label class="form-label">Nombre</label>
@@ -48,18 +48,17 @@ const submit = async () => {
         <div class="small text-danger" v-text="errors.nombre" />
       </div>
       <div class="mb-3">
-        <label class="form-label">Cargo</label>
-        <input class="form-control" v-model.trim="form.cargo" />
+        <label class="form-label">Alias</label>
+        <input class="form-control" v-model.trim="form.apodo" @input="errors.apodo = null" />
+        <div class="small text-danger" v-text="errors.apodo" />
       </div>
       <div class="mb-3">
-        <label class="form-label">Teléfono</label>
-        <input class="form-control" v-model.trim="form.telefono" @input="errors.telefono = null" />
-        <div class="small text-danger" v-text="errors.telefono" />
+        <label class="form-label">Etiquetas</label>
+        <input class="form-control" v-model.trim="form.label" />
       </div>
       <div class="mb-3">
-        <label class="form-label">Correo</label>
-        <input class="form-control" v-model.trim="form.correo" @input="errors.correo = null" />
-        <div class="small text-danger" v-text="errors.correo" />
+        <label class="form-label">Descripción</label>
+        <textarea class="form-control" v-model.trim="form.descripcion" />
       </div>
     </form>
     <template #footer>

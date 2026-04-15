@@ -5,9 +5,27 @@ import { ref, computed, watch } from 'vue'
 
 const active = ref(null)
 const acciones = computed(() => [
-  { texto: "Nuevo", to: { name: 'configurar-grupo-detalles-hijos-crear' }, icon: "bi-plus-lg" },
-  { texto: "Editar", to: { name: 'configurar-grupo-detalles-hijo-editar', params: { hijo: active.value } }, icon: "bi-pencil", disabled: !active.value },
-  { texto: "Eliminar", to: { name: 'configurar-grupo-detalles-hijo-eliminar', params: { hijo: active.value } }, icon: "bi-trash", disabled: !active.value },
+  {
+    texto: "Nuevo",
+    to: { name: 'configurar-grupo-hijos-crear' },
+    icon: "bi-plus-lg"
+  },
+  {
+    texto: "Editar",
+    to: active.value
+      ? { name: 'configurar-grupo-hijo-editar', params: { hijoId: active.value } }
+      : undefined,
+    icon: "bi-pencil",
+    disabled: !active.value
+  },
+  {
+    texto: "Eliminar",
+    to: active.value
+      ? { name: 'configurar-grupo-hijo-eliminar', params: { hijoId: active.value } }
+      : undefined,
+    icon: "bi-trash",
+    disabled: !active.value
+  },
 ])
 //
 // Cuando se elimina un grupo, active no está en data.children, entonces active = null

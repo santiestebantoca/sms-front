@@ -57,113 +57,115 @@ const routesConfigurar = [
         name: 'configurar-grupos',
         component: () => import('@/views/configurar/grupos/index.vue'),
         props: route => ({
-          id: route.params.id ? parseInt(route.params.id) : null,
-          setId: id => id && router.push({ name: 'configurar-grupo', params: { id } }),
+          grupoId: route.params.grupoId ? parseInt(route.params.grupoId) : null,
+          setGrupoId: (id) => id && router.push({
+            name: 'configurar-grupo',
+            params: { grupoId: id }
+          }),
           flows: {
             crear: {
               active: route.query.crear === 'true',
               go: () => router.replace({ query: { crear: 'true' } }),
               back: () => router.replace({ query: { crear: undefined } }),
-              forward: id => router.push({ name: 'configurar-grupo', params: { id } })
+              forward: (id) => router.push({
+                name: 'configurar-grupo',
+                params: { grupoId: id }
+              })
             }
           }
         }),
         children: [
           {
-            path: ':id',
+            path: ':grupoId',
             name: 'configurar-grupo',
-            redirect: { name: 'configurar-grupo-detalles' },
             component: () => import('@/views/configurar/grupos/[id]/index.vue'),
             props: route => ({
-              id: parseInt(route.params.id),
+              grupoId: parseInt(route.params.grupoId),
             }),
             children: [
               {
-                path: '',
-                name: 'configurar-grupo-detalles',
-                component: () => import('@/views/configurar/grupos/[id]/detalles/index.vue'),
-                children: [
-                  {
-                    path: 'editar',
-                    name: 'configurar-grupo-detalles-editar',
-                    component: () => import('@/views/configurar/grupos/[id]/detalles/editar.vue'),
-                    props: () => ({
-                      back: () => router.push({ name: 'configurar-grupo' })
-                    })
-                  },
-                  {
-                    path: 'eliminar',
-                    name: 'configurar-grupo-detalles-eliminar',
-                    component: () => import('@/views/configurar/grupos/[id]/detalles/eliminar.vue'),
-                    props: () => ({
-                      forward: () => router.push({ name: 'configurar-grupos' }),
-                      back: () => router.push({ name: 'configurar-grupo' }),
-                    })
-                  },
-                  {
-                    path: 'hijos/crear',
-                    name: 'configurar-grupo-detalles-hijos-crear',
-                    component: () => import('@/views/configurar/grupos/[id]/detalles/hijos/crear.vue'),
-                    props: route => ({
-                      pertenece: parseInt(route.params.id),
-                      back: () => router.push({ name: 'configurar-grupo' })
-                    })
-                  },
-                  {
-                    path: 'hijos/:hijo?/eliminar',
-                    name: 'configurar-grupo-detalles-hijo-eliminar',
-                    component: () => import('@/views/configurar/grupos/[id]/detalles/hijos/[id]/eliminar.vue'),
-                    props: route => ({
-                      id: parseInt(route.params.hijo),
-                      back: () => router.push({ name: 'configurar-grupo' }),
-                    })
-                  },
-                  {
-                    path: 'hijos/:hijo?/editar',
-                    name: 'configurar-grupo-detalles-hijo-editar',
-                    component: () => import('@/views/configurar/grupos/[id]/detalles/hijos/[id]/editar.vue'),
-                    props: route => ({
-                      id: parseInt(route.params.hijo),
-                      back: () => router.push({ name: 'configurar-grupo' }),
-                    })
-                  },
-                  {
-                    path: 'suscriptores/crear',
-                    name: 'configurar-grupo-detalles-suscriptores-crear',
-                    component: () => import('@/views/configurar/grupos/[id]/detalles/suscriptores/crear.vue'),
-                    props: route => ({
-                      grupo: parseInt(route.params.id),
-                      back: () => router.push({ name: 'configurar-grupo' })
-                    })
-                  },
-                  {
-                    path: 'suscriptor/:suscriptor?/editar',
-                    name: 'configurar-grupo-detalles-suscriptor-editar',
-                    component: () => import('@/views/configurar/grupos/[id]/detalles/suscriptores/[id]/editar.vue'),
-                    props: route => ({
-                      id: parseInt(route.params.suscriptor),
-                      back: () => router.push({ name: 'configurar-grupo' })
-                    })
-                  },
-                  {
-                    path: 'suscriptor/:suscriptor?/eliminar',
-                    name: 'configurar-grupo-detalles-suscriptor-eliminar',
-                    component: () => import('@/views/configurar/grupos/[id]/detalles/suscriptores/[id]/eliminar.vue'),
-                    props: route => ({
-                      id: parseInt(route.params.suscriptor),
-                      back: () => router.push({ name: 'configurar-grupo' }),
-                    })
-                  },
-                  {
-                    path: 'notifica/seleccionar',
-                    name: 'configurar-grupo-detalles-notifica-seleccionar',
-                    component: () => import('@/views/configurar/grupos/[id]/detalles/notifica/seleccionar.vue'),
-                    props: () => ({
-                      back: () => router.push({ name: 'configurar-grupo' }),
-                    })
-                  }
-                ]
+                path: 'editar',
+                name: 'configurar-grupo-editar',
+                component: () => import('@/views/configurar/grupos/[id]/editar.vue'),
+                props: () => ({
+                  back: () => router.push({ name: 'configurar-grupo' })
+                })
               },
+              {
+                path: 'eliminar',
+                name: 'configurar-grupo-eliminar',
+                component: () => import('@/views/configurar/grupos/[id]/eliminar.vue'),
+                props: () => ({
+                  forward: () => router.push({ name: 'configurar-grupos' }),
+                  back: () => router.push({ name: 'configurar-grupo' }),
+                })
+              },
+              {
+                path: 'hijos/crear',
+                name: 'configurar-grupo-hijos-crear',
+                component: () => import('@/views/configurar/grupos/[id]/hijos/crear.vue'),
+                props: route => ({
+                  grupoId: parseInt(route.params.grupoId),
+                  back: () => router.push({ name: 'configurar-grupo' })
+                })
+              },
+              {
+                path: 'hijos/:hijoId/eliminar',
+                name: 'configurar-grupo-hijo-eliminar',
+                component: () => import('@/views/configurar/grupos/[id]/hijos/[id]/eliminar.vue'),
+                props: route => ({
+                  grupoId: parseInt(route.params.grupoId),
+                  hijoId: parseInt(route.params.hijoId),
+                  back: () => router.push({ name: 'configurar-grupo' }),
+                })
+              },
+              {
+                path: 'hijos/:hijoId/editar',
+                name: 'configurar-grupo-hijo-editar',
+                component: () => import('@/views/configurar/grupos/[id]/hijos/[id]/editar.vue'),
+                props: route => ({
+                  grupoId: parseInt(route.params.grupoId),
+                  hijoId: parseInt(route.params.hijoId),
+                  back: () => router.push({ name: 'configurar-grupo' }),
+                })
+              },
+              {
+                path: 'suscriptores/crear',
+                name: 'configurar-grupo-suscriptores-crear',
+                component: () => import('@/views/configurar/grupos/[id]/suscriptores/crear.vue'),
+                props: route => ({
+                  grupoId: parseInt(route.params.grupoId),
+                  back: () => router.push({ name: 'configurar-grupo' })
+                })
+              },
+              {
+                path: 'suscriptores/:suscriptorId/editar',
+                name: 'configurar-grupo-suscriptor-editar',
+                component: () => import('@/views/configurar/grupos/[id]/suscriptores/[id]/editar.vue'),
+                props: route => ({
+                  grupoId: parseInt(route.params.grupoId),
+                  suscriptorId: parseInt(route.params.suscriptorId),
+                  back: () => router.push({ name: 'configurar-grupo' })
+                })
+              },
+              {
+                path: 'suscriptores/:suscriptorId/eliminar',
+                name: 'configurar-grupo-suscriptor-eliminar',
+                component: () => import('@/views/configurar/grupos/[id]/suscriptores/[id]/eliminar.vue'),
+                props: route => ({
+                  grupoId: parseInt(route.params.grupoId),
+                  suscriptorId: parseInt(route.params.suscriptorId),
+                  back: () => router.push({ name: 'configurar-grupo' }),
+                })
+              },
+              {
+                path: 'notifica/seleccionar',
+                name: 'configurar-grupo-notifica-seleccionar',
+                component: () => import('@/views/configurar/grupos/[id]/notifica/seleccionar.vue'),
+                props: () => ({
+                  back: () => router.push({ name: 'configurar-grupo' }),
+                })
+              }
             ]
           },
         ]

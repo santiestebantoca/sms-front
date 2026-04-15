@@ -1,5 +1,5 @@
 <script setup>
-const props = defineProps({ id: Number, back: Function })
+const props = defineProps({ grupoId: Number, hijoId: Number, back: Function })
 
 import useHandleSubmit from '@/composables/useHandleSubmit.js'
 import useGrupos from '@/stores/config-grupos'
@@ -12,12 +12,12 @@ const grupos = useGrupos()
 //
 const submit = async () => {
   // loading.value++
-  await grupos.grupo.del(props.id)
+  await grupos.grupo.del(props.hijoId)
     .then(res => process.DELETE(res.data,
       () => {
         Promise.all([
           grupos.get(),
-          grupos.grupo.get(grupos.grupo.data.id),
+          grupos.grupo.get(props.grupoId),
         ]).then(() => {
           model.value = false
         })

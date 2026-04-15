@@ -1,7 +1,7 @@
 <script setup>
 const props = defineProps({
-  id: { type: Number, default: null },
-  setId: Function,
+  grupoId: { type: Number, default: null },
+  setGrupoId: Function,
   flows: Object
 })
 
@@ -11,8 +11,8 @@ import { ref, watch, watchEffect } from 'vue'
 
 const grupos = useGrupos()
 const active = ref(null)
-watch(active, val => props.setId(val))
-watchEffect(() => active.value = props.id)
+watch(active, val => props.setGrupoId(val))
+watchEffect(() => active.value = props.grupoId)
 grupos.get()
 </script>
 
@@ -39,7 +39,7 @@ grupos.get()
       </template>
     </div>
     <div class="p-1 overflow-auto">
-      <div v-if="!id" class="mt-5 text-center">
+      <div v-if="!grupoId" class="mt-5 text-center">
         Seleccione un grupo para mostrarlo aquí.
       </div>
       <router-view v-else />

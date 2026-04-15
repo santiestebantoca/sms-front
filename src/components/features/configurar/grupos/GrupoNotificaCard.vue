@@ -5,7 +5,11 @@ import { ref, computed } from 'vue'
 
 const active = ref(null)
 const acciones = computed(() => [
-  { texto: "Seleccionar", to: { name: 'configurar-grupo-detalles-notifica-seleccionar' }, icon: "bi-check2-square" },
+  {
+    texto: "Seleccionar",
+    to: { name: 'configurar-grupo-notifica-seleccionar' },
+    icon: "bi-check2-square"
+  },
 ])
 </script>
 

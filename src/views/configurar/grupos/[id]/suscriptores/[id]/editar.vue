@@ -1,5 +1,5 @@
 <script setup>
-const props = defineProps({ id: Number, back: Function })
+const props = defineProps({ grupoId: Number, suscriptorId: Number, back: Function })
 
 import useHandleSubmit from '@/composables/useHandleSubmit.js'
 import useGrupos from '@/stores/config-grupos'
@@ -11,7 +11,7 @@ const model = ref(null)
 const mounted = ref(null)
 const dataReady = ref(null)
 const grupos = useGrupos()
-const data = computed(() => grupos.grupo.data.suscriptores?.find(d => d.id === props.id))
+const data = computed(() => grupos.grupo.data.suscriptores?.find(d => d.id === props.suscriptorId))
 const form = ref({
   nombre: null,
   cargo: null,
@@ -44,9 +44,9 @@ const validate = () => {
 const submit = async () => {
   if (!validate()) return
   // loading.value++
-  await grupos.grupo.suscriptores.put({ id: props.id, data: form.value })
+  await grupos.grupo.suscriptores.put({ id: props.suscriptorId, data: form.value })
     .then(res => process.PUT(res.data,
-      () => grupos.grupo.get(data.value.grupo).then(() => model.value = false),
+      () => grupos.grupo.get(props.grupoId).then(() => model.value = false),
       errs => errors.value = errs))
   // loading.value--
 }

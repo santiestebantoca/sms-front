@@ -1,5 +1,5 @@
 <script setup>
-const props = defineProps({ id: Number, back: Function })
+const props = defineProps({ grupoId: Number, suscriptorId: Number, back: Function })
 
 import useHandleSubmit from '@/composables/useHandleSubmit.js'
 import useGrupos from '@/stores/config-grupos'
@@ -9,14 +9,14 @@ import { ref, computed } from 'vue'
 const process = useHandleSubmit()
 const model = ref(true)
 const grupos = useGrupos()
-const data = computed(() => grupos.grupo.data.suscriptores?.find(d => d.id === props.id))
+const data = computed(() => grupos.grupo.data.suscriptores?.find(d => d.id === props.suscriptorId))
 const nombre = ref(data.value.nombre) // otherwise data is undefined before compo unmounts 
 //
 const submit = async () => {
   // loading.value++
-  await grupos.grupo.suscriptores.del(props.id)
+  await grupos.grupo.suscriptores.del(props.suscriptorId)
     .then(res => process.DELETE(res.data,
-      () => grupos.grupo.get(data.value.grupo).then(() => {
+      () => grupos.grupo.get(props.grupoId).then(() => {
         model.value = false
       }),
       () => { }))
