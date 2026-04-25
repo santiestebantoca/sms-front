@@ -1,23 +1,22 @@
 <script setup>
 const props = defineProps({ back: Function })
 
-import useHandleSubmit from '@/composables/useHandleSubmit.js'
-import useGrupos from '@/stores/config-grupos'
+import { useConfigGruposStore, useConfigGrupoStore, useConfigGrupoNotificaStore } from '@/stores/config-grupos'
 import { ref, computed, watch, watchEffect, onMounted } from 'vue'
 
-// const loading = inject('app:loading')
-const process = useHandleSubmit()
 const model = ref(true)
 const mounted = ref(null)
 const dataReady = ref(null)
-const grupos = useGrupos()
-const data = computed(() => grupos.grupo.data)
+const grupos = useConfigGruposStore()
+const grupo = useConfigGrupoStore()
+const notifica = useConfigGrupoNotificaStore()
+const data = computed(() => grupo.data)
 const form = ref({
   grupo_a: null,
   grupo_b: []
 })
 watch(data, d => {
-  if (grupos.grupo.status.loaded) {
+  if (grupo.status.loaded) {
     form.value.grupo_a = d.id
     form.value.grupo_b = d.notifica.map(d => d.grupo_b)
     dataReady.value = true
@@ -27,12 +26,10 @@ onMounted(() => mounted.value = true)
 watchEffect(() => model.value = mounted.value && dataReady.value)
 //
 const submit = async () => {
-  // loading.value++
-  await grupos.grupo.notifica.post(form.value)
-    .then(res => process.POST(res.data,
-      () => grupos.grupo.get(form.value.grupo_a).then(() => model.value = false),
+  await notifica.post(form.value)
+    .then(res => process.POST(res,
+      () => grupo.get(form.value.grupo_a).then(() => model.value = false),
       () => { }))
-  // loading.value--
 }
 </script>
 

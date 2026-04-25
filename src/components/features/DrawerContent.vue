@@ -8,13 +8,13 @@ const props = defineProps({ down: Boolean, closeDrawer: Function, options: Objec
       <BNavItem v-for="{ to, icon, label, count } in options" :to="to" @click="closeDrawer">
         <UIcon :name="icon" class="me-2 mb-1" />
         {{ label }}
-        <BBadge v-if="count" variant="warning" pill class="ms-2"> {{ count }} </BBadge>
+        <BBadge v-if="count > 0" variant="warning" pill class="ms-2"> {{ count }} </BBadge>
       </BNavItem>
     </template>
     <template v-else>
       <BNavItem v-for="{ to, icon, label, count } in options" :to="to" v-tippy="label" class="up">
         <UIcon :name="icon" font-size="1.2em" />
-        <BBadge v-if="count" variant="warning" pill> {{ count }} </BBadge>
+        <BBadge v-if="count > 0" variant="warning" pill> {{ count }} </BBadge>
       </BNavItem>
     </template>
   </BNav>

@@ -1,12 +1,9 @@
 <script setup>
 const props = defineProps({ back: Function })
 
-import useHandleSubmit from '@/composables/useHandleSubmit.js'
 import useUsers from '@/stores/config-users'
 import { ref, computed, watch, inject } from 'vue'
 
-const loading = inject('app:loading')
-const process = useHandleSubmit()
 const model = ref(null)
 const users = useUsers()
 const data = computed(() => users.user.data)
@@ -25,12 +22,10 @@ watch(data, d => {
 }, { immediate: true })
 //
 const submit = async () => {
-  loading.value++
   await users.user.membership.post(form.value)
-    .then(res => process.POST(res.data,
+    .then(res => process.POST(res,
       () => users.user.get(form.value.user_id).then(() => model.value = false),
       () => { }))
-  loading.value--
 }
 </script>
 

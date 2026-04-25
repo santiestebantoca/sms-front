@@ -1,10 +1,10 @@
 <script setup>
 const props = defineProps({ next: Function })
 
-// import useSnackbarStore from '@/stores/snackbar'
-import useAuthStore from '@/stores/auth'
-import { ref, computed } from 'vue'
+import { useAuthStore } from '@/stores/auth'
+import { ref, computed, watch } from 'vue'
 import { useToast } from 'bootstrap-vue-next'
+import { isValidationError } from '@/api/client'
 
 const { create: showToast } = useToast()
 const auth = useAuthStore()
@@ -17,6 +17,15 @@ const formDefault = {
 }
 const form = ref({ ...formDefault })
 const label = computed(() => sending.value ? 'Autenticando' : 'Iniciar sesión')
+const loginError = ref(false)
+const loginErrorInterval = ref(null)
+watch(loginError, (newVal, oldVal) => {
+  if (newVal) {
+    if (oldVal === false) clearInterval(loginErrorInterval.value)
+    loginErrorInterval.value = setTimeout(() => loginError.value = false, 5000)
+  }
+})
+//
 const validate = () => {
   errors.value = {}
   if (!form.value.username) errors.value.username = 'Valor requerido'
@@ -26,11 +35,10 @@ const validate = () => {
 const submit = () => {
   if (!validate()) return
   sending.value = true
-  auth.login(form.value).then(process).finally(() => sending.value = false)
-}
-const process = (res) => {
-  if (res) props.next()
-  else showToast({ body: 'Credenciales no válidas.', variant: 'warning' })
+  auth.login(form.value)
+    .then(() => props.next())
+    .catch(err => isValidationError(err) && (loginError.value = true))
+    .finally(() => sending.value = false)
 }
 const toggleType = () => type.value = type.value === 'password' ? 'text' : 'password'
 </script>
@@ -39,7 +47,15 @@ const toggleType = () => type.value = type.value === 'password' ? 'text' : 'pass
   <div class="grid">
     <div class="content">
       <h5 class="text-primary-emphasis fw-semibold">Inicio de sesión</h5>
-      <h6 class="text-muted">Credenciales del dominio "etecsa.cu"</h6>
+      <transition name="fade" mode="out-in">
+        <h6 v-if="loginError" class="text-danger hstack gap-3" style="height: 22px;">
+          <UIcon name="bi-exclamation-circle" style="position: relative;top:2px" />
+          Credenciales no válidas
+        </h6>
+        <h6 v-else class="text-muted hstack" style="height: 22px;">
+          Credenciales del dominio "etecsa.cu"
+        </h6>
+      </transition>
       <form @submit.prevent>
         <div class="position-relative mb-3">
           <UIcon name="bi-person" class="p-icon" />
@@ -60,7 +76,7 @@ const toggleType = () => type.value = type.value === 'password' ? 'text' : 'pass
           <BButton @click="submit" variant="primary" :disabled="sending" class="w-100 lh-lg">{{ label }}</BButton>
         </div>
       </form>
-      <div class="alert bg-light bg-gradient small mt-4 d-flex gap-3">
+      <div class="alert bg-light bg-gradient small mt-4 d-flex gap-3 border">
         <span>
           <UIcon name="bi-exclamation-triangle-fill" font-size="1.2em" />
         </span>

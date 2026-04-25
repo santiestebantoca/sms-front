@@ -2,7 +2,7 @@
 const props = defineProps({ id: Number, setId: Function, compose: Object })
 
 import useSuscriptores from '@/stores/config-suscriptores'
-import useGrupos from '@/stores/config-grupos'
+import useGrupos from '@/stores/config-grupos/index'
 import SuscriptoresNew from './SuscriptoresNew.vue'
 import { ref, watch, provide } from 'vue'
 

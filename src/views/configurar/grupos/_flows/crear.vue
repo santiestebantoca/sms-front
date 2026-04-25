@@ -1,14 +1,13 @@
 <script setup>
 const props = defineProps({ forward: Function, back: Function })
 
-import useHandleSubmit from '@/composables/useHandleSubmit.js'
-import useGrupos from '@/stores/config-grupos'
+import { isValidationError } from '@/api/client'
+import { useGruposStore } from '@/stores/grupos'
 import { useToast } from 'bootstrap-vue-next'
 import { ref, onMounted } from 'vue'
 
-const process = useHandleSubmit()
 const model = ref(false)
-const grupos = useGrupos()
+const grupos = useGruposStore()
 const created = ref(null)
 const toast = useToast()
 const form = ref({
@@ -27,17 +26,14 @@ const validate = () => {
 }
 const submit = async () => {
   if (!validate()) return
-  // loading.value++
   await grupos.post(form.value)
-    .then(res => process.POST(res.data,
-      async id => {
-        await grupos.get()
-        toast.create({ body: 'Nuevo grupo creado', variant: 'success' })
-        created.value = id
-        model.value = false
-      },
-      errs => errors.value = errs))
-  // loading.value--
+    .then(res => {
+      grupos._post(res)
+      toast.create({ body: 'Nuevo grupo creado', variant: 'success' })
+      created.value = res.id
+      model.value = false
+    })
+    .catch(err => isValidationError(err) && (errors.value = err.errors))
 }
 const hidden = () => {
   if (created.value) props.forward(created.value)

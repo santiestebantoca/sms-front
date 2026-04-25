@@ -34,6 +34,12 @@
   // }
 }
 
+// badge-outline-white
+.badge {
+  outline: 1px solid white;
+  outline-offset: 0;
+}
+
 /* General */
 .pre-wrap {
   white-space: pre-wrap;
@@ -54,6 +60,22 @@
   // border: var(--bs-spinner-border-width) solid currentcolor;
   // border-right-color: transparent;
   --bs-spinner-border-width: 2px !important;
-  border: var(--bs-spinner-border-width) solid var(--bs-gray-500) !important;
-  border-right-color: var(--bs-gray-300) !important;
+  border: var(--bs-spinner-border-width) solid var(--bs-gray-300) !important;
+  border-right-color: var(--bs-gray-600) !important;
+}
+
+// Custom classes
+.label-value {
+  position: relative;
+  margin-bottom: 16px !important;
+}
+
+.label-value::after {
+  position: absolute;
+  // content: '';
+  // top: 6px;
+  // bottom: 2px;
+  // left: -10px;
+  // width: 2px;
+  // background-color: var(--bs-yellow-600);
 }

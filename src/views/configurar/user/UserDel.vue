@@ -1,27 +1,22 @@
 <script setup>
 const props = defineProps({ back: Function, cancel: Function })
 
-import useHandleSubmit from '@/composables/useHandleSubmit.js'
 import useUsers from '@/stores/config-users'
 import { ref, computed, inject } from 'vue'
 
-const loading = inject('app:loading')
 const active = inject('users:id')
-const process = useHandleSubmit()
 const model = ref(true)
 const deleted = ref(false)
 const users = useUsers()
 const data = computed(() => users.user.data)
 const submit = async () => {
-  loading.value++
   await users.user.del(data.value.id)
-    .then(res => process.DELETE(res.data,
+    .then(res => process.DELETE(res,
       () => users.get().then(() => {
         deleted.value = true
         model.value = false
       }),
       () => { }))
-  loading.value--
 }
 const hidden = () => {
   if (deleted.value) {

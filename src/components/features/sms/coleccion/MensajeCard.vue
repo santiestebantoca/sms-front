@@ -1,42 +1,38 @@
 <script setup>
 const props = defineProps({ data: Object })
 
-import useAuthStore from '@/stores/auth'
-import useColeccionStore from '@/stores/coleccion'
-import useHandleSubmit from '@/composables/useHandleSubmit.js'
+import { useAuthStore } from '@/stores/auth/index'
+import { useSmssStore, useSmsStore } from '@/stores/smss'
+import { useEnviosStore } from '@/stores/envios'
 import { useClipboard } from '@vueuse/core'
 import { shortTime } from '@/composables/useDates'
 import { ref, computed, watch, inject } from 'vue'
-import ListaNotificados from '@/components/features/sms/ListaNotificados.vue'
+import ListaDestinatarios from '@/components/features/sms/ListaDestinatarios.vue'
 
 const popover = ref(false)
-const loading = inject('app:loading')
-const coleccion = useColeccionStore()
-const process = useHandleSubmit()
+const smss = useSmssStore()
+const sms = useSmsStore() // no contiene datos solo funciones
+//
+const destinatarios = useEnviosStore()
+const showDestinatarios = ref(null)
+watch(showDestinatarios, val => val && destinatarios.get({ mensaje_id: props.data.id }))
+//
 const date = shortTime(props.data.en)
-const form = ref({
-  continua: props.data.continua
+const continua = computed({
+  get() {
+    return props.data.continua
+  },
+  async set(newValue) {
+    await sms.put(props.data.id, { continua: newValue })
+    smss.del(props.data.id)
+  }
 })
-watch(() => form.value.continua, () => submit())
-const submit = async () => {
-  loading.value++
-  await coleccion.sms.put({ id: props.data.id, data: form.value })
-    .then(res => process.PUT(res.data, () => {
-      coleccion.get()
-      coleccion.nav.get()
-    }, () => { }))
-    .catch(err => console.log(err)) // unexpected server response
-  loading.value--
-}
 const to = ref({ name: 'sms-componer', query: { previo: props.data.id } })
 //
 const source = ref(props.data.texto)
 const { copy, copied, isSupported } = useClipboard({ source })
 //
-const listaNotificados = ref(null)
-watch(listaNotificados, val => {
-  val && coleccion.sms.notificados.get({ mensaje_id: props.data.id })
-})
+//
 const ageno = computed(() => props.data.de !== useAuthStore().authUser.name)
 const tippyText = ref('Menú del mensaje')
 const tippy = ref({ content: tippyText.value })
@@ -83,7 +79,7 @@ const rootStyle = computed(() => ({
         <template #tooltip-content>
           <span class="text-nowrap">Ver opciones</span>
         </template>
-        <BDropdownItem v-if="data.continua" @click="form.continua = false">
+        <BDropdownItem v-if="data.continua" @click="continua = false">
           <UIcon name="bi-stop-circle" class="me-2" />
           No continuar
         </BDropdownItem>
@@ -91,7 +87,7 @@ const rootStyle = computed(() => ({
           <UIcon name="bi-copy" class="me-2" />
           Copiar texto
         </BDropdownItem>
-        <BDropdownItem @click="listaNotificados = true">
+        <BDropdownItem @click="showDestinatarios = true">
           <UIcon name="bi-people" class="me-2" />
           Ver notificados
         </BDropdownItem>
@@ -101,8 +97,8 @@ const rootStyle = computed(() => ({
         <UIcon name="bi-arrow-right" />
       </BButton>
     </div>
-    <ListaNotificados v-model="listaNotificados" :notificados="coleccion.sms.notificados.data"
-      :loading="coleccion.sms.notificados.status.loading" />
+    <ListaDestinatarios v-model="showDestinatarios" :destinatarios="destinatarios.data"
+      :loading="destinatarios.status.loading" />
   </div>
 </template>
 

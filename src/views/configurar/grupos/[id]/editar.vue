@@ -1,17 +1,16 @@
 <script setup>
 const props = defineProps({ back: Function })
 
-import useHandleSubmit from '@/composables/useHandleSubmit.js'
-import useGrupos from '@/stores/config-grupos'
-import { ref, computed, watch, onMounted, inject, watchEffect } from 'vue'
+import { isValidationError } from '@/api/client'
+import { useGruposStore, useGrupoStore } from '@/stores/grupos'
+import { ref, computed, watch, onMounted, watchEffect } from 'vue'
 
-// const loading = inject('app:loading')
-const process = useHandleSubmit()
 const model = ref(null)
 const dataReady = ref(null)
 const mounted = ref(null)
-const grupos = useGrupos()
-const data = computed(() => grupos.grupo.data)
+const grupos = useGruposStore()
+const grupo = useGrupoStore()
+const data = computed(() => grupo.data)
 const form = ref({
   nombre: null,
   apodo: null,
@@ -38,17 +37,12 @@ const validate = () => {
 }
 const submit = async () => {
   if (!validate()) return
-  // loading.value++
-  await grupos.grupo.put({ id: data.value.id, data: form.value })
-    .then(res => process.PUT(res.data,
-      () => {
-        Promise.all([
-          grupos.get(),
-          grupos.grupo.get(data.value.id)
-        ]).then(() => model.value = false)
-      },
-      errs => errors.value = errs))
-  // loading.value--
+  await grupo.put(data.value.id, form.value)
+    .then(res => {
+      grupos.replace(res)
+      model.value = false
+    })
+    .catch(err => isValidationError(err) && (errors.value = err.errors))
 }
 </script>
 

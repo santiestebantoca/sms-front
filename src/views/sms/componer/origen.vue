@@ -1,36 +1,32 @@
 <script setup>
 const props = defineProps({ back: Function })
 
-import useGrupos from '@/stores/componer-grupos'
-import { ref, watch, inject, onUnmounted } from 'vue'
+import { useGruposStore } from '@/stores/grupos'
+import { ref, watch, inject, onMounted, onUnmounted } from 'vue'
 
-// const loading = inject('app:loading')
-const selection = inject('componer:selection')
-const grupos = useGrupos()
+const origen = inject('componer:origen')
+const grupos = useGruposStore()
 const active = ref([])
 const model = ref(null)
 const submit = async () => {
-  selection.value.grupos = active.value.map(id => grupos.find(id))
+  origen.value = active.value
   model.value = false
 }
-// Initial
-watch(() => grupos.status.loading, val => !val && (model.value = true))
-//   if (val) loading.value++
-//   else {
-//     loading.value--
-//     model.value = true
-//   }
-// })
-grupos.query = { label: 'origen' } // it makes a get
-onUnmounted(() => grupos.$reset())
+//
+onMounted(() => model.value = true)
+grupos.get({ label: 'origen' })
+onUnmounted(() => grupos.reset())
 </script>
 
 <template>
   <BModal title="Seleccionar origen" v-model="model" @hidden="back">
-    <RootTree>
+    <div v-if="grupos.status.loading" class="p-5 text-center">
+      <BSpinner />
+    </div>
+    <RootTree v-else>
       <TreeNode v-for="data in grupos.data" :data="data" :key="data.id">
         <template #default="{ data, leaf }">
-          <input v-if="leaf" type="checkbox" v-model="active" :value="data.id" />
+          <input v-if="leaf" type="checkbox" v-model="active" :value="data" />
           <UIcon v-else name="bi-subtract" style="color:var(--bs-yellow);flex-shrink: 0;" />
           <span v-text="data.nombre" class="text-truncate" />
         </template>

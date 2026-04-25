@@ -1,14 +1,12 @@
 <script setup>
 const props = defineProps({ grupoId: Number, back: Function })
 
-import useHandleSubmit from '@/composables/useHandleSubmit.js'
-import useGrupos from '@/stores/config-grupos'
+import { useConfigGrupoStore, useConfigGrupoSuscriptoresStore } from '@/stores/config-grupos'
 import { ref } from 'vue'
 
-// const loading = inject('app:loading')
-const process = useHandleSubmit()
 const model = ref(true)
-const grupos = useGrupos()
+const grupo = useConfigGrupoStore()
+const suscriptores = useConfigGrupoSuscriptoresStore()
 const form = ref({
   nombre: null,
   cargo: null,
@@ -30,12 +28,10 @@ const validate = () => {
 }
 const submit = async () => {
   if (!validate()) return
-  // loading.value++
-  await grupos.grupo.suscriptores.post(form.value)
-    .then(res => process.POST(res.data,
-      () => grupos.grupo.get(props.grupoId).then(() => model.value = false),
+  await suscriptores.post(form.value)
+    .then(res => process.POST(res,
+      () => grupo.get(props.grupoId).then(() => model.value = false),
       errs => errors.value = errs))
-  // loading.value--
 }
 </script>
 

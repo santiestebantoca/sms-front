@@ -2,7 +2,7 @@
 import ImpersonateSearch from './ImpersonateSearch.vue'
 import ImpersonateUser from './ImpersonateUser.vue'
 import ImpersonateUsers from './ImpersonateUsers.vue'
-import useAuthStore from '@/stores/auth'
+import { useAuthStore } from '@/stores/auth'
 import { computed } from 'vue'
 
 const auth = useAuthStore()

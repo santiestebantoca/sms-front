@@ -1,23 +1,20 @@
 <script setup>
 const props = defineProps({ back: Function })
 
-import useNotificados from '@/stores/componer-notificados'
+import { useGruposNotificadosStore, useNotificadosCheckedStore } from '@/stores/grupos-notificados'
 import { useToast } from 'bootstrap-vue-next'
-import { ref, onMounted, watch } from 'vue'
+import { ref, onMounted, watch, computed } from 'vue'
+import { storeToRefs } from 'pinia'
 
 const { create: showToast } = useToast()
-const notificados = useNotificados()
+const notificados = useGruposNotificadosStore()
+const { gruposIds, destinatariosIds } = storeToRefs(useNotificadosCheckedStore())
 const model = ref(false)
-onMounted(() => {
-  if (notificados.data.length) model.value = true
-  else props.back()
-})
-const checkChildren = (grupoId, checked) => {
-  const grupo = notificados.data.find(d => d.id === grupoId)
-  grupo.suscriptores.forEach(d => d.checked = checked)
-}
-watch(() => notificados.suscriptores?.counter, val => {
-  if (val === 0)
+
+onMounted(() => model.value = true)
+
+watch(destinatariosIds, val => {
+  if (val.length === 0)
     showToast({ body: 'Debe haber al menos un suscriptor seleccionado.', variant: 'warning' })
 })
 </script>
@@ -27,13 +24,13 @@ watch(() => notificados.suscriptores?.counter, val => {
     <RootTree :childrenNames="['suscriptores']">
       <TreeNode v-for="data in notificados.data" :data="data" :key="data.id">
         <template #default="{ data }">
-          <template v-if="data.tipo === 'grupo'">
-            <input type="checkbox" v-model="data.checked" @input="checkChildren(data.id, $event.target.checked)" />
+          <template v-if="!data.grupo">
+            <input type="checkbox" v-model="gruposIds" :value="data.id" />
             <UIcon name="bi-subtract" style="color:var(--bs-yellow);flex-shrink: 0;" />
             <span v-text="data.apodo || data.nombre" class="text-truncate" />
           </template>
           <template v-else>
-            <input type="checkbox" v-model="data.checked" />
+            <input type="checkbox" v-model="destinatariosIds" :value="data.id" />
             <span v-text="data.nombre" class="text-truncate" />
             <span v-text="data.telefono" style="color:var(--bs-pink)" />
           </template>

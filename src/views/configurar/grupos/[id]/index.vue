@@ -5,14 +5,16 @@ import GrupoCard from '@/components/features/configurar/grupos/GrupoCard.vue'
 import HijosCard from '@/components/features/configurar/grupos/GrupoHijosCard.vue'
 import SuscriptoresCard from '@/components/features/configurar/grupos/GrupoSuscriptoresCard.vue'
 import NotificaCard from '@/components/features/configurar/grupos/GrupoNotificaCard.vue'
-import useGruposStore from '@/stores/config-grupos'
+import { useGrupoStore } from '@/stores/grupos'
 import { ref, computed, watch, markRaw } from 'vue'
 
-const grupo = useGruposStore().grupo
+const grupo = useGrupoStore()
 const data = computed(() => grupo.data)
 
-const show = computed(() => data.value?.id === props.grupoId)
-watch(() => props.grupoId, val => grupo.get(val), { immediate: true })
+const ready = computed(() => data.value?.id === props.grupoId)
+watch(() => props.grupoId, val => {
+  grupo.get(val, { include: "suscriptores,hijos,notificados" })
+}, { immediate: true })
 
 const tabsData = ref([
   {
@@ -40,8 +42,11 @@ const tabsData = ref([
 </script>
 
 <template>
-  <div v-if="show">
-    <BTabs>
+  <div>
+    <div class="text-center p-5" v-if="!ready">
+      <BSpinner />
+    </div>
+    <BTabs v-else>
       <BTab v-for="tab in tabsData" :key="tab.id" :active="tab.active" :title="tab.title">
         <component :is="tab.componente.is" :data="tab.componente.data" />
       </BTab>
@@ -51,15 +56,11 @@ const tabsData = ref([
 </template>
 
 <style scoped>
-:deep(.nav-item),
 :deep(.nav-link) {
   border: none !important;
   margin-bottom: 0 !important;
   line-height: normal;
   --bs-nav-tabs-link-active-color: var(--bs-primary);
-}
-
-:deep(.nav-link) {
   position: relative;
   padding-bottom: 12px;
 }

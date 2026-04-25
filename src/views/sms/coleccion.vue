@@ -1,50 +1,57 @@
-<!-- 
-Filter options
-Mi turno: mensaje.de = me, mensaje.en = (today, yesterday, before yesterday)
--->
 <script setup>
 import { toSQLString } from '@/composables/useDates'
-import useColeccionStore from '@/stores/coleccion'
+import { useSmssStore, useSmssFiltrosStore } from '@/stores/smss'
 import MensajeCard from '@/components/features/sms/coleccion/MensajeCard.vue'
 import { tidy, filter, groupBy } from '@tidyjs/tidy'
+import { useDebounce } from '@vueuse/core'
 import { ref, computed, watch } from 'vue'
 
-const coleccion = useColeccionStore()
-const buscar = ref(null)
-const buscarLower = computed(() => buscar.value?.toLowerCase())
-const buscarDisabled = computed(() => !coleccion.data.length)
-const selection = ref('continua')
-const updateQuery = () => {
-  if (selection.value === 'continua')
-    coleccion.query = { continua: true }
-  else {
-    const ahora = new Date()
-    const empieza = new Date()
-    const ayer = empieza.getHours() < 8
-    empieza.setDate(empieza.getDate() - (ayer ? 1 : 0))
-    empieza.setHours(8, 0, 0, 0)
-    ahora.setHours(23, 59, 59, 0)
-    coleccion.query = {
-      desde: toSQLString(empieza),
-      hasta: toSQLString(ahora)
+const smss = useSmssStore()
+const filtros = useSmssFiltrosStore()
+filtros.continua = true
+const selection = computed({
+  get() {
+    return filtros.continua ? 'continua' : 'turno'
+  },
+  set(newValue) {
+    if (newValue === 'continua') {
+      filtros.continua = true
+      filtros.desde = null
+      filtros.hasta = null
+    } else {
+      const ahora = new Date()
+      const empieza = new Date()
+      const ayer = empieza.getHours() < 8
+      empieza.setDate(empieza.getDate() - (ayer ? 1 : 0))
+      empieza.setHours(8, 0, 0, 0)
+      ahora.setHours(23, 59, 59, 0)
+      filtros.continua = null
+      filtros.desde = toSQLString(empieza)
+      filtros.hasta = toSQLString(ahora)
     }
   }
-}
-watch(selection, updateQuery, { immediate: true })
-// Data:: transform
+})
+//
+// Buscar (fuera filtros / no es persistente)
+const buscar = ref(null)
+const debouncedBuscar = useDebounce(buscar, 300)
+const buscarLower = computed(() => debouncedBuscar.value?.toLowerCase())
+const buscarDisabled = computed(() => !smss.data.length)
+//
+// Data:: transform y filtro Buscar
 const data = computed(() =>
   tidy(
-    coleccion.data,
-    ...buscar.value ? [filter(d => d.texto.toLowerCase().includes(buscarLower.value))] : [],
+    smss.data,
+    ...buscarLower.value ? [filter(d => d.texto.toLowerCase().includes(buscarLower.value))] : [],
     groupBy('subgrupo', [], groupBy.entriesObject())
   ))
-//
+
 const mostrando = computed(() => {
   if (buscar.value) {
     const m = data.value.reduce((a, d) => a + d.values.length, 0)
     return `${m} mensaje${m === 1 ? ' filtrado' : 's filtrados'}`
   } else {
-    const m = coleccion.data.length
+    const m = smss.data.length
     const c = data.value.length
     return `${m} mensaje${m === 1 ? '' : 's'} en ${c} conversaci${c === 1 ? 'ón' : 'ones'}`
   }
@@ -58,19 +65,9 @@ const mostrando = computed(() => {
         <span class="small fw-semibold">MENSAJES</span>
         <div class="mx-auto" />
       </div>
-      <div class="mb-2 ps-12">
-        <div class="d-inline-block">
-          <BFormRadio v-model="selection" value="continua">
-            Pendientes por continuar
-          </BFormRadio>
-        </div>
-      </div>
-      <div class="mb-3 ps-12">
-        <div class="d-inline-block">
-          <BFormRadio v-model="selection" value="turno">
-            Enviados en este turno
-          </BFormRadio>
-        </div>
+      <div class="mt-3 ps-12 vstack gap-2">
+        <BFormRadio v-model="selection" value="continua"> Pendientes por continuar </BFormRadio>
+        <BFormRadio v-model="selection" value="turno"> Enviados en este turno </BFormRadio>
       </div>
     </div>
     <div class="px-1 overflow-auto position-relative">
@@ -84,7 +81,7 @@ const mostrando = computed(() => {
             </BButton>
           </div>
         </div>
-        <BButton class="me-auto" variant="flat-dark" @click="updateQuery">
+        <BButton class="me-auto" variant="flat-dark" @click="smss.get">
           <UIcon name="bi-arrow-clockwise" /> Actualizar
         </BButton>
         <div v-text="mostrando" class="small fw-semibold text-secondary" />

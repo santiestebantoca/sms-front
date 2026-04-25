@@ -1,12 +1,9 @@
 <script setup>
 const props = defineProps({ back: Function })
 
-import useHandleSubmit from '@/composables/useHandleSubmit.js'
 import usePlantillas from '@/stores/config-plantillas'
 import { ref, inject } from 'vue'
 
-const loading = inject('app:loading')
-const process = useHandleSubmit()
 const model = ref(true)
 const plantillas = usePlantillas()
 const form = ref({
@@ -20,12 +17,10 @@ const validate = () => {
 }
 const submit = async () => {
   if (!validate()) return
-  loading.value++
   await plantillas.post(form.value)
-    .then(res => process.POST(res.data,
+    .then(res => process.POST(res,
       () => plantillas.get().then(() => model.value = false),
       errs => errors.value = errs))
-  loading.value--
 }
 </script>
 

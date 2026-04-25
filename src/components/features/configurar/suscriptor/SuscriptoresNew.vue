@@ -4,14 +4,11 @@ This compo uses a dialog and tabs: best UX is to scroll top on tab switch
 <script setup>
 const props = defineProps({ back: Function })
 
-import useHandleSubmit from '@/composables/useHandleSubmit.js'
 import useSuscriptores from '@/stores/config-suscriptores'
-import useGrupos from '@/stores/config-grupos'
+import useGrupos from '@/stores/config-grupos/index'
 import GrupoSel from './GrupoSel.vue'
 import { ref, computed, watch, inject, nextTick } from 'vue'
 
-const loading = inject('app:loading')
-const process = useHandleSubmit()
 const model = ref(true)
 const tab = ref('general')
 const suscriptores = useSuscriptores()
@@ -37,12 +34,10 @@ const validate = () => {
 }
 const submit = async () => {
   if (!validate()) return
-  loading.value++
   await suscriptores.post(form.value)
-    .then(res => process.POST(res.data,
+    .then(res => process.POST(res,
       () => suscriptores.get().then(() => model.value = false),
       errs => errors.value = errs))
-  loading.value--
 }
 //
 const grupo = computed(() => useGrupos().find(form.value.grupo))

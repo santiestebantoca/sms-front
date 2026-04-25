@@ -1,14 +1,13 @@
 <script setup>
 const props = defineProps({ grupoId: Number, back: Function })
 
-import useHandleSubmit from '@/composables/useHandleSubmit.js'
-import useGrupos from '@/stores/config-grupos'
+import { isValidationError } from '@/api/client'
+import { useGruposStore, useGrupoStore } from '@/stores/grupos'
 import { ref } from 'vue'
 
-// const loading = inject('app:loading')
-const process = useHandleSubmit()
 const model = ref(true)
-const grupos = useGrupos()
+const grupos = useGruposStore()
+const grupo = useGrupoStore()
 const form = ref({
   nombre: null,
   apodo: null,
@@ -25,17 +24,12 @@ const validate = () => {
 }
 const submit = async () => {
   if (!validate()) return
-  // loading.value++
   await grupos.post(form.value)
-    .then(res => process.POST(res.data,
-      () => Promise.all([
-        grupos.get(),
-        ...props.grupoId === grupos.grupo.data.id
-          ? [grupos.grupo.get(props.grupoId)]
-          : []
-      ]).then(() => model.value = false),
-      errs => errors.value = errs))
-  // loading.value--
+    .then(() => Promise.all([
+      grupos.get(),
+      grupo.get(props.grupoId, { include: 'hijos' })]))
+    .then(() => model.value = false)
+    .catch(err => isValidationError(err) && (errors.value = err.errors))
 }
 </script>
 

@@ -5,7 +5,7 @@ It is not a dialog and allows one active
 <script setup>
 const value = defineModel()
 
-import useGrupos from '@/stores/config-grupos'
+import useGrupos from '@/stores/config-grupos/index'
 import { ref, computed, watch, provide } from 'vue'
 
 const active = ref([])

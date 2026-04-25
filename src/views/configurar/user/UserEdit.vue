@@ -1,12 +1,9 @@
 <script setup>
 const props = defineProps({ back: Function })
 
-import useHandleSubmit from '@/composables/useHandleSubmit.js'
 import useUsers from '@/stores/config-users'
 import { ref, computed, watch, inject } from 'vue'
 
-const loading = inject('app:loading')
-const process = useHandleSubmit()
 const model = ref(null)
 const users = useUsers()
 const data = computed(() => users.user.data)
@@ -33,9 +30,8 @@ const validate = () => {
 }
 const submit = async () => {
   if (!validate()) return
-  loading.value++
-  await users.user.put({ id: data.value.id, data: form.value })
-    .then(res => process.PUT(res.data,
+  await users.user.put(data.value.id, form.value)
+    .then(res => process.PUT(res,
       () => {
         Promise.all([
           users.get(),
@@ -43,7 +39,6 @@ const submit = async () => {
         ]).then(() => model.value = false)
       },
       errs => errors.value = errs))
-  loading.value--
 }
 </script>
 

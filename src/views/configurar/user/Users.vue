@@ -2,7 +2,7 @@
 const props = defineProps({ id: Number, setId: Function, compose: Object })
 
 import useUsers from '@/stores/config-users'
-// import useGrupos from '@/stores/config-grupos'
+// import useGrupos from '@/stores/config-grupos/index'
 import UsersNew from './UsersNew.vue'
 import { ref, watch, provide } from 'vue'
 

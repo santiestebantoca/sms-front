@@ -1,10 +1,10 @@
-import useAuthStore from '@/stores/auth'
-import useColeccionStore from '@/stores/coleccion'
+import { useAuthStore } from '@/stores/auth'
+import { useSmssMetaStore } from '@/stores/smss'
 import { computed, onUnmounted } from 'vue'
 
 export default function useNavigation() {
-  const admin = useAuthStore().authUser.admin
-  const coleccion = useColeccionStore().nav
+  const auth = useAuthStore()
+  const meta = useSmssMetaStore()
   const options = computed(() => ({
     header: [
       { to: '/sms', label: 'Mensaje', id: 'nav-options-header-sms' },
@@ -24,7 +24,7 @@ export default function useNavigation() {
         label: 'Colección',
         name: 'coleccion',
         id: 'nav-options-componer-sms-coleccion',
-        count: coleccion.data
+        count: meta.data.pendientes
       },
     ],
     configurar: [
@@ -42,13 +42,6 @@ export default function useNavigation() {
         name: 'suscriptores',
         id: 'nav-options-configurar-suscriptores'
       },
-      ...admin ? [{
-        to: { name: 'configurar-users' },
-        icon: 'bi-person-workspace',
-        label: 'Usuarios',
-        name: 'users',
-        id: 'nav-options-configurar-users'
-      }] : [],
       {
         to: { name: 'configurar-plantillas' },
         icon: 'bi-card-text',
@@ -56,12 +49,15 @@ export default function useNavigation() {
         name: 'plantillas',
         id: 'nav-options-configurar-plantillas'
       },
+      ...auth.authUser.admin ? [{
+        to: { name: 'configurar-users' },
+        icon: 'bi-person-workspace',
+        label: 'Usuarios',
+        name: 'users',
+        id: 'nav-options-configurar-users'
+      }] : [],
     ]
   }))
-
-  // coleccion.startPolling()
-
-  // onUnmounted(() => coleccion.stopPolling())
 
   return { options }
 }

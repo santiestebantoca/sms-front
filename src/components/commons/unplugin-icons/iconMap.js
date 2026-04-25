@@ -33,9 +33,11 @@ import BiPlusLg from '~icons/bi/plus-lg'
 import BiPlus from '~icons/bi/plus'
 import BiPencil from '~icons/bi/pencil'
 import BiCheck2Square from '~icons/bi/check2-square'
+import BiExclamationCircle from '~icons/bi/exclamation-circle'
 
 export const iconMap = {
     // 'mdi-home': MdiHome,
+    'bi-exclamation-circle': BiExclamationCircle,
     'bi-check2-square': BiCheck2Square,
     'bi-pencil': BiPencil,
     'bi-plus': BiPlus,

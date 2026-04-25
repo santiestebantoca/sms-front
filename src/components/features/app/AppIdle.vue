@@ -1,3 +1,4 @@
+<!-- AppIdle.vue (actualizado) -->
 <script setup>
 class IdleTimer {
   constructor(timeout, warning) {
@@ -17,7 +18,7 @@ class IdleTimer {
 
     this.isStarted = false
     this.isListening = false
-    this.status = null // {null, repose, listening, warning, timeout}
+    this.status = null
   }
 
   setTimers() {
@@ -89,44 +90,35 @@ const props = defineProps({
   warning: Number
 })
 
-import useHttpStore from '@/stores/http'
-import useAuthStore from '@/stores/auth'
+import { useLastServerAccess } from '@/composables/useLastServerAccess'
+import { useAuthStore } from '@/stores/auth'
 import { ref, computed, watch, onBeforeUnmount } from 'vue'
 
-const http = useHttpStore()
+const lastServerAccessStore = useLastServerAccess()
 const auth = useAuthStore()
 const emit = defineEmits(['expired'])
+
 const idleTimer = ref(new IdleTimer(props.timeout, props.warning))
+
 idleTimer.value.heartBeat = () => auth.getAuthUser()
 idleTimer.value.onTimeout = () => emit('expired')
+
 const warning = computed(() => idleTimer.value.status === 'warning')
+
 watch(() => auth.auth, auth => {
   if (auth) idleTimer.value.start()
   else idleTimer.value.stop()
 })
-watch(() => http.lastServerAccess, () => idleTimer.value.reset())
+
+// ✅ El watch sigue funcionando exactamente igual
+watch(() => lastServerAccessStore.lastServerAccess.value, () => {
+  idleTimer.value.reset()
+})
+
 onBeforeUnmount(() => idleTimer.value.stop())
 </script>
 
 <template>
-  <Teleport to="body">
-    <Transition>
-      <div class="modal-backdrop fade show" v-if="warning"></div>
-    </Transition>
-  </Teleport>
+  <BOverlay v-model="warning" :no-wrap="true" blur="2px" variant="dark" opacity="0.6" z-index="1040"
+    class="position-fixed top-0 start-0 w-100 h-100" style="pointer-events: none;" />
 </template>
-
-<style scoped>
-.v-enter-active {
-  transition: opacity 0.3s;
-}
-
-.v-leave-active {
-  transition: opacity 0.1s;
-}
-
-.v-enter-from,
-.v-leave-to {
-  opacity: 0;
-}
-</style>

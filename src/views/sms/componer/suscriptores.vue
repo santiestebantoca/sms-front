@@ -1,25 +1,32 @@
 <script setup>
 const props = defineProps({ back: Function })
 
-import useNotificados from '@/stores/componer-notificados'
-import { ref, onMounted, computed } from 'vue'
+import { useGruposNotificadosStore, useNotificadosCheckedStore } from '@/stores/grupos-notificados'
+import { useToast } from 'bootstrap-vue-next'
+import { ref, onMounted, watch, computed } from 'vue'
+import { storeToRefs } from 'pinia'
 
-const notificados = useNotificados()
+const { create: showToast } = useToast()
+const notificados = useGruposNotificadosStore()
+const { destinatariosIds } = storeToRefs(useNotificadosCheckedStore())
 const model = ref(false)
-onMounted(() => {
-  if (notificados.data.length) model.value = true
-  else props.back()
+
+onMounted(() => model.value = true)
+
+watch(destinatariosIds, val => {
+  if (val.length === 0)
+    showToast({ body: 'Debe haber al menos un suscriptor seleccionado.', variant: 'warning' })
 })
-const treeData = computed(() => notificados.data
-  .reduce((a, d) => [...a, ...d.suscriptores], []))
+
+const destinatarios = computed(() => notificados.data.flatMap(grupo => grupo.suscriptores))
 </script>
 
 <template>
-  <BModal v-model="model" @hidden="back" title="Suscriptores notificados">
+  <BModal v-model="model" @hidden="back" title="Destinatarios">
     <RootTree list>
-      <TreeNode v-for="data in treeData" :data="data" :key="data.id">
+      <TreeNode v-for="data in destinatarios" :data="data" :key="data.id">
         <template #default="{ data }">
-          <input type="checkbox" v-model="data.checked" />
+          <input type="checkbox" v-model="destinatariosIds" :value="data.id" />
           <span v-text="data.nombre" class="text-truncate" />
           <span v-text="data.telefono" style="color:var(--bs-pink)" />
         </template>

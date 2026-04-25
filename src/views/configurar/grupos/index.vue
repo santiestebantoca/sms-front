@@ -5,15 +5,15 @@ const props = defineProps({
   flows: Object
 })
 
-import useGrupos from '@/stores/config-grupos'
+import { useGruposStore } from '@/stores/grupos'
 import CrearGrupo from '@/views/configurar/grupos/_flows/crear.vue'
 import { ref, watch, watchEffect } from 'vue'
 
-const grupos = useGrupos()
+const grupos = useGruposStore()
+grupos.get()
 const active = ref(null)
 watch(active, val => props.setGrupoId(val))
 watchEffect(() => active.value = props.grupoId)
-grupos.get()
 </script>
 
 <template>
@@ -37,6 +37,9 @@ grupos.get()
           </TreeNode>
         </RootTree>
       </template>
+      <div v-else class="mt-5 text-center">
+        <BSpinner />
+      </div>
     </div>
     <div class="p-1 overflow-auto">
       <div v-if="!grupoId" class="mt-5 text-center">

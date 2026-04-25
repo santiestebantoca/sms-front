@@ -1,31 +1,24 @@
 <script setup>
-const props = defineProps({ back: Function, forward: Function })
+const props = defineProps({ grupoId: Number, back: Function, forward: Function })
 
-import useHandleSubmit from '@/composables/useHandleSubmit.js'
-import useGrupos from '@/stores/config-grupos'
+import { useGruposStore } from '@/stores/grupos'
 import { useToast } from 'bootstrap-vue-next'
 import { ref, computed, onMounted } from 'vue'
 
-const process = useHandleSubmit()
 const model = ref(false)
 const deleted = ref(false)
 const toast = useToast()
-const grupos = useGrupos()
-const data = computed(() => grupos.grupo.data)
+const grupos = useGruposStore()
 onMounted(() => model.value = true)
 //
 const submit = async () => {
-  // loading.value++
-  await grupos.grupo.del(data.value.id)
-    .then(res => process.DELETE(res.data,
-      async () => {
-        await grupos.get()
-        toast.create({ body: 'Grupo eliminado', variant: 'success' })
-        deleted.value = true
-        model.value = false
-      },
-      () => { }))
-  // loading.value--
+  await grupos.del(props.grupoId)
+    .then(() => {
+      toast.create({ body: 'Grupo eliminado', variant: 'success' })
+      deleted.value = true
+      model.value = false
+    })
+    .catch(err => toast.create({ body: 'No se pudo ejecutar la acción.', variant: 'danger' }))
 }
 const hidden = () => {
   if (deleted.value) props.forward()
@@ -36,14 +29,19 @@ const hidden = () => {
 <template>
   <BModal v-model="model" title="Eliminar grupo" @hidden="hidden">
     <p>
-      Se eliminará el grupo y se eliminarán los grupos que pertenecen a él.
-      Se eliminarán también los suscriptores que pertenecen a estos grupos.
+      Esta acción eliminará permanentemente:
     </p>
-    <p>
-      ¿Desea continuar?
-    </p>
+    <ul>
+      <li>El grupo seleccionado</li>
+      <li>Grupos pertenecientes a él (grupos hijos)</li>
+      <li>Suscriptores pertenecientes a estos grupos</li>
+    </ul>
+    <p class="text-danger fw-semibold">Esta acción no se puede deshacer.</p>
     <template #footer>
-      <BButton variant="primary" @click="submit">
+      <BButton variant="secondary" @click="model = false">
+        Cancelar
+      </BButton>
+      <BButton variant="danger" @click="submit">
         Aceptar
       </BButton>
     </template>

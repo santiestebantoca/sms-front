@@ -1,4 +1,4 @@
-import useAuthStore from '@/stores/auth'
+import { useAuthStore } from '@/stores/auth'
 import { computed } from 'vue'
 
 export default function useAuthUserMenu() {

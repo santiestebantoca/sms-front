@@ -1,5 +1,5 @@
 import { createRouter, createWebHashHistory } from 'vue-router'
-import useAuthStore from '@/stores/auth'
+import { useAuthStore } from '@/stores/auth'
 
 const routesAuth = [
   {
@@ -95,7 +95,8 @@ const routesConfigurar = [
                 path: 'eliminar',
                 name: 'configurar-grupo-eliminar',
                 component: () => import('@/views/configurar/grupos/[id]/eliminar.vue'),
-                props: () => ({
+                props: route => ({
+                  grupoId: parseInt(route.params.grupoId),
                   forward: () => router.push({ name: 'configurar-grupos' }),
                   back: () => router.push({ name: 'configurar-grupo' }),
                 })
@@ -426,6 +427,7 @@ router.afterEach((to) => {
 
 router.beforeEach(async (to, from) => {
   const auth = useAuthStore()
+  // console.log(auth)
   if (to.matched.some(record => record.meta.requiresAuth)) {
     if (auth.auth === null) // browser navigation (initial state)
       await auth.getAuthUser()

@@ -1,17 +1,15 @@
 <script setup>
 const props = defineProps({ grupoId: Number, suscriptorId: Number, back: Function })
 
-import useHandleSubmit from '@/composables/useHandleSubmit.js'
-import useGrupos from '@/stores/config-grupos'
+import { useConfigGrupoStore, useConfigGrupoSuscriptoresStore } from '@/stores/config-grupos'
 import { ref, computed, watch, onMounted, watchEffect } from 'vue'
 
-// const loading = inject('app:loading')
-const process = useHandleSubmit()
 const model = ref(null)
 const mounted = ref(null)
 const dataReady = ref(null)
-const grupos = useGrupos()
-const data = computed(() => grupos.grupo.data.suscriptores?.find(d => d.id === props.suscriptorId))
+const grupo = useConfigGrupoStore()
+const suscriptores = useConfigGrupoSuscriptoresStore()
+const data = computed(() => grupo.data.suscriptores?.find(d => d.id === props.suscriptorId))
 const form = ref({
   nombre: null,
   cargo: null,
@@ -43,12 +41,10 @@ const validate = () => {
 }
 const submit = async () => {
   if (!validate()) return
-  // loading.value++
-  await grupos.grupo.suscriptores.put({ id: props.suscriptorId, data: form.value })
-    .then(res => process.PUT(res.data,
-      () => grupos.grupo.get(props.grupoId).then(() => model.value = false),
+  await suscriptores.put(props.suscriptorId, form.value)
+    .then(res => process.PUT(res,
+      () => grupo.get(props.grupoId).then(() => model.value = false),
       errs => errors.value = errs))
-  // loading.value--
 }
 </script>
 

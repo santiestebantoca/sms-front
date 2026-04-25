@@ -1,18 +1,22 @@
 <script setup>
 const model = defineModel()
 
-import usePlantillas from '@/stores/componer-plantillas'
+import { usePlantillasStore } from '@/stores/plantillas'
+import { useDebounce } from '@vueuse/core'
 import { ref, watch } from 'vue'
 
-const plantillas = usePlantillas()
-const show = ref(false)
+const plantillas = usePlantillasStore()
+// const show = ref(false)
+//
+// Buscar (fuera filtros / no es persistente)
 const buscar = ref(null)
-// const vFocus = { mounted: el => el.focus() }
-watch(buscar, val => {
-  if (val) plantillas.query = { texto: val }
-  else plantillas.$reset()
-}, { immediate: true })
-watch(show, () => buscar.value = null)
+const debouncedBuscar = useDebounce(buscar, 300)
+//
+watch(debouncedBuscar, val => {
+  if (val) plantillas.get({ texto: val })
+  else plantillas.reset()
+})
+// watch(show, () => buscar.value = null)
 const tippy = ref({
   content: 'Click para insertar en el mensaje',
   popperOptions: {
@@ -20,7 +24,7 @@ const tippy = ref({
   },
 })
 //
-const emit = defineEmits(['close'])
+const emit = defineEmits(['close', 'select'])
 const close = () => {
   model.value = false
   emit('close')
@@ -56,8 +60,8 @@ const close = () => {
     </div>
     <!-- List -->
     <div class="p-3">
-      <BButton v-for="d, i in plantillas.data" :key="i" variant="warning" class="btn-plantilla text-start mb-3"
-        @click="$emit('select', d.texto)" v-tippy="tippy">
+      <BButton v-for="d, i in plantillas.data" :key="i" variant="warning"
+        class="btn-plantilla text-start mb-3 shadow-sm" @click="$emit('select', d.texto)" v-tippy="tippy">
         {{ d.texto }}
       </BButton>
     </div>
