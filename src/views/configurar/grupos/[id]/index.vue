@@ -11,7 +11,6 @@ import { ref, computed, watch, markRaw } from 'vue'
 const grupo = useGrupoStore()
 const data = computed(() => grupo.data)
 
-const ready = computed(() => data.value?.id === props.grupoId)
 watch(() => props.grupoId, val => {
   grupo.get(val, { include: "suscriptores,hijos,notificados" })
 }, { immediate: true })
@@ -43,10 +42,10 @@ const tabsData = ref([
 
 <template>
   <div>
-    <div class="text-center p-5" v-if="!ready">
+    <div class="text-center p-5" v-if="grupo.status.loading">
       <BSpinner />
     </div>
-    <BTabs v-else>
+    <BTabs v-else-if="data.id === grupoId">
       <BTab v-for="tab in tabsData" :key="tab.id" :active="tab.active" :title="tab.title">
         <component :is="tab.componente.is" :data="tab.componente.data" />
       </BTab>

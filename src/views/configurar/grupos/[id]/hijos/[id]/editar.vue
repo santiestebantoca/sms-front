@@ -40,7 +40,7 @@ const submit = async () => {
   if (!validate()) return
   await api.update(props.hijoId, form.value)
     .then(res => {
-      grupo.get(props.grupoId, { include: 'hijos' })
+      grupo.refresh(props.grupoId, { include: 'hijos' })
       grupos.replace(res)
       model.value = false
     })

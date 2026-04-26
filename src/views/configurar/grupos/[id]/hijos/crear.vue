@@ -27,7 +27,7 @@ const submit = async () => {
   await grupos.post(form.value)
     .then(() => Promise.all([
       grupos.get(),
-      grupo.get(props.grupoId, { include: 'hijos' })]))
+      grupo.refresh(props.grupoId, { include: 'hijos' })]))
     .then(() => model.value = false)
     .catch(err => isValidationError(err) && (errors.value = err.errors))
 }

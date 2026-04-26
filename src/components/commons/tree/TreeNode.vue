@@ -1,14 +1,17 @@
 <script setup>
 const props = defineProps({ data: Object, level: { type: Number, default: 0 } })
 
-import { ref, inject, computed } from 'vue'
+import { ref, inject, computed, watch } from 'vue'
 
 const list = inject('tree:list')
 const childrenNames = inject('tree:childrenNames')
 const itemIdName = inject('tree:itemIdName')
+const active = inject('tree:active')
 const open = ref(false)
 const childrenName = computed(() => [...childrenNames.value, 'children'].find(name => props.data.hasOwnProperty(name)))
 const leaf = computed(() => !props.data[childrenName.value]?.length)
+
+watch(active, val => des)
 </script>
 
 <template>

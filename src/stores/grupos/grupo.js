@@ -15,11 +15,20 @@ export const useGrupoStore = defineStore('grupo', () => {
   const data = ref({})
 
   const get = async (id, params = {}) => {
-    status.value.loading = true
+    try { // puede no existir el recurso
+      status.value.loading = true
+      const result = await api.getById(id, params)
+      data.value = result
+    } finally {
+      status.value.loaded = true
+      status.value.loading = false
+    }
+  }
+
+  const refresh = async (id, params = {}) => {
     const result = await api.getById(id, params)
-    deepPatch(data.value, result) // actualiza solo lo que cambió
-    status.value.loaded = true
-    status.value.loading = false
+    if (data.value.id === result.id)
+      deepPatch(data.value, result) // actualiza solo lo que cambió
   }
 
   const put = async (id, _data) => {
@@ -39,5 +48,5 @@ export const useGrupoStore = defineStore('grupo', () => {
     nextTick(() => status.value.resetting = false)
   }
 
-  return { data, status, get, put, reset }
+  return { data, status, get, refresh, put, reset }
 })

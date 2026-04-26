@@ -14,7 +14,7 @@ onMounted(() => model.value = true)
 const submit = async () => {
   await grupos.del(props.hijoId)
     .then(res => {
-      grupo.get(props.grupoId, { include: 'hijos' })
+      grupo.refresh(props.grupoId, { include: 'hijos' })
       model.value = false
     })
     .catch(() => toast.create({ body: 'No se pudo ejecutar la acción.', variant: 'warning' }))
