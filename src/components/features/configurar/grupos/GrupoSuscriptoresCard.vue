@@ -28,9 +28,9 @@ const acciones = computed(() => [
   },
 ])
 //
-// Cuando se elimina un grupo, active no está en data.children, entonces active = null
-watch(() => props.data, ({ suscriptores }) => {
-  if (!suscriptores.some(d => d.id === active.value)) active.value = null
+// Cuando se elimina un item, active no está en items, entonces active = null
+watch(() => props.data.suscriptores, (items) => {
+  if (!items.some(item => item.id === active.value)) active.value = null
 })
 </script>
 

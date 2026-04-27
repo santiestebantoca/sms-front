@@ -1,15 +1,15 @@
 <script setup>
 const props = defineProps({ grupoId: Number, suscriptorId: Number, back: Function })
 
-import { useConfigGrupoStore, useConfigGrupoSuscriptoresStore } from '@/stores/config-grupos'
-import { ref, computed, watch, onMounted, watchEffect } from 'vue'
+import { useGrupoStore } from '@/stores/grupos'
+import { useSuscriptorStore } from '@/stores/suscriptores'
+import { isValidationError } from '@/api/client'
+import { ref, computed, onMounted, watchEffect } from 'vue'
 
 const model = ref(null)
-const mounted = ref(null)
-const dataReady = ref(null)
-const grupo = useConfigGrupoStore()
-const suscriptores = useConfigGrupoSuscriptoresStore()
-const data = computed(() => grupo.data.suscriptores?.find(d => d.id === props.suscriptorId))
+const grupo = useGrupoStore()
+const suscriptor = useSuscriptorStore()
+const data = computed(() => grupo.data.suscriptores?.find(d => d.id === props.suscriptorId) || {})
 const form = ref({
   nombre: null,
   cargo: null,
@@ -17,17 +17,15 @@ const form = ref({
   correo: null,
 })
 const errors = ref({})
-watch(data, d => {
-  if (d) {
-    form.value.nombre = d.nombre
-    form.value.cargo = d.cargo
-    form.value.telefono = d.telefono
-    form.value.correo = d.correo
-    dataReady.value = true
-  }
-}, { immediate: true })
-onMounted(() => mounted.value = true)
-watchEffect(() => model.value = mounted.value && dataReady.value)
+//
+watchEffect(() => {
+  form.value.nombre = data.value.nombre
+  form.value.cargo = data.value.cargo
+  form.value.telefono = data.value.telefono
+  form.value.correo = data.value.correo
+  form.value.descripcion = data.value.descripcion
+})
+onMounted(() => model.value = true)
 //
 const validate = () => {
   const telefono = /^(\+53|53)?\d{8}$/
@@ -41,10 +39,10 @@ const validate = () => {
 }
 const submit = async () => {
   if (!validate()) return
-  await suscriptores.put(props.suscriptorId, form.value)
-    .then(res => process.PUT(res,
-      () => grupo.get(props.grupoId).then(() => model.value = false),
-      errs => errors.value = errs))
+  await suscriptor.put(props.suscriptorId, form.value)
+    .then(res => grupo.refresh(props.grupoId, { include: 'suscriptores' }))
+    .then(() => model.value = false)
+    .catch(err => isValidationError(err) && (errors.value = err.errors))
 }
 </script>
 

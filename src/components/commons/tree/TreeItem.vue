@@ -5,6 +5,8 @@ const props = defineProps({
   treeItemId: Number || String,
   leaf: Boolean,
   level: { type: Number, default: 0 },
+  descendantActive: Boolean,
+  open: Boolean
 })
 
 import { computed, inject } from 'vue'
@@ -13,10 +15,11 @@ const onNodeClick = inject('tree:onNodeClick', () => { })
 const selectable = inject('tree:selectable')
 const active = inject('tree:active')
 const list = inject('tree:list')
-const rootStyle = computed(() => ({
-  '--li-padding-left': list.value ? '8px' : `${14 * props.level + 32}px`
-}))
 const isActive = computed(() => active.value && props.treeItemId === active.value)
+const rootStyle = computed(() => ({
+  '--li-padding-left': list.value ? '8px' : `${14 * props.level + 32}px`,
+  ...props.descendantActive && !open.value ? { '--li-bg-color': 'var(--bs-gray-100)' } : {}
+}))
 //
 const handleClick = () => {
   onNodeClick(props.treeItemId)
@@ -47,16 +50,13 @@ li {
 }
 
 li.active,
-li:active {
-  --li-bg-color: var(--bs-info-100);
-}
-
+li:active,
 li:hover {
-  --li-bg-color: var(--bs-info-50);
+  --li-bg-color: var(--bs-info-50) !important;
 }
 
-li.active:hover,
-li:active:hover {
+li.active,
+li:active {
   --li-border-color: var(--bs-info-200);
 }
 

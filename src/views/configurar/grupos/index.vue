@@ -18,7 +18,7 @@ watchEffect(() => active.value = props.grupoId)
 
 <template>
   <div class="main">
-    <div class="border-end px-1 overflow-auto">
+    <div class="border-end px-1 overflow-auto pb-4">
       <div class="hstack sticky-top bg-white" style="height: 40px;padding-left: 12px;">
         <span class="small fw-semibold">GRUPOS</span>
         <div class="mx-auto" />

@@ -1,6 +1,6 @@
 // stores/coleccion/sms.js
 import { defineStore } from 'pinia'
-import { notificadosApi } from '@/api/grupos-notificados'
+import { notificadosApi as api } from '@/api/grupos-notificados'
 import { ref, computed, nextTick } from 'vue'
 
 export const useGruposNotificadosStore = defineStore('grupos-notificados', () => {
@@ -14,26 +14,31 @@ export const useGruposNotificadosStore = defineStore('grupos-notificados', () =>
 
   const get = async (params) => {
     status.value.loading = true
-    const result = await notificadosApi.getAll(params)
+    const result = await api.getAll(params)
     data.value = result
     status.value.loaded = true
     status.value.loading = false
   }
 
+  const post = async (_data) => {
+    status.value.loading = true
+    const result = await api.create(_data)
+    status.value.loading = false
+    return result
+  }
+
   const reset = () => {
-    status.value.resetting = true
+    status.value.loaded = status.value.resetting = true
     data.value = []
     nextTick(() => status.value.resetting = false)
   }
-
-  // const post = (data) => { } //gruposApi.create(data)
 
   return {
     data,
     get,
     status,
     total,
-    // post,
+    post,
     reset
   }
 })

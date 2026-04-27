@@ -24,6 +24,7 @@ export const useGruposStore = defineStore('grupos', () => {
   const post = async (_data) => {
     status.value.loading = true
     const result = await api.create(_data)
+    // data.value.push(result)
     status.value.loading = false
     return result
   }

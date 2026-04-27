@@ -1,12 +1,14 @@
 <script setup>
 const props = defineProps({ grupoId: Number, back: Function })
 
-import { useConfigGrupoStore, useConfigGrupoSuscriptoresStore } from '@/stores/config-grupos'
+import { isValidationError } from '@/api/client'
+import { useGrupoStore } from '@/stores/grupos'
+import { useSuscriptoresStore } from '@/stores/suscriptores'
 import { ref } from 'vue'
 
 const model = ref(true)
-const grupo = useConfigGrupoStore()
-const suscriptores = useConfigGrupoSuscriptoresStore()
+const grupo = useGrupoStore()
+const suscriptores = useSuscriptoresStore()
 const form = ref({
   nombre: null,
   cargo: null,
@@ -29,9 +31,9 @@ const validate = () => {
 const submit = async () => {
   if (!validate()) return
   await suscriptores.post(form.value)
-    .then(res => process.POST(res,
-      () => grupo.get(props.grupoId).then(() => model.value = false),
-      errs => errors.value = errs))
+    .then(() => grupo.refresh(props.grupoId, { include: 'suscriptores' }))
+    .then(() => model.value = false)
+    .catch(err => isValidationError(err) && (errors.value = err.errors))
 }
 </script>
 

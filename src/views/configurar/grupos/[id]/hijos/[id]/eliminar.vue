@@ -9,8 +9,9 @@ const model = ref(false)
 const grupos = useGruposStore()
 const grupo = useGrupoStore()
 const toast = useToast()
+
 onMounted(() => model.value = true)
-//
+
 const submit = async () => {
   await grupos.del(props.hijoId)
     .then(res => {
@@ -33,7 +34,10 @@ const submit = async () => {
     </ul>
     <p class="text-danger fw-semibold">Esta acción no se puede deshacer.</p>
     <template #footer>
-      <BButton variant="primary" @click="submit">
+      <BButton variant="secondary" @click="model = false">
+        Cancelar
+      </BButton>
+      <BButton variant="danger" @click="submit">
         Aceptar
       </BButton>
     </template>

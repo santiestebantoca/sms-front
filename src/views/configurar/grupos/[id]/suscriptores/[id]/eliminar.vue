@@ -1,32 +1,45 @@
 <script setup>
 const props = defineProps({ grupoId: Number, suscriptorId: Number, back: Function })
 
-import { useConfigGrupoStore, useConfigGrupoSuscriptoresStore } from '@/stores/config-grupos'
-import { ref, computed } from 'vue'
+import { useGrupoStore } from '@/stores/grupos'
+import { useSuscriptoresStore } from '@/stores/suscriptores'
+import { useToast } from 'bootstrap-vue-next'
+import { ref, computed, onMounted, watchEffect } from 'vue'
 
-const model = ref(true)
-const grupo = useConfigGrupoStore()
-const suscriptores = useConfigGrupoSuscriptoresStore()
-const data = computed(() => grupo.data.suscriptores?.find(d => d.id === props.suscriptorId))
-const nombre = ref(data.value.nombre) // otherwise data is undefined before compo unmounts 
-//
+const model = ref(null)
+const grupo = useGrupoStore()
+const suscriptores = useSuscriptoresStore()
+const nombre = ref(null) // preserva su valor aun cuando data es undefined (después de eliminado)
+const toast = useToast()
+
+watchEffect(() => {
+  const data = grupo.data.suscriptores?.find(d => d.id === props.suscriptorId) || {}
+  if (data.nombre) nombre.value = data.nombre
+})
+onMounted(() => model.value = true)
+
 const submit = async () => {
   await suscriptores.del(props.suscriptorId)
-    .then(res => process.DELETE(res,
-      () => grupo.get(props.grupoId).then(() => {
-        model.value = false
-      }),
-      () => { }))
+    .then(res => {
+      grupo.refresh(props.grupoId, { include: 'suscriptores' })
+      model.value = false
+    })
+    .catch(() => toast.create({ body: 'No se pudo ejecutar la acción.', variant: 'warning' }))
 }
 </script>
 
 <template>
   <BModal v-model="model" title="Eliminar suscriptor" @hidden="back">
     <p>
-      ¿Desea eliminar el suscriptor <span class="fw-semibold" v-text="nombre" />?
+      ¿Desea eliminar al suscriptor
+      <span class="fw-semibold" v-text="nombre" />?
     </p>
+    <p class="text-danger fw-semibold">Esta acción no se puede deshacer.</p>
     <template #footer>
-      <BButton variant="primary" @click="submit">
+      <BButton variant="secondary" @click="model = false">
+        Cancelar
+      </BButton>
+      <BButton variant="danger" @click="submit">
         Aceptar
       </BButton>
     </template>
