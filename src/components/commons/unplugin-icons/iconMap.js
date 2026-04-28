@@ -34,9 +34,15 @@ import BiPlus from '~icons/bi/plus'
 import BiPencil from '~icons/bi/pencil'
 import BiCheck2Square from '~icons/bi/check2-square'
 import BiExclamationCircle from '~icons/bi/exclamation-circle'
+import BiIntersect from '~icons/bi/intersect'
+import BiRecordCircle from '~icons/bi/record-circle-fill'
+import BiRecord2 from '~icons/bi/record2'
 
 export const iconMap = {
     // 'mdi-home': MdiHome,
+    'bi-record2': BiRecord2,
+    'bi-record-circle': BiRecordCircle,
+    'bi-intersect': BiIntersect,
     'bi-exclamation-circle': BiExclamationCircle,
     'bi-check2-square': BiCheck2Square,
     'bi-pencil': BiPencil,

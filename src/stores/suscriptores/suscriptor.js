@@ -1,5 +1,5 @@
 // stores/coleccion/sms.js
-import { deepPatch } from '@/utils/deepPatch'
+import { deepPatch } from '@/utils'
 import { defineStore } from 'pinia'
 import { useSuscriptoresStore as useItemsStore } from '.'
 import { suscriptoresApi as api } from '@/api/suscriptores'

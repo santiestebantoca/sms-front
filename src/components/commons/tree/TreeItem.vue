@@ -11,7 +11,6 @@ const props = defineProps({
 
 import { computed, inject } from 'vue'
 
-const onNodeClick = inject('tree:onNodeClick', () => { })
 const selectable = inject('tree:selectable')
 const active = inject('tree:active')
 const list = inject('tree:list')
@@ -20,7 +19,8 @@ const rootStyle = computed(() => ({
   '--li-padding-left': list.value ? '8px' : `${14 * props.level + 32}px`,
   ...props.descendantActive && !open.value ? { '--li-bg-color': 'var(--bs-gray-100)' } : {}
 }))
-//
+
+const onNodeClick = inject('tree:onNodeClick', () => { })
 const handleClick = () => {
   onNodeClick(props.treeItemId)
 }

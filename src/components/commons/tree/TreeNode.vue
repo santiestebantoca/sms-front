@@ -2,7 +2,6 @@
 const props = defineProps({
   data: Object,
   level: { type: Number, default: 0 },
-  filtro: { type: Function, default: () => true }
 })
 
 import { ref, inject, computed, watch, watchEffect } from 'vue'
@@ -16,7 +15,7 @@ const childrenName = computed(() => [...childrenNames.value, 'children'].find(na
 const leaf = computed(() => !props.data[childrenName.value]?.length)
 const descendantIds = computed(() => getAllNodeIds(props.data))
 const isDescendantActive = computed(() => active.value && descendantIds.value.some(d => d === active.value))
-//
+
 function getAllNodeIds(node) {
   let ids = []
   function traverse(node) {
@@ -27,19 +26,17 @@ function getAllNodeIds(node) {
   traverse(node)
   return ids.slice(1)
 }
-const show = ref(false)
-watchEffect(() => show.value = props.filtro(props.data))
 </script>
 
 <template>
-  <TreeItem v-if="show" v-model="open" :level="level" :leaf="leaf" :treeItemId="data[itemIdName]"
+  <TreeItem v-model="open" :level="level" :leaf="leaf" :treeItemId="data[itemIdName]"
     :descendantActive="isDescendantActive" :open="open">
     <slot :data="data" :leaf="leaf" />
   </TreeItem>
-  <template v-if="show && !list && !leaf && childrenName">
+  <template v-if="!list && !leaf && childrenName">
     <span v-show="open">
       <TreeNode v-for="(child, index) in data[childrenName]" :key="child[itemIdName] || index" :data="child"
-        :level="level + 1" :filtro="filtro">
+        :level="level + 1">
         <template #default="{ data, leaf }">
           <slot :data="data" :leaf="leaf" />
         </template>

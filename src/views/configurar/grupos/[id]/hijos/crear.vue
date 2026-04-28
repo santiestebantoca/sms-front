@@ -16,7 +16,7 @@ const form = ref({
   pertenece: props.grupoId,
 })
 const errors = ref({})
-//
+
 const validate = () => {
   errors.value = {}
   if (!form.value.nombre) errors.value.nombre = 'Este campo no puede estar vacío'
@@ -25,9 +25,7 @@ const validate = () => {
 const submit = async () => {
   if (!validate()) return
   await grupos.post(form.value)
-    .then(() => Promise.all([
-      grupos.get(),
-      grupo.refresh(props.grupoId, { include: 'hijos' })]))
+    .then(() => grupo.refresh(props.grupoId, { include: 'hijos' }))
     .then(() => model.value = false)
     .catch(err => isValidationError(err) && (errors.value = err.errors))
 }

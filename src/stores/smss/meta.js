@@ -1,7 +1,7 @@
 // stores/coleccion/nav.js
 import { defineStore } from 'pinia'
 import { smssApi } from '@/api/smss'
-import { deepPatch } from '@/utils/deepPatch'
+import { deepPatch } from '@/utils'
 import { ref, onUnmounted } from 'vue'
 
 export const useSmssMetaStore = defineStore('smss-meta', () => {

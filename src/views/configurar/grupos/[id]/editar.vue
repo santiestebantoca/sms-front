@@ -18,6 +18,7 @@ const form = ref({
   descripcion: null
 })
 const errors = ref({})
+
 watch(data, d => {
   if (d) {
     form.value.nombre = d.nombre
@@ -29,7 +30,7 @@ watch(data, d => {
 }, { immediate: true })
 watchEffect(() => model.value = dataReady.value && mounted.value)
 onMounted(() => mounted.value = true)
-//
+
 const validate = () => {
   errors.value = {}
   if (!form.value.nombre) errors.value.nombre = 'Este campo no puede estar vacío'
@@ -38,10 +39,7 @@ const validate = () => {
 const submit = async () => {
   if (!validate()) return
   await grupo.put(data.value.id, form.value)
-    .then(res => {
-      grupos.replace(res)
-      model.value = false
-    })
+    .then(res => model.value = false)
     .catch(err => isValidationError(err) && (errors.value = err.errors))
 }
 </script>

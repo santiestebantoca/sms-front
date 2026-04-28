@@ -7,13 +7,15 @@ const props = defineProps({
 
 import { useGruposStore } from '@/stores/grupos'
 import CrearGrupo from '@/views/configurar/grupos/_flows/crear.vue'
-import { ref, watch, watchEffect } from 'vue'
+import { computed, ref, watch, watchEffect } from 'vue'
 
 const grupos = useGruposStore()
-grupos.get()
 const active = ref(null)
+
 watch(active, val => props.setGrupoId(val))
 watchEffect(() => active.value = props.grupoId)
+
+grupos.get()
 </script>
 
 <template>
@@ -29,9 +31,10 @@ watchEffect(() => active.value = props.grupoId)
       </div>
       <template v-if="grupos.status.loaded">
         <RootTree v-model="active" selectable>
-          <TreeNode v-for="data in grupos.data" :data="data" :key="data.id">
+          <TreeNode v-for="item in grupos.tree" :data="item" :key="item.id">
             <template #default="{ data }">
-              <UIcon name="bi-subtract" style="color:var(--bs-yellow);flex-shrink: 0;" />
+              <UIcon name="bi-subtract" style="flex-shrink:0"
+                :style="{ color: data.label === 'origen' ? 'var(--bs-success-400)' : 'var(--bs-yellow)' }" />
               <span v-text="data.nombre" class="text-truncate" />
             </template>
           </TreeNode>

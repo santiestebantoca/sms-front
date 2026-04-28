@@ -18,7 +18,7 @@ const form = ref({
   descripcion: null
 })
 const errors = ref({})
-//
+
 watchEffect(() => {
   form.value.nombre = data.value.nombre
   form.value.apodo = data.value.apodo
@@ -30,7 +30,7 @@ onMounted(async () => {
   data.value = await api.getById(props.hijoId)
   loading.value = false
 })
-//
+
 const validate = () => {
   errors.value = {}
   if (!form.value.nombre) errors.value.nombre = 'Este campo no puede estar vacío'

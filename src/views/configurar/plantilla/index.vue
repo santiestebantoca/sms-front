@@ -1,5 +1,5 @@
 <script setup>
-const props = defineProps({ id: Number, setId: Function, compose: Object })
+const props = defineProps({ plantillaId: Number, setPlantillaId: Function, flows: Object })
 
 import usePlantillas from '@/stores/config-plantillas'
 import PlantillasNew from './PlantillasNew.vue'

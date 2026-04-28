@@ -9,8 +9,9 @@ const model = ref(false)
 const deleted = ref(false)
 const toast = useToast()
 const grupos = useGruposStore()
+
 onMounted(() => model.value = true)
-//
+
 const submit = async () => {
   await grupos.del(props.grupoId)
     .then(() => {

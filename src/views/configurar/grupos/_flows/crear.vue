@@ -17,8 +17,9 @@ const form = ref({
   descripcion: null,
 })
 const errors = ref({})
+
 onMounted(() => model.value = true)
-//
+
 const validate = () => {
   errors.value = {}
   if (!form.value.nombre) errors.value.nombre = 'Este campo no puede estar vacío'
@@ -28,7 +29,6 @@ const submit = async () => {
   if (!validate()) return
   await grupos.post(form.value)
     .then(res => {
-      grupos._post(res)
       toast.create({ body: 'Nuevo grupo creado', variant: 'success' })
       created.value = res.id
       model.value = false

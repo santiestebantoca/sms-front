@@ -1,5 +1,5 @@
 // stores/coleccion/sms.js
-import { deepPatch } from '@/utils/deepPatch'
+import { deepPatch } from '@/utils'
 import { defineStore } from 'pinia'
 import { useGruposStore as useItemsStore } from '.'
 import { gruposApi as api } from '@/api/grupos'

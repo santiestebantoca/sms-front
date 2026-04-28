@@ -1,12 +1,14 @@
 <script setup>
 const props = defineProps({ back: Function })
 
-import { useGrupoStore } from '@/stores/grupos'
+import { flatToTree } from '@/utils'
+import { useGrupoStore, useGruposStore } from '@/stores/grupos'
 import { gruposApi } from '@/api/grupos'
 import { useGruposNotificadosStore } from '@/stores/grupos-notificados'
 import { ref, computed, watchEffect, onMounted } from 'vue'
 
 const model = ref(false)
+// const grupos = useGruposStore()
 const loading = ref(true)
 const grupos = ref([])
 const grupo = useGrupoStore()
@@ -22,8 +24,8 @@ watchEffect(() => {
 })
 onMounted(async () => {
   model.value = true
-  const result = await gruposApi.getAll({ notificables: true })
-  grupos.value = result
+  const result = await gruposApi.getAll({ label: 'grupo,centro' })
+  grupos.value = flatToTree(result, { parentKey: 'pertenece' })
   loading.value = false
 })
 
@@ -36,22 +38,19 @@ const submit = async () => {
 
 <template>
   <BModal v-model="model" title="Notifica" @hidden="back">
-    <div v-if="loading" class="text-center p-5">
+    <div v-if="loading" class="p-5 text-center">
       <BSpinner />
     </div>
-    <template v-else>
-      <RootTree>
-        <TreeNode v-for="data in grupos" :data="data" :key="data.id"
-          :filtro="d => d.children?.length || !d.label?.includes('origen')">
-          <template #default="{ data }">
-            <input type="checkbox" v-model="form.grupo_b" :value="data.id" />
-            <UIcon name="bi-subtract" style="color:var(--bs-yellow);flex-shrink: 0;" />
-            <span v-text="data.nombre" class="text-truncate" />
-          </template>
-        </TreeNode>
-      </RootTree>
-    </template>
-    <template v-if="!loading" #footer>
+    <RootTree v-else>
+      <TreeNode v-for="data in grupos" :data="data" :key="data.id">
+        <template #default="{ data }">
+          <input type="checkbox" v-model="form.grupo_b" :value="data.id" />
+          <UIcon name="bi-subtract" style="color:var(--bs-yellow);flex-shrink: 0;" />
+          <span v-text="data.nombre" class="text-truncate" />
+        </template>
+      </TreeNode>
+    </RootTree>
+    <template #footer>
       <BButton variant="primary" @click="submit">
         <UIcon name="bi-check2" /> Listo
       </BButton>
