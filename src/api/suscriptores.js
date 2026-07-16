@@ -1,4 +1,3 @@
-// api/suscriptores.js
 import { api } from './client'
 
 export const suscriptoresApi = {
@@ -8,6 +7,6 @@ export const suscriptoresApi = {
   delete: (id) => api.delete(`/suscriptores/suscriptores/${id}`).then(res => res.data),
 
   // Item individual
-  // getById: (id) => api.get(`/config_suscriptor/suscriptores/${id}`).then(res => res.data),
+  getById: (id) => api.get(`/suscriptores/suscriptores/${id}`).then(res => res.data),
   update: (id, data) => api.put(`/suscriptores/suscriptores/${id}`, data).then(res => res.data),
 }

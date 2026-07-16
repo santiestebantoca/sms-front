@@ -1,6 +1,9 @@
-// stores/coleccion/index.js
-// Archivo de barril - exporta todos los stores del módulo coleccion
-
-// Store principal
-export { useGruposStore } from './grupos'
-export { useGrupoStore } from './grupo'
+export {
+    useGruposQuery,
+    useGruposNotificablesQuery,
+    useGruposOrigenesQuery
+} from './useGruposQuery'
+export { useGrupoQuery, useGrupoExpandidoQuery } from './useGrupoQuery'
+export { useGrupoUpdate } from './useGrupoUpdate'
+export { useGrupoDelete } from './useGrupoDelete'
+export { useGrupoCreate } from './useGrupoCreate'

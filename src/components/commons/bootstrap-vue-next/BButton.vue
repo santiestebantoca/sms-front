@@ -7,6 +7,7 @@ const props = defineProps({
     type: String,
     default: 'primary'
   },
+  loading: Boolean
 })
 
 const baseVariant = computed(() => props.variant.split('-').at(-1))
@@ -42,7 +43,8 @@ const rootStyle = computed(() => ({
 </script>
 
 <template>
-  <BButton :variant="internalVariant" :class="flatModifierClass" :style="rootStyle" v-bind="$attrs">
+  <BButton :variant="internalVariant" :class="flatModifierClass" :style="rootStyle" v-bind="$attrs" :loading="loading"
+    :disabled="loading">
     <slot />
   </BButton>
 </template>

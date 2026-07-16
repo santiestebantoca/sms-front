@@ -70,9 +70,34 @@
   outline-offset: 0;
 }
 
+.form-control:focus {
+  box-shadow: 0 0 0 0.12rem rgba(13, 110, 253, 0.25) !important;
+}
+
+
 /* General */
 .pre-wrap {
   white-space: pre-wrap;
+}
+
+.ms-n1 {
+  margin-left: -0.25rem !important;
+}
+
+.ms-n2 {
+  margin-left: -0.5rem !important;
+}
+
+.ms-n3 {
+  margin-left: -1rem !important;
+}
+
+.ms-n4 {
+  margin-left: -1.5rem !important;
+}
+
+.ms-n5 {
+  margin-left: -3rem !important;
 }
 
 *:not(:hover)>.d-hover {
@@ -98,14 +123,14 @@
 .label-value {
   position: relative;
   margin-bottom: 16px !important;
-}
 
-.label-value::after {
-  position: absolute;
-  // content: '';
-  // top: 6px;
-  // bottom: 2px;
-  // left: -10px;
-  // width: 2px;
-  // background-color: var(--bs-yellow-600);
+  &::after {
+    position: absolute;
+    // content: '';
+    // top: 6px;
+    // bottom: 2px;
+    // left: -10px;
+    // width: 2px;
+    // background-color: var(--bs-yellow-600);
+  }
 }

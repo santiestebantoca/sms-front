@@ -2,13 +2,10 @@
 const props = defineProps({ grupoId: Number, back: Function })
 
 import { isValidationError } from '@/api/client'
-import { useGrupoStore } from '@/stores/grupos'
-import { useSuscriptoresStore } from '@/stores/suscriptores'
-import { ref } from 'vue'
+import { useSuscriptorCreate } from '@/stores/suscriptores'
+import { ref, computed, onMounted } from 'vue'
 
-const model = ref(true)
-const grupo = useGrupoStore()
-const suscriptores = useSuscriptoresStore()
+const model = ref(false)
 const form = ref({
   nombre: null,
   cargo: null,
@@ -17,7 +14,11 @@ const form = ref({
   grupo: props.grupoId
 })
 const errors = ref({})
-//
+const { mutateAsync: crearSuscriptor, asyncStatus } = useSuscriptorCreate()
+const loading = computed(() => asyncStatus.value === 'loading')
+
+onMounted(() => model.value = true)
+
 const validate = () => {
   const telefono = /^(\+53|53)?\d{8}$/
   const correo = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/
@@ -28,12 +29,14 @@ const validate = () => {
   if (form.value.correo && !correo.test(form.value.correo)) errors.value.correo = 'Formato no válido'
   return !Object.keys(errors.value).length
 }
-const submit = async () => {
+const submit = () => {
   if (!validate()) return
-  await suscriptores.post(form.value)
-    .then(() => grupo.refresh(props.grupoId, { include: 'suscriptores' }))
+  crearSuscriptor(form.value)
     .then(() => model.value = false)
-    .catch(err => isValidationError(err) && (errors.value = err.errors))
+    .catch(err => {
+      isValidationError(err) && (errors.value = err.errors)
+      errors.value.form = 'Error al crear el grupo.'
+    })
 }
 </script>
 

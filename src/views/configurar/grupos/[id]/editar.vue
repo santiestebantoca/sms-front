@@ -1,16 +1,11 @@
 <script setup>
-const props = defineProps({ back: Function })
+const props = defineProps({ grupoId: Number, back: Function })
 
 import { isValidationError } from '@/api/client'
-import { useGruposStore, useGrupoStore } from '@/stores/grupos'
-import { ref, computed, watch, onMounted, watchEffect } from 'vue'
+import { useGrupoExpandidoQuery, useGrupoUpdate } from '@/stores/grupos'
+import { ref, computed, onMounted, watchEffect } from 'vue'
 
-const model = ref(null)
-const dataReady = ref(null)
-const mounted = ref(null)
-const grupos = useGruposStore()
-const grupo = useGrupoStore()
-const data = computed(() => grupo.data)
+const model = ref(false)
 const form = ref({
   nombre: null,
   apodo: null,
@@ -18,18 +13,19 @@ const form = ref({
   descripcion: null
 })
 const errors = ref({})
+const { grupo, isPending } = useGrupoExpandidoQuery(props.grupoId)
+const { mutateAsync: actualizarGrupo, asyncStatus } = useGrupoUpdate()
+const loading = computed(() => asyncStatus.value === 'loading')
 
-watch(data, d => {
-  if (d) {
-    form.value.nombre = d.nombre
-    form.value.apodo = d.apodo
-    form.value.label = d.label
-    form.value.descripcion = d.descripcion
-    dataReady.value = true
+watchEffect(() => {
+  if (grupo.value) {
+    form.value.nombre = grupo.value.nombre
+    form.value.apodo = grupo.value.apodo
+    form.value.label = grupo.value.label
+    form.value.descripcion = grupo.value.descripcion
   }
-}, { immediate: true })
-watchEffect(() => model.value = dataReady.value && mounted.value)
-onMounted(() => mounted.value = true)
+})
+onMounted(() => model.value = true)
 
 const validate = () => {
   errors.value = {}
@@ -38,9 +34,12 @@ const validate = () => {
 }
 const submit = async () => {
   if (!validate()) return
-  await grupo.put(data.value.id, form.value)
-    .then(res => model.value = false)
-    .catch(err => isValidationError(err) && (errors.value = err.errors))
+  actualizarGrupo({ id: grupo.value.id, ...form.value })
+    .then(() => model.value = false)
+    .catch(err => {
+      isValidationError(err) && (errors.value = err.errors)
+      errors.value.form = 'Error al actualizar el grupo.'
+    })
 }
 </script>
 
@@ -67,8 +66,11 @@ const submit = async () => {
       </div>
     </form>
     <template #footer>
-      <BButton @click="submit" variant="primary">
-        Aceptar
+      <BButton variant="secondary" @click="model = false" :disabled="loading">
+        Cancelar
+      </BButton>
+      <BButton @click="submit" :loading="loading" loading-fill style="width: 90px;">
+        Guardar
       </BButton>
     </template>
   </BModal>

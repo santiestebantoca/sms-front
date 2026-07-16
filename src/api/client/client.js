@@ -30,6 +30,9 @@ export const api = axios.create({
   timeout: 120000,
   headers: {
     'X-Requested-With': 'XMLHttpRequest'
+  },
+  paramsSerializer: {
+    indexes: null // para name[] genera: ?name=1&name=4&name=5 (estándar de web2py)
   }
 })
 
@@ -58,7 +61,7 @@ api.interceptors.response.use(
     // Sin respuesta del servidor (error de conectividad o servidor no responde)
     // Webb2py no pone baceras CORS en status 500, luego el navegador invalida response 
     if (!error.response) {
-      notify('network', 'Sin conexión a internet o el servidor no responde o falla.')
+      notify('network', 'El servidor no responde: no está en línea o falla la conexión.')
       throw new NetworkError('Sin conexión o servidor inaccesible.', error)
     }
 

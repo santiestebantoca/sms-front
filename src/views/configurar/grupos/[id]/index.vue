@@ -4,16 +4,15 @@ const props = defineProps({ grupoId: Number, back: Function })
 import GrupoCard from '@/components/features/configurar/grupos/GrupoCard.vue'
 import HijosCard from '@/components/features/configurar/grupos/GrupoHijosCard.vue'
 import SuscriptoresCard from '@/components/features/configurar/grupos/GrupoSuscriptoresCard.vue'
-import NotificaCard from '@/components/features/configurar/grupos/GrupoNotificaCard.vue'
-import { useGrupoStore } from '@/stores/grupos'
-import { ref, computed, watch, markRaw } from 'vue'
+import NotificadosCard from '@/components/features/configurar/grupos/GrupoNotificadosCard.vue'
+import { useGrupoExpandidoQuery } from '@/stores/grupos'
+import { ref, markRaw, toRef, watchEffect } from 'vue'
 
-const grupo = useGrupoStore()
-const data = computed(() => grupo.data)
+const { grupo: data, isPending } = useGrupoExpandidoQuery(toRef(props, 'grupoId'))
 
-watch(() => props.grupoId, val => {
-  grupo.get(val, { include: "suscriptores,hijos,notificados" })
-}, { immediate: true })
+watchEffect(() => {
+  if (!isPending.value && data.value === undefined) props.back()
+})
 
 const tabsData = ref([
   {
@@ -34,15 +33,15 @@ const tabsData = ref([
   },
   {
     id: 4,
-    title: 'Notifica',
-    componente: { is: markRaw(NotificaCard), data }
+    title: 'Notificados',
+    componente: { is: markRaw(NotificadosCard), data }
   },
 ])
 </script>
 
 <template>
   <div>
-    <div class="text-center p-5" v-if="grupo.status.loading">
+    <div v-if="isPending" class="text-center p-5">
       <BSpinner />
     </div>
     <BTabs v-else-if="data.id === grupoId">

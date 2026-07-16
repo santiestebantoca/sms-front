@@ -25,11 +25,6 @@ pinia.use(piniaPluginPersistedstate)
 app.use(pinia)
 app.use(PiniaColada, {
   // Configuración global (opcional)
-  // cache: {
-  //     staleTime: 1000 * 60 * 5,   // 5 min antes de marcar como "stale"
-  //     gcTime: 1000 * 60 * 30,     // 30 min antes de eliminar del cache
-  // },
-  // refetchOnWindowFocus: true,
 })
 app.use(router)
 app.use(VueTippy, {

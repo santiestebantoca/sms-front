@@ -1,55 +1,33 @@
 <script setup>
 const model = defineModel()
 
-import { usePlantillasStore } from '@/stores/plantillas'
-import { useDebounce } from '@vueuse/core'
-import { ref, watch } from 'vue'
+import { useWidgetPlantillasQuery } from '@/stores/plantillas'
+import { ref } from 'vue'
 
-const plantillas = usePlantillasStore()
-// const show = ref(false)
-//
-// Buscar (fuera filtros / no es persistente)
-const buscar = ref(null)
-const debouncedBuscar = useDebounce(buscar, 300)
-//
-watch(debouncedBuscar, val => {
-  if (val) plantillas.get({ texto: val })
-  else plantillas.reset()
-})
-// watch(show, () => buscar.value = null)
+const { plantillas, isLoading, search } = useWidgetPlantillasQuery()
 const tippy = ref({
-  content: 'Click para insertar en el mensaje',
+  content: 'Insertar plantilla',
   popperOptions: {
     strategy: 'fixed',
   },
 })
-//
-const emit = defineEmits(['close', 'select'])
-const close = () => {
-  model.value = false
-  emit('close')
-}
+const emit = defineEmits(['select'])
+
+const close = () => model.value = false
 </script>
 
 <template>
-  <div v-if="model" class="widget">
+  <div v-if="model" class="widget px-3">
     <!-- Header -->
     <div class="sticky-top pb-1">
-      <div class="hstack ps-3 pe-2" style="height: 40px;">
+      <div class="hstack" style="height: 40px;">
         <span class="small fw-semibold">PLANTILLAS</span>
-        <BButton variant="flat-dark" class="ms-auto btn-sm" @click="close">
+        <BButton variant="flat-dark" class="ms-auto btn-sm" style="transform: translateX(.5em);" @click="close">
           <UIcon name="bi-x-lg" />
         </BButton>
       </div>
-      <div class="ps-3 pe-3">
-        <div style="flex-grow:1;max-width: 400px" class="position-relative">
-          <input v-model="buscar" class="form-control" placeholder="Buscar en las plantillas">
-          <div v-if="buscar" class="position-absolute top-50 end-0 translate-middle-y pe-1">
-            <BButton variant="flat-dark" class="btn-sm" @click="buscar = null" style="height: 30px;">
-              <UIcon name="bi-x-lg" font-size="12px" />
-            </BButton>
-          </div>
-        </div>
+      <div>
+        <BSearchInput v-model="search" />
         <div class="text-end mt-2 small">
           <router-link :to="{ name: 'configurar-plantillas' }" class="text-decoration-none">
             <UIcon name="bi-gear" font-size="12px" />
@@ -59,10 +37,22 @@ const close = () => {
       </div>
     </div>
     <!-- List -->
-    <div class="p-3">
-      <BButton v-for="d, i in plantillas.data" :key="i" variant="warning"
-        class="btn-plantilla text-start mb-3 shadow-sm" @click="$emit('select', d.texto)" v-tippy="tippy">
-        {{ d.texto }}
+    <div v-if="search.length < 2" class="text-secondary text-center mt-5">
+      <p>
+        <UIcon name="bi-search" />
+      </p>
+      Escribe al menos 2 caracteres para comenzar a buscar
+    </div>
+    <div v-else-if="isLoading" class="text-center mt-5">
+      <BSpinner />
+    </div>
+    <div v-else-if="plantillas?.length === 0" class="text-center mt-5">
+      No se encontraron plantillas que coincidan con el texto buscado
+    </div>
+    <div v-else class="py-4">
+      <BButton variant="flat-outline-dark" class="btn-card mb-3" v-for="item, index in plantillas" :key="index"
+        @click="$emit('select', item.texto)" v-tippy="tippy">
+        {{ item.texto }}
       </BButton>
     </div>
   </div>
@@ -79,12 +69,23 @@ const close = () => {
   box-shadow: 0px 8px 10px 1px white;
 }
 
-.btn-warning {
-  --bs-btn-border-color: var(--bs-yellow-200);
-  --bs-btn-hover-border-color: var(--bs-yellow-600);
-  --bs-btn-bg: var(--bs-yellow-200);
-  --bs-btn-hover-bg: var(--bs-yellow-200);
-  --bs-btn-color: var(--bs-gray-900);
-  --bs-btn-padding-y: 0.6rem;
+.btn-card {
+  text-align: start;
+  padding-left: calc(13px + 12px);
+  position: relative;
+  width: 100%;
+}
+
+.btn-card::after {
+  position: absolute;
+  content: '';
+  top: 10px;
+  bottom: 10px;
+  left: 5px;
+  width: 3px;
+  border-radius: 4px;
+  background-color: var(--bs-yellow-700);
+  background-image: var(--bs-gradient) !important;
+  transition: all .6s;
 }
 </style>

@@ -1,25 +1,24 @@
 <script setup>
 const props = defineProps({ grupoId: Number, hijoId: Number, back: Function })
 
-import { useGruposStore, useGrupoStore } from '@/stores/grupos'
+import { useGrupoExpandidoQuery, useGrupoDelete } from '@/stores/grupos'
 import { useToast } from 'bootstrap-vue-next'
-import { ref, onMounted } from 'vue'
+import { ref, computed, onMounted } from 'vue'
 
 const model = ref(false)
-const grupos = useGruposStore()
-const grupo = useGrupoStore()
 const toast = useToast()
+const { grupo: padre, isPending } = useGrupoExpandidoQuery(props.grupoId)
+const grupo = computed(() => padre.value?.hijos.find(d => d.id === props.hijoId))
+const { mutateAsync: deleteGrupo, asyncStatus } = useGrupoDelete()
+const loading = computed(() => asyncStatus.value === 'loading')
 
 onMounted(() => model.value = true)
 
-const submit = async () => {
-  await grupos.del(props.hijoId)
-    .then(res => {
-      grupo.refresh(props.grupoId, { include: 'hijos' })
-      model.value = false
-    })
-    .catch(() => toast.create({ body: 'No se pudo ejecutar la acción.', variant: 'warning' }))
-}
+const submit = () => deleteGrupo(grupo.value)
+  .then(() => model.value = false)
+  .catch((err) => {
+    toast.create({ body: 'No se pudo ejecutar la acción.', variant: 'danger' })
+  })
 </script>
 
 <template>
@@ -37,7 +36,7 @@ const submit = async () => {
       <BButton variant="secondary" @click="model = false">
         Cancelar
       </BButton>
-      <BButton variant="danger" @click="submit">
+      <BButton variant="danger" @click="submit" :disabled="isPending">
         Aceptar
       </BButton>
     </template>

@@ -49,9 +49,12 @@ li {
   padding-left: var(--li-padding-left) !important;
 }
 
-li.active,
-li:active,
 li:hover {
+  --li-bg-color: var(--bs-gray-100) !important;
+}
+
+li.active,
+li:active {
   --li-bg-color: var(--bs-info-50) !important;
 }
 

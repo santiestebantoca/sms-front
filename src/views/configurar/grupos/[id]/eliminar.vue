@@ -1,26 +1,28 @@
 <script setup>
 const props = defineProps({ grupoId: Number, back: Function, forward: Function })
 
-import { useGruposStore } from '@/stores/grupos'
+import { useGrupoExpandidoQuery, useGrupoDelete } from '@/stores/grupos'
 import { useToast } from 'bootstrap-vue-next'
 import { ref, computed, onMounted } from 'vue'
 
 const model = ref(false)
 const deleted = ref(false)
 const toast = useToast()
-const grupos = useGruposStore()
+const { grupo, isPending } = useGrupoExpandidoQuery(props.grupoId)
+const { mutateAsync: deleteGrupo, asyncStatus } = useGrupoDelete()
+const loading = computed(() => asyncStatus.value === 'loading')
 
 onMounted(() => model.value = true)
 
-const submit = async () => {
-  await grupos.del(props.grupoId)
-    .then(() => {
-      toast.create({ body: 'Grupo eliminado', variant: 'success' })
-      deleted.value = true
-      model.value = false
-    })
-    .catch(err => toast.create({ body: 'No se pudo ejecutar la acción.', variant: 'danger' }))
-}
+const submit = () => deleteGrupo(grupo.value)
+  .then(() => {
+    toast.create({ body: 'Grupo eliminado.', variant: 'success' })
+    deleted.value = true
+    model.value = false
+  })
+  .catch((err) => {
+    toast.create({ body: 'No se pudo ejecutar la acción.', variant: 'danger' })
+  })
 const hidden = () => {
   if (deleted.value) props.forward()
   else props.back()
@@ -39,11 +41,11 @@ const hidden = () => {
     </ul>
     <p class="text-danger fw-semibold">Esta acción no se puede deshacer.</p>
     <template #footer>
-      <BButton variant="secondary" @click="model = false">
+      <BButton variant="secondary" @click="model = false" :disabled="loading">
         Cancelar
       </BButton>
-      <BButton variant="danger" @click="submit">
-        Aceptar
+      <BButton variant="danger" @click="submit" :loading="loading" loading-fill style="width: 90px;">
+        Eliminar
       </BButton>
     </template>
   </BModal>

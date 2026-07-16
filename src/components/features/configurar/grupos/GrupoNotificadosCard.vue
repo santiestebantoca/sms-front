@@ -7,7 +7,7 @@ const active = ref(null)
 const acciones = computed(() => [
   {
     texto: "Seleccionar",
-    to: { name: 'configurar-grupo-notifica-seleccionar' },
+    to: { name: 'configurar-grupo-notificados-seleccionar' },
     icon: "bi-check2-square"
   },
 ])
@@ -21,11 +21,11 @@ const acciones = computed(() => [
     </BButton>
   </div>
   <div class="px-3 py-2">
-    <div v-if="!data.notifica.length" class="mt-2">
+    <div v-if="!data.notificados.length" class="mt-2">
       No hay grupos aquí.
     </div>
     <RootTree v-else list selectable v-model="active">
-      <TreeNode v-for="data in data.notifica" :data="data" :key="data.id">
+      <TreeNode v-for="data in data.notificados" :data="data" :key="data.id">
         <template #default="{ data }">
           <UIcon name="bi-subtract" style="color:var(--bs-yellow);flex-shrink: 0;" />
           <span v-text="data.nombre" class="text-truncate" />

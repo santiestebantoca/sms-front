@@ -1,7 +1,7 @@
 <script setup>
 const props = defineProps({ back: Function })
 
-import { useGruposNotificadosStore, useNotificadosCheckedStore } from '@/stores/grupos-notificados'
+import { useGruposNotificadosStore, useNotificadosCheckedStore } from '@/stores/notificados'
 import { useToast } from 'bootstrap-vue-next'
 import { ref, onMounted, watch, computed } from 'vue'
 import { storeToRefs } from 'pinia'

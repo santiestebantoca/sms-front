@@ -1,32 +1,36 @@
 <script setup>
 const props = defineProps({ grupoId: Number, suscriptorId: Number, back: Function })
 
-import { useGrupoStore } from '@/stores/grupos'
-import { useSuscriptorStore } from '@/stores/suscriptores'
 import { isValidationError } from '@/api/client'
+import { useSuscriptorQuery, useSuscriptorUpdate } from '@/stores/suscriptores'
+import { useGrupoExpandidoQuery } from '@/stores/grupos'
 import { ref, computed, onMounted, watchEffect } from 'vue'
 
-const model = ref(null)
-const grupo = useGrupoStore()
-const suscriptor = useSuscriptorStore()
-const data = computed(() => grupo.data.suscriptores?.find(d => d.id === props.suscriptorId) || {})
+const model = ref(false)
 const form = ref({
   nombre: null,
   cargo: null,
   telefono: null,
   correo: null,
+  grupo: null
 })
 const errors = ref({})
-//
+const { grupo, isPending } = useGrupoExpandidoQuery(props.grupoId)
+const suscriptor = computed(() => grupo.value?.suscriptores.find(d => d.id === props.suscriptorId))
+const { mutateAsync: actualizarSuscriptor, asyncStatus } = useSuscriptorUpdate()
+const loading = computed(() => asyncStatus.value === 'loading')
+
 watchEffect(() => {
-  form.value.nombre = data.value.nombre
-  form.value.cargo = data.value.cargo
-  form.value.telefono = data.value.telefono
-  form.value.correo = data.value.correo
-  form.value.descripcion = data.value.descripcion
+  if (suscriptor.value) {
+    form.value.nombre = suscriptor.value.nombre
+    form.value.cargo = suscriptor.value.cargo
+    form.value.telefono = suscriptor.value.telefono
+    form.value.correo = suscriptor.value.correo
+    form.value.grupo = suscriptor.value.grupo
+  }
 })
 onMounted(() => model.value = true)
-//
+
 const validate = () => {
   const telefono = /^(\+53|53)?\d{8}$/
   const correo = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/
@@ -39,10 +43,12 @@ const validate = () => {
 }
 const submit = async () => {
   if (!validate()) return
-  await suscriptor.put(props.suscriptorId, form.value)
-    .then(res => grupo.refresh(props.grupoId, { include: 'suscriptores' }))
+  actualizarSuscriptor({ id: suscriptor.value.id, ...form.value })
     .then(() => model.value = false)
-    .catch(err => isValidationError(err) && (errors.value = err.errors))
+    .catch(err => {
+      isValidationError(err) && (errors.value = err.errors)
+      errors.value.form = 'Error al actualizar el grupo.'
+    })
 }
 </script>
 

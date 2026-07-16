@@ -58,18 +58,18 @@ const routesConfigurar = [
         component: () => import('@/views/configurar/grupos/index.vue'),
         props: route => ({
           grupoId: route.params.grupoId ? parseInt(route.params.grupoId) : null,
-          setGrupoId: (id) => id && router.push({
+          setGrupoId: (grupoId) => grupoId && router.push({
             name: 'configurar-grupo',
-            params: { grupoId: id }
+            params: { grupoId }
           }),
           flows: {
             crear: {
               active: route.query.crear === 'true',
               go: () => router.replace({ query: { crear: 'true' } }),
               back: () => router.replace({ query: { crear: undefined } }),
-              forward: (id) => router.push({
+              forward: (grupoId) => router.push({
                 name: 'configurar-grupo',
-                params: { grupoId: id }
+                params: { grupoId }
               })
             }
           }
@@ -81,13 +81,15 @@ const routesConfigurar = [
             component: () => import('@/views/configurar/grupos/[id]/index.vue'),
             props: route => ({
               grupoId: parseInt(route.params.grupoId),
+              back: () => router.push({ name: 'configurar-grupos' })
             }),
             children: [
               {
                 path: 'editar',
                 name: 'configurar-grupo-editar',
                 component: () => import('@/views/configurar/grupos/[id]/editar.vue'),
-                props: () => ({
+                props: (route) => ({
+                  grupoId: parseInt(route.params.grupoId),
                   back: () => router.push({ name: 'configurar-grupo' })
                 })
               },
@@ -160,10 +162,11 @@ const routesConfigurar = [
                 })
               },
               {
-                path: 'notifica/seleccionar',
-                name: 'configurar-grupo-notifica-seleccionar',
-                component: () => import('@/views/configurar/grupos/[id]/notifica/seleccionar.vue'),
-                props: () => ({
+                path: 'notificados/seleccionar',
+                name: 'configurar-grupo-notificados-seleccionar',
+                component: () => import('@/views/configurar/grupos/[id]/notificados/seleccionar.vue'),
+                props: route => ({
+                  grupoId: parseInt(route.params.grupoId),
                   back: () => router.push({ name: 'configurar-grupo' }),
                 })
               }
@@ -288,37 +291,44 @@ const routesConfigurar = [
       {
         path: 'plantillas',
         name: 'configurar-plantillas',
-        component: () => import('@/views/configurar/plantilla/Plantillas.vue'),
+        component: () => import('@/views/configurar/plantillas/index.vue'),
         props: route => ({
-          // id: route.params.id ? parseInt(route.params.id) : null,
-          // setId: id => router.push({ name: 'configurar-plantilla', params: { id } }),
-          compose: {
-            new: route.query.compose === 'new',
-            back: () => router.replace({
-              query: {
-                compose: undefined,
-              }
-            })
+          flows: {
+            crear: {
+              active: route.query.crear === 'true',
+              go: () => router.replace({ query: { crear: 'true' } }),
+              back: () => router.replace({ query: { crear: undefined } })
+            }
           }
         }),
         children: [
           {
-            path: ':id/edit',
-            name: 'configurar-plantilla-edit',
-            component: () => import('@/views/configurar/plantilla/PlantillaEdit.vue'),
-            props: route => ({
-              id: route.params.id ? parseInt(route.params.id) : null,
-              back: () => router.push({ name: 'configurar-plantillas' })
-            })
-          },
-          {
-            path: ':id/del',
-            name: 'configurar-plantilla-del',
-            component: () => import('@/views/configurar/plantilla/PlantillaDel.vue'),
-            props: route => ({
-              id: route.params.id ? parseInt(route.params.id) : null,
-              back: () => router.push({ name: 'configurar-plantillas' }),
-            })
+            path: ':plantillaId',
+            name: 'configurar-plantilla',
+            component: () => import('@/views/configurar/plantillas/[id]/index.vue'),
+            props: (route) => ({
+              plantillaId: parseInt(route.params.plantillaId),
+            }),
+            children: [
+              {
+                path: 'editar',
+                name: 'configurar-plantilla-editar',
+                component: () => import('@/views/configurar/plantillas/[id]/editar.vue'),
+                props: (route) => ({
+                  plantillaId: parseInt(route.params.plantillaId),
+                  back: () => router.push({ name: 'configurar-plantillas' })
+                })
+              },
+              {
+                path: 'eliminar',
+                name: 'configurar-plantilla-eliminar',
+                component: () => import('@/views/configurar/plantillas/[id]/eliminar.vue'),
+                props: route => ({
+                  plantillaId: parseInt(route.params.plantillaId),
+                  back: () => router.push({ name: 'configurar-plantillas' }),
+                })
+              },
+            ],
           }
         ]
       },
@@ -350,9 +360,9 @@ const routesSms = [
         }),
         children: [
           {
-            path: 'origen',
-            name: 'sms-componer-origen',
-            component: () => import('@/views/sms/componer/origen.vue'),
+            path: 'origenes',
+            name: 'sms-componer-origenes',
+            component: () => import('@/views/sms/componer/origenes.vue'),
             props: () => ({
               back: () => router.push({ name: 'sms-componer' })
             })

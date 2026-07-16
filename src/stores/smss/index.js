@@ -4,5 +4,8 @@
 // Store principal
 export { useSmssMetaStore } from './meta'
 export { useSmssStore } from './smss'
-export { useSmsStore } from './sms'
+// export { useSmsStore } from './sms'
 export { useSmssFiltrosStore } from './filtros'
+
+// new
+export { useSmsSend } from './useSmsSend'

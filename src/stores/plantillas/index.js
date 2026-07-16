@@ -1,5 +1,5 @@
-// stores/coleccion/index.js
-// Archivo de barril - exporta todos los stores del módulo coleccion
 
-// Store principal
-export { usePlantillasStore } from './plantillas'
+export { usePlantillasQuery, useWidgetPlantillasQuery } from './usePlantillasQuery'
+export { usePlantillaCreate } from './usePlantillaCreate'
+export { usePlantillaUpdate } from './usePlantillaUpdate'
+export { usePlantillaDelete } from './usePlantillaDelete'

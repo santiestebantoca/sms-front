@@ -29,7 +29,7 @@ const acciones = computed(() => [
 ])
 //
 // Cuando se elimina un item, active no está en items, entonces active = null
-watch(() => props.data.children, (items) => {
+watch(() => props.data.hijos, (items) => {
   if (!items.some(item => item.id === active.value)) active.value = null
 })
 </script>
@@ -42,11 +42,11 @@ watch(() => props.data.children, (items) => {
     </BButton>
   </div>
   <div class="px-3 py-2">
-    <div v-if="!data.children.length" class="mt-2">
+    <div v-if="!data.hijos.length" class="mt-2">
       No hay grupos aquí.
     </div>
     <RootTree v-else list selectable v-model="active">
-      <TreeNode v-for="data in data.children" :data="data" :key="data.id">
+      <TreeNode v-for="data in data.hijos" :data="data" :key="data.id">
         <template #default="{ data }">
           <UIcon name="bi-subtract" style="color:var(--bs-yellow);flex-shrink: 0;" />
           <span v-text="data.nombre" class="text-truncate" />

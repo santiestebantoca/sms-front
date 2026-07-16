@@ -1,7 +1,3 @@
-<!-- 
-It is a remake of ../grupos/NotificaSel.vue
-It is not a dialog and allows one active
--->
 <script setup>
 const value = defineModel()
 

@@ -101,7 +101,7 @@ watch(tab, () => dialogBody.value.$el.scrollTop = 0)
                 </div>
               </div>
             </bs-tab-pane>
-            <!-- grupos: like NotificaSel.vue -->
+            <!-- grupos: like NotificadosSel.vue -->
             <bs-tab-pane name="grupos">
               <label class="form-label">Grupo</label>
               <GrupoSel v-model="form.grupo" />

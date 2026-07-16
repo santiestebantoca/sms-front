@@ -1,4 +1,3 @@
-// api/grupos.js
 import { api } from './client'
 
 export const gruposApi = {

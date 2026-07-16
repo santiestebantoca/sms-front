@@ -1,37 +1,37 @@
 <script setup>
 const props = defineProps({
-  grupoId: { type: Number, default: null },
+  grupoId: Number,
   setGrupoId: Function,
   flows: Object
 })
 
-import { useGruposStore } from '@/stores/grupos'
+import { useGruposQuery } from '@/stores/grupos'
 import CrearGrupo from '@/views/configurar/grupos/_flows/crear.vue'
-import { computed, ref, watch, watchEffect } from 'vue'
+import { computed } from 'vue'
 
-const grupos = useGruposStore()
-const active = ref(null)
-
-watch(active, val => props.setGrupoId(val))
-watchEffect(() => active.value = props.grupoId)
-
-grupos.get()
+const { grupos, isPending } = useGruposQuery()
+const active = computed({
+  get: () => props.grupoId,
+  set: (value) => props.setGrupoId(value)
+})
 </script>
 
 <template>
   <div class="main">
-    <div class="border-end px-1 overflow-auto pb-4">
-      <div class="hstack sticky-top bg-white" style="height: 40px;padding-left: 12px;">
-        <span class="small fw-semibold">GRUPOS</span>
-        <div class="mx-auto" />
-        <BButton @click="flows.crear.go" variant="primary" v-tippy="'Crear grupo'" class="btn-sm p-1"
-          style="height:32px">
-          <UIcon name="bi-plus" font-size="20" />
+    <div class="border-end overflow-auto">
+      <div class="hstack sticky-top p-1 ps-3">
+        <span class="small fw-semibold me-auto">GRUPOS</span>
+        <BButton @click="flows.crear.go" variant="primary" v-tippy="'Crear grupo'" class="btn-sm"
+          style="height:32px;width: 32px;">
+          <UIcon name="bi-plus-lg" />
         </BButton>
       </div>
-      <template v-if="grupos.status.loaded">
+      <div v-if="isPending" class="mt-5 text-center">
+        <BSpinner />
+      </div>
+      <div v-else class="px-1 py-3">
         <RootTree v-model="active" selectable>
-          <TreeNode v-for="item in grupos.tree" :data="item" :key="item.id">
+          <TreeNode v-for="item in grupos" :data="item" :key="item.id">
             <template #default="{ data }">
               <UIcon name="bi-subtract" style="flex-shrink:0"
                 :style="{ color: data.label === 'origen' ? 'var(--bs-success-400)' : 'var(--bs-yellow)' }" />
@@ -39,12 +39,9 @@ grupos.get()
             </template>
           </TreeNode>
         </RootTree>
-      </template>
-      <div v-else class="mt-5 text-center">
-        <BSpinner />
       </div>
     </div>
-    <div class="p-1 overflow-auto">
+    <div class="overflow-auto px-3 pt-1 pb-4">
       <div v-if="!grupoId" class="mt-5 text-center">
         Seleccione un grupo para mostrarlo aquí.
       </div>
@@ -59,7 +56,12 @@ grupos.get()
   height: 100%;
   display: grid;
   grid-template-columns: 1fr 3fr;
-  column-gap: 8px;
+  /* column-gap: 8px; */
   overflow: hidden;
+}
+
+.sticky-top {
+  background-color: white;
+  box-shadow: 0px 8px 10px 1px white;
 }
 </style>

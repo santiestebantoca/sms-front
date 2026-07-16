@@ -1,16 +1,11 @@
 <script setup>
 const props = defineProps({ grupoId: Number, hijoId: Number, back: Function })
 
-import { useGruposStore, useGrupoStore } from '@/stores/grupos'
 import { isValidationError } from '@/api/client'
-import { gruposApi as api } from '@/api/grupos'
-import { ref, onMounted, watchEffect } from 'vue'
+import { useGrupoExpandidoQuery, useGrupoUpdate } from '@/stores/grupos'
+import { ref, computed, onMounted, watchEffect } from 'vue'
 
 const model = ref(false)
-const loading = ref(true)
-const grupos = useGruposStore()
-const grupo = useGrupoStore()
-const data = ref({})
 const form = ref({
   nombre: null,
   apodo: null,
@@ -18,18 +13,21 @@ const form = ref({
   descripcion: null
 })
 const errors = ref({})
+const { grupo: padre, isPending } = useGrupoExpandidoQuery(props.grupoId)
+const grupo = computed(() => padre.value?.hijos.find(d => d.id === props.hijoId))
+const { mutateAsync: actualizarGrupo, asyncStatus } = useGrupoUpdate()
+const loading = computed(() => asyncStatus.value === 'loading')
 
 watchEffect(() => {
-  form.value.nombre = data.value.nombre
-  form.value.apodo = data.value.apodo
-  form.value.label = data.value.label
-  form.value.descripcion = data.value.descripcion
+  if (grupo.value) {
+    form.value.nombre = grupo.value.nombre
+    form.value.apodo = grupo.value.apodo
+    form.value.label = grupo.value.label
+    form.value.descripcion = grupo.value.descripcion
+    form.value.pertenece = grupo.value.pertenece
+  }
 })
-onMounted(async () => {
-  model.value = true
-  data.value = await api.getById(props.hijoId)
-  loading.value = false
-})
+onMounted(() => model.value = true)
 
 const validate = () => {
   errors.value = {}
@@ -38,46 +36,43 @@ const validate = () => {
 }
 const submit = async () => {
   if (!validate()) return
-  await api.update(props.hijoId, form.value)
-    .then(res => {
-      grupo.refresh(props.grupoId, { include: 'hijos' })
-      grupos.replace(res)
-      model.value = false
+  actualizarGrupo({ id: grupo.value.id, ...form.value })
+    .then(() => model.value = false)
+    .catch(err => {
+      isValidationError(err) && (errors.value = err.errors)
+      errors.value.form = 'Error al actualizar el grupo.'
     })
-    .catch(err => isValidationError(err) && (errors.value = err.errors))
 }
 </script>
 
 <template>
   <BModal v-model="model" title="Editar grupo" @hidden="back">
-    <div v-if="loading" class="text-center p-5">
-      <BSpinner />
-    </div>
-    <template v-else>
-      <form @submit.prevent="submit">
-        <div class="mb-3">
-          <label class="form-label">Nombre</label>
-          <input class="form-control" v-model.trim="form.nombre" @input="errors.nombre = null" />
-          <div class="small text-danger" v-text="errors.nombre" />
-        </div>
-        <div class="mb-3">
-          <label class="form-label">Alias</label>
-          <input class="form-control" v-model.trim="form.apodo" @input="errors.apodo = null" />
-          <div class="small text-danger" v-text="errors.apodo" />
-        </div>
-        <div class="mb-3">
-          <label class="form-label">Etiquetas</label>
-          <input class="form-control" v-model.trim="form.label" />
-        </div>
-        <div class="mb-3">
-          <label class="form-label">Descripción</label>
-          <textarea class="form-control" v-model.trim="form.descripcion" />
-        </div>
-      </form>
-    </template>
-    <template v-if="!loading" #footer>
-      <BButton variant="primary" @click="submit">
-        Aceptar
+    <form @submit.prevent="submit">
+      <div class="mb-3">
+        <label class="form-label">Nombre</label>
+        <input class="form-control" v-model.trim="form.nombre" @input="errors.nombre = null" />
+        <div class="small text-danger" v-text="errors.nombre" />
+      </div>
+      <div class="mb-3">
+        <label class="form-label">Alias</label>
+        <input class="form-control" v-model.trim="form.apodo" @input="errors.apodo = null" />
+        <div class="small text-danger" v-text="errors.apodo" />
+      </div>
+      <div class="mb-3">
+        <label class="form-label">Etiquetas</label>
+        <input class="form-control" v-model.trim="form.label" />
+      </div>
+      <div class="mb-3">
+        <label class="form-label">Descripción</label>
+        <textarea class="form-control" v-model.trim="form.descripcion" />
+      </div>
+    </form>
+    <template #footer>
+      <BButton variant="secondary" @click="model = false" :disabled="loading">
+        Cancelar
+      </BButton>
+      <BButton @click="submit" :loading="loading" loading-fill style="width: 90px;">
+        Guardar
       </BButton>
     </template>
   </BModal>

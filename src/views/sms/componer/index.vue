@@ -3,21 +3,18 @@ const props = defineProps({ back: Function, previo: Object })
 
 import ListaDestinatarios from '@/components/features/sms/ListaDestinatarios.vue'
 import ListaPlantillas from '@/components/features/sms/componer/ListaPlantillas.vue'
-import { usePlantillasStore } from '@/stores/plantillas'
-import { useSmsStore } from '@/stores/smss'
-import { useGruposNotificadosStore, useNotificadosCheckedStore } from '@/stores/grupos-notificados'
+import { usePlantillaCreate } from '@/stores/plantillas'
+
+
+import { useSmsSend } from '@/stores/smss'
+import { useNotificadosQuery } from '@/stores/notificados'
 // import { useEnviosStore } from '@/stores/envios' // Para ListaDestinatarios
 import { useToast } from 'bootstrap-vue-next'
 import { storeToRefs } from 'pinia'
 import { ref, watch, computed, provide, watchEffect } from 'vue'
 
-const { create: toast } = useToast()
-const plantillas = usePlantillasStore()
-const notificados = useGruposNotificadosStore()
-const { gruposIds, destinatariosIds } = storeToRefs(useNotificadosCheckedStore())
-const sms = useSmsStore()
-const verPlantillas = ref(false)
-const errors = ref({})
+const notificados = useNotificadosQuery()
+provide('componer:origenes', notificados.origenes) // compartido con la vista /origenes
 const formDefault = {
   destinatarios: [],
   texto: null,
@@ -25,9 +22,79 @@ const formDefault = {
   previo: null
 }
 const form = ref({ ...formDefault })
-const origen = ref([])
-provide('componer:origen', origen) // compartido con la vista /origen
-//
+const errors = ref({})
+const tipoSelButtons = computed(() => [
+  {
+    text: 'Según origen (#origen)',
+    to: { name: 'sms-componer-origenes' },
+    disabled: !!props.previo.id
+  },
+  {
+    text: 'Grupos',
+    disabled: true
+  },
+  {
+    text: 'Personas',
+    disabled: true
+  }
+])
+const selButtons = computed(() => ({
+  origenes: notificados.origenes.value.map(grupo => ({
+    text: grupo.apodo || grupo.nombre,
+    click: () => quitarGrupo(grupo.id),
+    variant: 'flat-dark',
+    tippy: `${grupo.nombre} (Click para quitar)`
+  })),
+  ...props.previo.id
+    ? {
+      previos: {
+        text: destinatariosPrevios.value.length === 1
+          ? '1 destinatario'
+          : `${destinatariosPrevios.value.length} destinatarios`,
+        click: () => verListaDestinatarios.value = true,
+        variant: 'flat-primary'
+      }
+    }
+    : {},
+  grupos: {//notificados.isLoading.value
+    text: notificados.gruposIds.value.length === 0
+      ? notificados.isLoading.value ? '...' : 'Ningún grupo notificado'
+      : notificados.gruposIds.value.length === 1
+        ? '1 grupo notificado'
+        : `${notificados.gruposIds.value.length} grupos notificados`,
+    to: { name: 'sms-componer-notificados' },
+    variant: notificados.gruposIds.value.length === 0 ? 'flat-danger' : 'flat-primary'
+  },
+  suscriptores: {
+    text: notificados.destinatariosIds.value.length === 0
+      ? notificados.isLoading.value ? '' : 'Ningún destinatario'
+      : notificados.destinatariosIds.value.length === 1
+        ? '1 destinatario'
+        : `${notificados.destinatariosIds.value.length} destinatarios`,
+    to: { name: 'sms-componer-suscriptores' },
+    variant: notificados.destinatariosIds.value.length === 0 ? 'flat-danger' : 'flat-primary'
+  }
+}))
+const verPlantillas = ref(false)
+const { mutateAsync: enviarSms, asyncStatus: asyncStatusSms } = useSmsSend()
+const enviandoSms = computed(() => asyncStatusSms.value === 'loading')
+const { mutateAsync: crearPlantilla, asyncStatus: asyncStatusPlantilla } = usePlantillaCreate()
+const creandoPlantilla = computed(() => asyncStatusPlantilla.value === 'loading')
+const { create: toast } = useToast()
+
+
+
+
+
+watchEffect(() => form.value.destinatarios = notificados.destinatariosIds.value)
+
+
+
+
+
+
+// 
+
 // Para presentar la interfaz a partir un mensaje previo
 const verListaDestinatarios = ref(false)
 const destinatariosPrevios = ref([])
@@ -47,80 +114,18 @@ watch(() => props.previo.id, async (val, oldVal) => {
   }
   else if (oldVal) resetState()
 }, { immediate: true })
-//
-// Botones de tipo de selección de destinatarios
-const tipoSelButtons = computed(() => [
-  {
-    text: 'Según origen (#origen)',
-    to: { name: 'sms-componer-origen' },
-    disabled: !!props.previo.id
-  },
-  {
-    text: 'Grupos',
-    disabled: true
-  },
-  {
-    text: 'Personas',
-    disabled: true
-  }
-])
-// Botones de la selección (grupos o destinatarios previos)
-const selButtons = computed(() => ({
-  origen: origen.value.map(grupo => ({
-    text: grupo.apodo || grupo.nombre,
-    click: () => quitarGrupo(grupo.id),
-    variant: 'flat-dark',
-    tippy: `${grupo.nombre} (Click para quitar)`
-  })),
-  ...props.previo.id
-    ? {
-      previos: {
-        text: destinatariosPrevios.value.length === 1
-          ? '1 destinatario'
-          : `${destinatariosPrevios.value.length} destinatarios`,
-        click: () => verListaDestinatarios.value = true,
-        variant: 'flat-primary'
-      }
-    }
-    : {},
-  grupos: {
-    text: gruposIds.value.length === 0
-      ? 'Ningún grupo notificado'
-      : gruposIds.value.length === 1
-        ? '1 grupo notificado'
-        : `${gruposIds.value.length} grupos notificados`,
-    to: { name: 'sms-componer-notificados' },
-    variant: gruposIds.value.length === 0 ? 'flat-danger' : 'flat-primary'
-  },
-  suscriptores: {
-    text: destinatariosIds.value.length === 0
-      ? 'Ningún destinatario'
-      : destinatariosIds.value.length === 1
-        ? '1 destinatario'
-        : `${destinatariosIds.value.length} destinatarios`,
-    to: { name: 'sms-componer-suscriptores' },
-    variant: destinatariosIds.value.length === 0 ? 'flat-danger' : 'flat-primary'
-  }
-}))
-//
-watchEffect(() => form.value.destinatarios = destinatariosIds.value)
-watch(origen, async val => {
-  if (val.length) {
-    await notificados.get({ origen: val.map(d => d.id).toString(), include: 'suscriptor' })
-  } else {
-    notificados.reset()
-  }
-})
-//
+
+
+
 const validate = () => {
   errors.value = {}
   if (!form.value.destinatarios.length) errors.value.destinatarios = 'La lista de destinatarios no puede estar vacía'
   if (!form.value.texto) errors.value.texto = 'El cuerpo del mensaje no puede estar vacío'
   return !Object.keys(errors.value).length
 }
-const submit = async () => {
+const submit = () => {
   if (validate()) {
-    await sms.post(form.value)
+    enviarSms(form.value)
       .then(() => {
         toast({ body: 'Mensaje enviado', variant: 'success', })
         resetState()
@@ -132,24 +137,24 @@ const submit = async () => {
     variant: 'warning',
   })
 }
-const guardarPlantilla = async texto => {
-  await plantillas.post({ texto })
-    .then(() => toast({
-      body: 'Texto guardado en plantillas.',
-      variant: 'success',
-    }))
-    .catch(err => toast({
-      body: 'No se pudo guardar la plantilla.',
-      variant: 'danger',
-    }))
-}
 const resetState = () => {
-  origen.value = []
+  notificados.origenes.value = []
   form.value = { ...formDefault }
   if (props.previo.id) props.previo.back()
 }
-const insertarPlantilla = val => form.value.texto = (form.value.texto ?? '') + val
-const quitarGrupo = id => origen.value = origen.value.filter(d => d.id !== id)
+const insertarPlantilla = texto => form.value.texto = (form.value.texto ?? '') + texto
+const guardarPlantilla = texto => {
+  crearPlantilla({ texto })
+    .then(nuevaPlantilla => {
+      toast({ body: 'Nueva plantilla creada.', variant: 'success' })
+    })
+    .catch(err => {
+      toast({ body: 'No se guardó la plantilla.', variant: 'danger' })
+    })
+}
+const quitarGrupo = id => {
+  notificados.origenes.value = notificados.origenes.value.filter(d => d.id !== id)
+}
 </script>
 
 <template>
@@ -178,28 +183,24 @@ const quitarGrupo = id => origen.value = origen.value.filter(d => d.id !== id)
             </BButton>
           </div>
           <!-- Barra de resultados de selección -->
-          <template v-if="origen.length">
+          <template v-if="selButtons.origenes.length">
             <div class="hstack flex-wrap overflow-hidden">
               <UIcon name="bi-subtract" style="color:var(--bs-yellow)" class="flex-shrink-0 me-2" />
-              <BButton v-for="origen, index in selButtons.origen" :key="index" :variant="origen.variant"
+              <BButton v-for="origen, index in selButtons.origenes" :key="index" :variant="origen.variant"
                 class="btn-sm fs-6" @click="origen.click" v-tippy="origen.tippy">
                 {{ origen.text }}
               </BButton>
               <!-- separator -->
               <UIcon name="bi-chevron-right" class="flex-shrink-0 mx-1" font-size="12" />
-              <!-- grupos notificados -->
-              <template v-if="!notificados.status.loading">
-                <BButton class="btn-sm fs-6" :variant="selButtons.grupos.variant" :to="selButtons.grupos.to">
-                  <span v-text="selButtons.grupos.text" style="margin-bottom: 2px;" />
-                </BButton>
-              </template>
-              <!-- destinitarios -->
-              <template v-if="!notificados.status.loading">
-                <BButton class="btn-sm fs-6" :variant="selButtons.suscriptores.variant"
-                  :to="selButtons.suscriptores.to">
-                  <span v-text="selButtons.suscriptores.text" style="margin-bottom: 2px;" />
-                </BButton>
-              </template>
+              <!-- grupos/destinatarios notificados -->
+              <!-- <template v-if="loadingNotificados"> -->
+
+              <BButton class="btn-sm fs-6" :variant="selButtons.grupos.variant" :to="selButtons.grupos.to">
+                <span v-text="selButtons.grupos.text" style="margin-bottom: 2px;" />
+              </BButton>
+              <BButton class="btn-sm fs-6" :variant="selButtons.suscriptores.variant" :to="selButtons.suscriptores.to">
+                <span v-text="selButtons.suscriptores.text" style="margin-bottom: 2px;" />
+              </BButton>
             </div>
           </template>
           <template v-else-if="previo.id">

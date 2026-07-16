@@ -1,6 +1,4 @@
-// stores/coleccion/index.js
-// Archivo de barril - exporta todos los stores del módulo coleccion
-
-// Store principal
-export { useSuscriptoresStore } from './suscriptores'
-export { useSuscriptorStore } from './suscriptor'
+export { useSuscriptorCreate } from './useSuscriptorCreate'
+export { useSuscriptorDelete } from './useSuscriptorDelete'
+export { useSuscriptorQuery } from './useSuscriptorQuery'
+export { useSuscriptorUpdate } from './useSuscriptorUpdate'
