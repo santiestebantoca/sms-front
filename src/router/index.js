@@ -340,18 +340,18 @@ const routesSms = [
   {
     path: '/sms',
     name: 'sms',
-    component: () => import('@/views/sms/index.vue'),
+    component: () => import('@/views/mensaje/index.vue'),
     meta: { requiresAuth: true },
     children: [
       {
         path: '',
         name: 'sms-home',
-        component: () => import('@/views/sms/home.vue')
+        component: () => import('@/views/mensaje/home.vue')
       },
       {
         path: 'componer',
         name: 'sms-componer',
-        component: () => import('@/views/sms/componer/index.vue'),
+        component: () => import('@/views/mensaje/componer/index.vue'),
         props: route => ({
           previo: {
             id: route.query.previo ? parseInt(route.query.previo) : null,
@@ -362,7 +362,7 @@ const routesSms = [
           {
             path: 'origenes',
             name: 'sms-componer-origenes',
-            component: () => import('@/views/sms/componer/origenes.vue'),
+            component: () => import('@/views/mensaje/componer/origenes.vue'),
             props: () => ({
               back: () => router.push({ name: 'sms-componer' })
             })
@@ -370,7 +370,7 @@ const routesSms = [
           {
             path: 'notificados',
             name: 'sms-componer-notificados',
-            component: () => import('@/views/sms/componer/notificados.vue'),
+            component: () => import('@/views/mensaje/componer/notificados.vue'),
             props: () => ({
               back: () => router.push({ name: 'sms-componer' })
             })
@@ -378,7 +378,7 @@ const routesSms = [
           {
             path: 'suscriptores',
             name: 'sms-componer-suscriptores',
-            component: () => import('@/views/sms/componer/suscriptores.vue'),
+            component: () => import('@/views/mensaje/componer/suscriptores.vue'),
             props: () => ({
               back: () => router.push({ name: 'sms-componer' })
             })
@@ -388,7 +388,7 @@ const routesSms = [
       {
         path: 'coleccion',
         name: 'sms-coleccion',
-        component: () => import('@/views/sms/coleccion.vue')
+        component: () => import('@/views/mensaje/coleccion.vue')
       }
     ]
   }

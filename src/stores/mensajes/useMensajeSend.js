@@ -1,7 +1,7 @@
 import { useMutation } from '@pinia/colada'
-import { smssApi as api } from '@/api/smss'
+import { mensajesApi as api } from '@/api/mensajes'
 
-export function useSmsSend() {
+export function useMensajeSend() {
   return useMutation({
     mutation: (newData) => api.send(newData),
   })

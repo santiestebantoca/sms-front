@@ -1,31 +1,34 @@
 <script setup>
 const props = defineProps({ back: Function })
 
-import useUsers from '@/stores/config-users'
+// ✗ Build failed in 1.63s
+// error during build:
+// [vite: load - fallback] Could not load D: \proyectos\vue - bs\sms\src / stores / config - users(imported by src / views / configurar / user / UserMembership.vue): ENOENT: no such file or directory, open 'D:\proyectos\vue-bs\sms\src\stores\config-users'
+// import useUsers from '@/stores/config-users'
 import { ref, computed, watch, inject } from 'vue'
 
 const model = ref(null)
-const users = useUsers()
-const data = computed(() => users.user.data)
-const options = computed(() => users.authgroup.data)
-users.authgroup.get()
+// const users = useUsers()
+// const data = computed(() => users.user.data)
+// const options = computed(() => users.authgroup.data)
+// users.authgroup.get()
 const form = ref({
   user_id: null,
   group_id: []
 })
-watch(data, d => {
-  if (users.user.status.loaded) {
-    form.value.user_id = d.id
-    form.value.group_id = d.membership.map(e => e.id)
-    model.value = true
-  }
-}, { immediate: true })
+// watch(data, d => {
+//   if (users.user.status.loaded) {
+//     form.value.user_id = d.id
+//     form.value.group_id = d.membership.map(e => e.id)
+//     model.value = true
+//   }
+// }, { immediate: true })
 //
 const submit = async () => {
-  await users.user.membership.post(form.value)
-    .then(res => process.POST(res,
-      () => users.user.get(form.value.user_id).then(() => model.value = false),
-      () => { }))
+  // await users.user.membership.post(form.value)
+  //   .then(res => process.POST(res,
+  //     () => users.user.get(form.value.user_id).then(() => model.value = false),
+  //     () => { }))
 }
 </script>
 
@@ -37,13 +40,13 @@ const submit = async () => {
         <form @submit.prevent="submit">
           <div class="mb-3">
             <label class="form-label">Grupos</label>
-            <div v-for="{ id, role, description } in options" :key="id" class="form-check" type="button">
+            <!-- <div v-for="{ id, role, description } in options" :key="id" class="form-check" type="button">
               <input type="checkbox" class="form-check-input" :id="role" :value="id" v-model="form.group_id" />
               <label class="form-check-label" :for="role">
                 <span class="text-capitalize" v-text="role" /><br />
                 <span class="form-text" v-text="description" />
               </label>
-            </div>
+            </div> -->
           </div><br>
           <bs-btn type="submit" color="primary" label="Aceptar" />
         </form>

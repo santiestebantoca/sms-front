@@ -1,17 +1,20 @@
 <script setup>
-import ImpersonateSearch from './ImpersonateSearch.vue'
-import ImpersonateUser from './ImpersonateUser.vue'
-import ImpersonateUsers from './ImpersonateUsers.vue'
-import { useAuthStore } from '@/stores/auth'
-import { computed } from 'vue'
+//✗ Build failed in 2.71s
+// error during build:
+// Could not resolve "./ImpersonateSearch.vue" from "src/views/auth/impersonate.vue"
+// import ImpersonateSearch from './ImpersonateSearch.vue'
+// import ImpersonateUser from './ImpersonateUser.vue'
+// import ImpersonateUsers from './ImpersonateUsers.vue'
+// import { useAuthStore } from '@/stores/auth'
+// import { computed } from 'vue'
 
-const auth = useAuthStore()
-const list = computed(() => auth.impersonate.users.isFiltered)
+// const auth = useAuthStore()
+// const list = computed(() => auth.impersonate.users.isFiltered)
 </script>
 
 <template>
   <div class="grid">
-    <div class="card border-0 pt-md-4">
+    <!-- <div class="card border-0 pt-md-4">
       <div class="header">
         <bs-btn-back to="/home" style="margin-left: -8px;" class="a" />
         <h5 class="mb-0 b">Personificar</h5>
@@ -21,7 +24,7 @@ const list = computed(() => auth.impersonate.users.isFiltered)
         <ImpersonateUsers v-if="list" />
         <ImpersonateUser v-else />
       </div>
-    </div>
+    </div> -->
   </div>
 </template>
 

@@ -2,6 +2,7 @@ import '@/assets/css/main.scss'
 import { createApp } from 'vue'
 import { createPinia } from 'pinia'
 import { PiniaColada } from '@pinia/colada'
+import { PiniaColadaAutoRefetch } from '@pinia/colada-plugin-auto-refetch'
 import piniaPluginPersistedstate from 'pinia-plugin-persistedstate'
 import { plugin as VueTippy } from 'vue-tippy' // Nota: importación nombrada 'plugin'
 import 'tippy.js/dist/tippy.css'      // Estilos base
@@ -25,6 +26,12 @@ pinia.use(piniaPluginPersistedstate)
 app.use(pinia)
 app.use(PiniaColada, {
   // Configuración global (opcional)
+  plugins: [
+    PiniaColadaAutoRefetch({
+      // global default (can be overridden per-query)
+      // autoRefetch: true,
+    }),
+  ],
 })
 app.use(router)
 app.use(VueTippy, {

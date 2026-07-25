@@ -31,4 +31,17 @@ export const queryKeys = {
     detalles: () => [...queryKeys.plantillas.root, 'detalle'],
     detalle: (id) => [...queryKeys.plantillas.detalles(), id],
   },
+  mensajes: {
+    root: ['mensajes'],
+    listas: () => [...queryKeys.mensajes.root, 'lista'],
+    lista: (filtros) => [...queryKeys.mensajes.listas(), { ...filtros }],
+    detalles: () => [...queryKeys.mensajes.root, 'detalle'],
+    detalle: (id) => [...queryKeys.mensajes.detalles(), id],
+    notificaciones: () => [...queryKeys.mensajes.root, 'notificaciones']
+  },
+  envios: {
+    root: ['envios'],
+    listas: () => [...queryKeys.envios.root, 'lista'],
+    lista: (filtros) => [...queryKeys.envios.listas(), { ...filtros }],
+  }
 }

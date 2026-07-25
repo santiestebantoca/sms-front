@@ -4,10 +4,10 @@
 <script setup>
 const props = defineProps({ noLeftButton: Boolean, title: { default: "SMS" } })
 
-import useNavigation from '@/composables/useNavigation'
+import { useNavigationHeader } from '@/composables/useNavigation'
 import UserWidget from '@/components/features/app/UserDropdown.vue'
 
-const nav = useNavigation().options
+const navHeader = useNavigationHeader().options
 </script>
 
 <template>
@@ -23,7 +23,7 @@ const nav = useNavigation().options
       </span>
       <!-- header actions -->
       <div class="hstack gap-1 px-1">
-        <template v-for="{ label, tooltip, icon, to, id } in nav.header">
+        <template v-for="{ label, tooltip, icon, to, id } in navHeader">
           <BButton :to="to" variant="flat-primary" :id="id" v-tippy="tooltip">
             <UIcon :name="icon" />
             {{ label }}

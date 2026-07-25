@@ -1,10 +1,16 @@
 <script setup>
-const props = defineProps({ destinatarios: Array, loading: Boolean })
+const props = defineProps({ mensajeId: Number })
+
+import { useEnviosQuery } from '@/stores/envios'
+import { ref } from 'vue'
+
+const enabled = ref(false)
+const { data: destinatarios, isPending, } = useEnviosQuery(props.mensajeId, enabled)
 </script>
 
 <template>
-  <BModal title="Destinatarios" no-footer>
-    <div v-if="loading" class="text-center py-4">
+  <BModal title="Destinatarios" no-footer @show="enabled = true">
+    <div v-if="isPending" class="text-center py-4">
       <BSpinner />
     </div>
     <RootTree v-else-if="destinatarios?.length" list no-hover>

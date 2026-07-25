@@ -1,14 +1,20 @@
 <script setup>
 const props = defineProps({ id: Number, setId: Function, compose: Object })
 
-import useUsers from '@/stores/config-users'
+// ✗ Build failed in 1.66s
+// error during build:
+// [vite: load - fallback] Could not load D: \proyectos\vue - bs\sms\src / stores / config - users(imported by src / views / configurar / user / Users.vue): ENOENT: no such file or directory, open 'D:\proyectos\vue-bs\sms\src\stores\config-users'
+// import useUsers from '@/stores/config-users'
 // import useGrupos from '@/stores/config-grupos/index'
-import UsersNew from './UsersNew.vue'
+// ✗ Build failed in 2.40s
+// error during build:
+// Could not resolve "./UsersNew.vue" from "src/views/configurar/user/Users.vue"
+// import UsersNew from './UsersNew.vue'
 import { ref, watch, provide } from 'vue'
 
-const users = useUsers()
+// const users = useUsers()
 const active = ref(props.id) // `id` source of true is this compo, except on reload 
-users.get()
+// users.get()
 // useGrupos().get() // UX
 watch(active, val => val && props.setId(val)) // can be null on `grupo` deleted
 provide('users:id', active)
@@ -25,7 +31,7 @@ const to = ref({ query: { compose: 'new' } })
           <bs-tooltip offset="0,10" placement="bottom"> Nuevo Usuario </bs-tooltip>
         </bs-btn-icon>
       </div>
-      <template v-if="users.status.loaded">
+      <!-- <template v-if="users.status.loaded">
         <ul class="ul">
           <template v-for="d in users.data">
             <li class="li li-win" :class="{ active: active === d.id }" @click="active = d.id">
@@ -34,13 +40,13 @@ const to = ref({ query: { compose: 'new' } })
               <span v-if="d.blocked" class="badge-danger"> bloqueado </span>
             </li>
           </template>
-        </ul>
-      </template>
+</ul>
+</template> -->
     </div>
     <div class="p-1 overflow-auto">
       <router-view />
     </div>
-    <UsersNew v-if="compose.new" :back="compose.back" />
+    <!-- <UsersNew v-if="compose.new" :back="compose.back" /> -->
   </div>
 </template>
 

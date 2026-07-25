@@ -1,14 +1,11 @@
 <script setup>
 const props = defineProps({ back: Function, previo: Object })
 
-import ListaDestinatarios from '@/components/features/sms/ListaDestinatarios.vue'
-import ListaPlantillas from '@/components/features/sms/componer/ListaPlantillas.vue'
+import ListaDestinatarios from '@/components/features/mensaje/ListaDestinatarios.vue'
+import ListaPlantillas from '@/components/features/mensaje/componer/ListaPlantillas.vue'
 import { usePlantillaCreate } from '@/stores/plantillas'
-
-
-import { useSmsSend } from '@/stores/smss'
+import { useMensajeSend, useMensajeQuery } from '@/stores/mensajes'
 import { useNotificadosQuery } from '@/stores/notificados'
-// import { useEnviosStore } from '@/stores/envios' // Para ListaDestinatarios
 import { useToast } from 'bootstrap-vue-next'
 import { storeToRefs } from 'pinia'
 import { ref, watch, computed, provide, watchEffect } from 'vue'
@@ -76,46 +73,26 @@ const selButtons = computed(() => ({
   }
 }))
 const verPlantillas = ref(false)
-const { mutateAsync: enviarSms, asyncStatus: asyncStatusSms } = useSmsSend()
+const { mutateAsync: enviarSms, asyncStatus: asyncStatusSms } = useMensajeSend()
 const enviandoSms = computed(() => asyncStatusSms.value === 'loading')
 const { mutateAsync: crearPlantilla, asyncStatus: asyncStatusPlantilla } = usePlantillaCreate()
 const creandoPlantilla = computed(() => asyncStatusPlantilla.value === 'loading')
 const { create: toast } = useToast()
-
-
-
-
+// If props.previo
+const { data: mensajePrevio, isLoading: isLoadingMensajePrevio } = useMensajeQuery(props.previo?.id)
+const verListaDestinatarios = ref(false)
+const destinatariosPrevios = computed(() => mensajePrevio.value?.destinatarios || [])
 
 watchEffect(() => form.value.destinatarios = notificados.destinatariosIds.value)
-
-
-
-
-
-
-// 
-
-// Para presentar la interfaz a partir un mensaje previo
-const verListaDestinatarios = ref(false)
-const destinatariosPrevios = ref([])
-const destinatariosPreviosLoading = ref(false)
-watch(() => props.previo.id, async (val, oldVal) => {
-  if (val) {
-    destinatariosPreviosLoading.value = true
-    const smsPrevio = await sms.get(val, { include: "destinatarios" })
-    destinatariosPreviosLoading.value = false
-    if (smsPrevio.id === val) {
-      destinatariosPrevios.value = smsPrevio.destinatarios
-      form.value.destinatarios = smsPrevio.destinatarios.map(d => d.suscriptor_id)
-      form.value.texto = smsPrevio.texto
-      form.value.continua = false
-      form.value.previo = val
-    }
+const { stop } = watchEffect(() => {
+  if (mensajePrevio.value) {
+    form.value.destinatarios = mensajePrevio.value.destinatarios.map(d => d.suscriptor_id)
+    form.value.texto = mensajePrevio.value.texto
+    form.value.previo = mensajePrevio.value.id
+    form.value.continua = false
+    stop()
   }
-  else if (oldVal) resetState()
-}, { immediate: true })
-
-
+})
 
 const validate = () => {
   errors.value = {}
@@ -207,7 +184,7 @@ const quitarGrupo = id => {
             <div class="hstack flex-wrap overflow-hidden">
               <UIcon name="bi-people-fill" class="flex-shrink-0 text-secondary me-2" />
               <!-- destinatarios previos -->
-              <template v-if="!destinatariosPreviosLoading">
+              <template v-if="!isPending">
                 <BButton :variant="selButtons.previos.variant" class="btn-sm fs-6" @click="selButtons.previos.click">
                   <span v-text="selButtons.previos.text" style="margin-bottom: 2px;" />
                 </BButton>
@@ -238,8 +215,8 @@ const quitarGrupo = id => {
     <ListaPlantillas v-model="verPlantillas" @select="insertarPlantilla" />
   </div>
   <template v-if="previo.id">
-    <ListaDestinatarios v-model="verListaDestinatarios" :destinatarios="destinatariosPrevios"
-      :loading="destinatariosPreviosLoading" />
+    <!-- <ListaDestinatarios v-model="verListaDestinatarios" :destinatarios="destinatariosPrevios"
+      :loading="destinatariosPreviosLoading" /> -->
   </template>
   <router-view />
 </template>

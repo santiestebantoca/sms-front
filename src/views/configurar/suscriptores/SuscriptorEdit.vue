@@ -4,15 +4,24 @@ This compo uses a dialog and tabs: best UX is to scroll top on tab switch
 <script setup>
 const props = defineProps({ back: Function })
 
-import useSuscriptores from '@/stores/config-suscriptores'
-import useGrupos from '@/stores/config-grupos/index'
-import GrupoSel from './GrupoSel.vue'
+// ✗ Build failed in 1.65s
+// error during build:
+// [vite: load - fallback] Could not load D: \proyectos\vue - bs\sms\src / stores / config - suscriptores(imported by src / views / configurar / suscriptores / SuscriptorEdit.vue): ENOENT: no such file or directory, open 'D:\proyectos\vue-bs\sms\src\stores\config-suscriptores'
+// import useSuscriptores from '@/stores/config-suscriptores'
+// ✗ Build failed in 1.74s
+// error during build:
+// [vite: load - fallback] Could not load D: \proyectos\vue - bs\sms\src / stores / config - grupos / index(imported by src / views / configurar / suscriptores / SuscriptorEdit.vue): ENOENT: no such file or directory, open 'D:\proyectos\vue-bs\sms\src\stores\config-grupos\index'
+// import useGrupos from '@/stores/config-grupos/index'
+// ✗ Build failed in 1.57s
+// error during build:
+// Could not resolve "./GrupoSel.vue" from "src/views/configurar/suscriptores/SuscriptorEdit.vue"
+// import GrupoSel from './GrupoSel.vue'
 import { ref, computed, watch, inject } from 'vue'
 
 const model = ref(null)
 const tab = ref('general')
-const suscriptores = useSuscriptores()
-const data = computed(() => suscriptores.suscriptor.data)
+// const suscriptores = useSuscriptores()
+// const data = computed(() => suscriptores.suscriptor.data)
 const form = ref({
   nombre: null,
   cargo: null,
@@ -23,18 +32,18 @@ const form = ref({
   suplente: null,
 })
 const errors = ref({})
-watch(data, d => {
-  if (d) {
-    form.value.nombre = d.nombre
-    form.value.cargo = d.cargo
-    form.value.telefono = d.telefono
-    form.value.correo = d.correo
-    form.value.grupo = d.grupo?.id
-    form.value.activo = d.activo
-    form.value.suplente = d.suplente?.id
-    model.value = true
-  }
-}, { immediate: true })
+// watch(data, d => {
+//   if (d) {
+//     form.value.nombre = d.nombre
+//     form.value.cargo = d.cargo
+//     form.value.telefono = d.telefono
+//     form.value.correo = d.correo
+//     form.value.grupo = d.grupo?.id
+//     form.value.activo = d.activo
+//     form.value.suplente = d.suplente?.id
+//     model.value = true
+//   }
+// }, { immediate: true })
 const validate = () => {
   const telefono = /^(\+53|53)?\d{8}$/
   const correo = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/
@@ -47,25 +56,25 @@ const validate = () => {
 }
 const submit = async () => {
   if (!validate()) return
-  await suscriptores.suscriptor.put(data.value.id, form.value)
-    .then(res => process.PUT(res,
-      () => {
-        Promise.all([
-          suscriptores.get(),
-          suscriptores.suscriptor.get(data.value.id)
-        ]).then(() => model.value = false)
-      },
-      errs => errors.value = errs))
+  // await suscriptores.suscriptor.put(data.value.id, form.value)
+  //   .then(res => process.PUT(res,
+  //     () => {
+  //       Promise.all([
+  //         suscriptores.get(),
+  //         suscriptores.suscriptor.get(data.value.id)
+  //       ]).then(() => model.value = false)
+  //     },
+  //     errs => errors.value = errs))
 }
 //
-const grupo = computed(() => useGrupos().find(form.value.grupo))
-const suplenteOptions = computed(() => suscriptores.data
-  .filter(d => d.id !== data.value.id)
-  .map(d => ({
-    value: d.id,
-    label: d.nombre,
-  })))
-const suplente = computed(() => suscriptores.data.find(d => d.id === form.value.suplente))
+// const grupo = computed(() => useGrupos().find(form.value.grupo))
+// const suplenteOptions = computed(() => suscriptores.data
+//   .filter(d => d.id !== data.value.id)
+//   .map(d => ({
+//     value: d.id,
+//     label: d.nombre,
+//   })))
+// const suplente = computed(() => suscriptores.data.find(d => d.id === form.value.suplente))
 //
 const dialogBody = ref()
 watch(tab, () => dialogBody.value.$el.scrollTop = 0)
@@ -102,10 +111,10 @@ watch(tab, () => dialogBody.value.$el.scrollTop = 0)
               <div class="mb-3">
                 <label class="form-label">Grupo</label>
                 <div class="form-control hstack" style="height: 38px;" @click="tab = 'grupos'" type="button">
-                  <template v-if="grupo">
+                  <!-- <template v-if="grupo">
                     <i class="bi-subtract me-2" style="color:var(--bs-yellow);flex-shrink: 0;" />
                     <span v-text="grupo.nombre" class="text-truncate" />
-                  </template>
+                  </template> -->
                   <bs-icon name="chevron-right" class="ms-auto" />
                 </div>
               </div>
@@ -115,16 +124,16 @@ watch(tab, () => dialogBody.value.$el.scrollTop = 0)
               </div>
               <div class="">
                 <label class="form-label">Suplente</label>
-                <div class="form-control hstack" style="height: 38px;" @click="tab = 'suplente'" type="button">
+                <!-- <div class="form-control hstack" style="height: 38px;" @click="tab = 'suplente'" type="button">
                   <span v-if="suplente" v-text="suplente.nombre" />
                   <bs-icon name="chevron-right" class="ms-auto" />
-                </div>
+                </div> -->
               </div>
             </bs-tab-pane>
             <!-- grupos: like NotificadosSel.vue -->
             <bs-tab-pane name="grupos">
               <label class="form-label">Grupo</label>
-              <GrupoSel v-model="form.grupo" />
+              <!-- <GrupoSel v-model="form.grupo" /> -->
             </bs-tab-pane>
             <!-- suplente -->
             <bs-tab-pane name="suplente">

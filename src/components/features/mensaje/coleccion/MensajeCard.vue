@@ -2,37 +2,19 @@
 const props = defineProps({ data: Object })
 
 import { useAuthStore } from '@/stores/auth/index'
-import { useSmssStore, useSmsStore } from '@/stores/smss'
-import { useEnviosStore } from '@/stores/envios'
+import { useMensajeUpdate } from '@/stores/mensajes'
 import { useClipboard } from '@vueuse/core'
 import { shortTime } from '@/composables/useDates'
-import { ref, computed, watch, inject } from 'vue'
-import ListaDestinatarios from '@/components/features/sms/ListaDestinatarios.vue'
+import { ref, computed, watch } from 'vue'
+import ListaDestinatarios from '@/components/features/mensaje/ListaDestinatarios.vue'
 
 const popover = ref(false)
-const smss = useSmssStore()
-const sms = useSmsStore() // no contiene datos solo funciones
-//
-const destinatarios = useEnviosStore()
 const showDestinatarios = ref(null)
-watch(showDestinatarios, val => val && destinatarios.get({ mensaje_id: props.data.id }))
-//
 const date = shortTime(props.data.en)
-const continua = computed({
-  get() {
-    return props.data.continua
-  },
-  async set(newValue) {
-    await sms.put(props.data.id, { continua: newValue })
-    smss.del(props.data.id)
-  }
-})
-const to = ref({ name: 'sms-componer', query: { previo: props.data.id } })
-//
 const source = ref(props.data.texto)
+const to = ref({ name: 'sms-componer', query: { previo: props.data.id } })
+const { mutateAsync: actualizarMensaje, asyncStatus } = useMensajeUpdate()
 const { copy, copied, isSupported } = useClipboard({ source })
-//
-//
 const ageno = computed(() => props.data.de !== useAuthStore().authUser.name)
 const tippyText = ref('Menú del mensaje')
 const tippy = ref({ content: tippyText.value })
@@ -41,6 +23,8 @@ const rootStyle = computed(() => ({
     ? 'orange'
     : props.data.continua ? 'orangered' : 'var(--bs-teal)',
 }))
+
+const noContinuar = () => actualizarMensaje({ id: props.data.id, continua: false })
 </script>
 
 <template>
@@ -79,7 +63,7 @@ const rootStyle = computed(() => ({
         <template #tooltip-content>
           <span class="text-nowrap">Ver opciones</span>
         </template>
-        <BDropdownItem v-if="data.continua" @click="continua = false">
+        <BDropdownItem v-if="data.continua" @click="noContinuar">
           <UIcon name="bi-stop-circle" class="me-2" />
           No continuar
         </BDropdownItem>
@@ -97,8 +81,7 @@ const rootStyle = computed(() => ({
         <UIcon name="bi-arrow-right" />
       </BButton>
     </div>
-    <ListaDestinatarios v-model="showDestinatarios" :destinatarios="destinatarios.data"
-      :loading="destinatarios.status.loading" />
+    <ListaDestinatarios v-model="showDestinatarios" :mensajeId="data.id" />
   </div>
 </template>
 
@@ -112,7 +95,6 @@ const rootStyle = computed(() => ({
 
 .card {
   border-color: var(--border-badge);
-  /* border-width: 2px; */
 }
 
 .card-body {

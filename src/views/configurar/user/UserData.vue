@@ -1,11 +1,14 @@
 <script setup>
 const props = defineProps({ back: Function })
 
-import useStore from '@/stores/config-users'
+// ✗ Build failed in 1.67s
+// error during build:
+// [vite: load - fallback] Could not load D: \proyectos\vue - bs\sms\src / stores / config - users(imported by src / views / configurar / user / UserData.vue): ENOENT:no such file or directory, open 'D:\proyectos\vue-bs\sms\src\stores\config-users'
+// import useStore from '@/stores/config-users'
 import { ref, computed } from 'vue'
 
-const users = useStore()
-const data = computed(() => users.user.data)
+// const users = useStore()
+// const data = computed(() => users.user.data)
 const to = ref({
   general: {
     edit: { name: 'configurar-user-edit' },
@@ -34,15 +37,15 @@ const tab = ref('general')
         <div class="px-3 py-2">
           <div class="label-value">
             <label>Nombre</label>
-            <div class="value" v-text="data.name" />
+            <!-- <div class="value" v-text="data.name" /> -->
           </div>
           <div class="label-value">
             <label>Nombre de usuario</label>
-            <div class="value" v-text="data.username" />
+            <!-- <div class="value" v-text="data.username" /> -->
           </div>
           <div class="label-value">
             <label>Bloqueado</label>
-            <div class="value" v-text="data.blocked ? 'Sí' : 'No'" />
+            <!-- <div class="value" v-text="data.blocked ? 'Sí' : 'No'" /> -->
           </div>
         </div>
       </bs-tab-pane>
@@ -53,12 +56,12 @@ const tab = ref('general')
         <div class="px-3 py-2">
           <div class="label-value">
             <label>Roles</label>
-            <div v-if="!data.membership.length" class="value">
+            <!-- <div v-if="!data.membership.length" class="value">
               Usuario estándar
-            </div>
-            <div v-for="{ role } in data.membership">
+            </div> -->
+            <!-- <div v-for="{ role } in data.membership">
               Usuario <span class="fw-semibold" v-text="role" />
-            </div>
+            </div> -->
           </div>
         </div>
       </bs-tab-pane>
@@ -66,19 +69,19 @@ const tab = ref('general')
         <div class="px-3 py-2 mt-4">
           <div class="label-value">
             <label>Creado en</label>
-            <div class="value" v-text="data.created_on || '-'" />
+            <!-- <div class="value" v-text="data.created_on || '-'" /> -->
           </div>
           <div class="label-value">
             <label>Creado por</label>
-            <div class="value" v-text="data.created_by || '-'" />
+            <!-- <div class="value" v-text="data.created_by || '-'" /> -->
           </div>
           <div class="label-value">
             <label>Modificado en</label>
-            <div class="value" v-text="data.modified_on || '-'" />
+            <!-- <div class="value" v-text="data.modified_on || '-'" /> -->
           </div>
           <div class="label-value">
             <label>Modificado por</label>
-            <div class="value" v-text="data.modified_by || '-'" />
+            <!-- <div class="value" v-text="data.modified_by || '-'" /> -->
           </div>
         </div>
       </bs-tab-pane>

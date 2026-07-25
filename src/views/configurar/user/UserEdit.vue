@@ -1,26 +1,29 @@
 <script setup>
 const props = defineProps({ back: Function })
 
-import useUsers from '@/stores/config-users'
+// ✗ Build failed in 1.69s
+// error during build:
+// [vite: load - fallback] Could not load D: \proyectos\vue - bs\sms\src / stores / config - users(imported by src / views / configurar / user / UserEdit.vue): ENOENT: no such file or directory, open 'D:\proyectos\vue-bs\sms\src\stores\config-users'
+// import useUsers from '@/stores/config-users'
 import { ref, computed, watch, inject } from 'vue'
 
 const model = ref(null)
-const users = useUsers()
-const data = computed(() => users.user.data)
+// const users = useUsers()
+// const data = computed(() => users.user.data)
 const form = ref({
   first_name: null,
   last_name: null,
   username: null
 })
 const errors = ref({})
-watch(data, d => {
-  if (d) {
-    form.value.first_name = d.first_name
-    form.value.last_name = d.last_name
-    form.value.username = d.username
-    model.value = true
-  }
-}, { immediate: true })
+// watch(data, d => {
+//   if (d) {
+//     form.value.first_name = d.first_name
+//     form.value.last_name = d.last_name
+//     form.value.username = d.username
+//     model.value = true
+//   }
+// }, { immediate: true })
 const validate = () => {
   errors.value = {}
   if (!form.value.first_name) errors.value.nombre = 'Este campo no puede estar vacío'
@@ -30,15 +33,15 @@ const validate = () => {
 }
 const submit = async () => {
   if (!validate()) return
-  await users.user.put(data.value.id, form.value)
-    .then(res => process.PUT(res,
-      () => {
-        Promise.all([
-          users.get(),
-          users.user.get(data.value.id)
-        ]).then(() => model.value = false)
-      },
-      errs => errors.value = errs))
+  // await users.user.put(data.value.id, form.value)
+  //   .then(res => process.PUT(res,
+  //     () => {
+  //       Promise.all([
+  //         users.get(),
+  //         users.user.get(data.value.id)
+  //       ]).then(() => model.value = false)
+  //     },
+  //     errs => errors.value = errs))
 }
 </script>
 

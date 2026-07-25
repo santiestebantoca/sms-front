@@ -38,8 +38,3 @@ export function shortTime(strDate) {
   }
   return res
 }
-
-export function toSQLString(date) {
-  if (date)
-    return useDateFormat(date, 'YYYY-MM-DD HH:mm:ss').value
-}

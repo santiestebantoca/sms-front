@@ -1,15 +1,15 @@
 <script setup>
 import MainLayout from '@/layouts/MainLayout.vue'
 import DrawerContent from '@/components/features/DrawerContent.vue'
-import useNavigation from '@/composables/useNavigation'
+import { useNavigationConfigurar } from '@/composables/useNavigation'
 
-const nav = useNavigation().options
+const navConfigurar = useNavigationConfigurar().options
 </script>
 
 <template>
   <MainLayout>
     <template #drawer-content="{ down, closeDrawer }">
-      <DrawerContent :down="down" :closeDrawer="closeDrawer" :options="nav.configurar" />
+      <DrawerContent :down="down" :closeDrawer="closeDrawer" :options="navConfigurar" />
     </template>
   </MainLayout>
 </template>

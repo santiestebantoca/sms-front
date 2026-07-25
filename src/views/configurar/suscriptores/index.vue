@@ -1,14 +1,24 @@
 <script setup>
 const props = defineProps({ id: Number, setId: Function, compose: Object })
 
-import useSuscriptores from '@/stores/config-suscriptores'
-import useGrupos from '@/stores/config-grupos/index'
-import SuscriptoresNew from './SuscriptoresNew.vue'
+// ✗ Build failed in 2.94s
+// error during build:
+// [vite: load - fallback] Could not load D: \proyectos\vue - bs\sms\src / stores / config - suscriptores(imported by src / views / configurar / suscriptores / index.vue): ENOENT: no such file or directory, open 'D:\proyectos\vue-bs\sms\src\stores\config-suscriptores'
+// import useSuscriptores from '@/stores/config-suscriptores'
+// ✗ Build failed in 1.72s
+// error during build:
+// [vite: load - fallback] Could not load D: \proyectos\vue - bs\sms\src / stores / config - grupos / index(imported by src / views / configurar / suscriptores / index.vue): ENOENT: no such file or directory, open 'D:\proyectos\vue-bs\sms\src\stores\config-grupos\index'
+// import useGrupos from '@/stores/config-grupos/index'
+// ✗ Build failed in 1.78s
+// error during build:
+// Could not resolve "./SuscriptoresNew.vue" from "src/views/configurar/suscriptores/index.vue"
+
+// import SuscriptoresNew from './SuscriptoresNew.vue'
 import { ref, watch, provide } from 'vue'
 
-const suscriptores = useSuscriptores()
+// const suscriptores = useSuscriptores()
 const active = ref(props.id) // `id` source of true is this compo, except on reload 
-suscriptores.get()
+// suscriptores.get()
 useGrupos().get() // UX
 watch(active, val => val && props.setId(val)) // can be null on `grupo` deleted
 provide('suscriptores:id', active)
@@ -25,7 +35,7 @@ const to = ref({ query: { compose: 'new' } })
           <bs-tooltip offset="0,10" placement="bottom"> Nuevo Suscriptor </bs-tooltip>
         </bs-btn-icon>
       </div>
-      <template v-if="suscriptores.status.loaded">
+      <!-- <template v-if="suscriptores.status.loaded">
         <ul class="ul">
           <template v-for="d in suscriptores.data">
             <li class="li li-win" :class="{ active: active === d.id }" @click="active = d.id">
@@ -34,13 +44,13 @@ const to = ref({ query: { compose: 'new' } })
               <span v-if="!d.activo" class="badge-danger"> inactivo </span>
             </li>
           </template>
-        </ul>
-      </template>
+</ul>
+</template> -->
     </div>
     <div class="p-1 overflow-auto">
       <router-view />
     </div>
-    <SuscriptoresNew v-if="compose.new" :back="compose.back" />
+    <!-- <SuscriptoresNew v-if="compose.new" :back="compose.back" /> -->
   </div>
 </template>
 

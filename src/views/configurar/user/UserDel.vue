@@ -1,22 +1,25 @@
 <script setup>
 const props = defineProps({ back: Function, cancel: Function })
 
-import useUsers from '@/stores/config-users'
+// ✗ Build failed in 1.57s
+// error during build:
+// [vite: load - fallback] Could not load D: \proyectos\vue - bs\sms\src / stores / config - users(imported by src / views / configurar / user / UserDel.vue): ENOENT: no such file or directory, open 'D:\proyectos\vue-bs\sms\src\stores\config-users'
+// import useUsers from '@/stores/config-users'
 import { ref, computed, inject } from 'vue'
 
 const active = inject('users:id')
 const model = ref(true)
 const deleted = ref(false)
-const users = useUsers()
-const data = computed(() => users.user.data)
+// const users = useUsers()
+// const data = computed(() => users.user.data)
 const submit = async () => {
-  await users.user.del(data.value.id)
-    .then(res => process.DELETE(res,
-      () => users.get().then(() => {
-        deleted.value = true
-        model.value = false
-      }),
-      () => { }))
+  // await users.user.del(data.value.id)
+  //   .then(res => process.DELETE(res,
+  //     () => users.get().then(() => {
+  //       deleted.value = true
+  //       model.value = false
+  //     }),
+  //     () => { }))
 }
 const hidden = () => {
   if (deleted.value) {
