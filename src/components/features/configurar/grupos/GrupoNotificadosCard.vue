@@ -35,17 +35,17 @@ const acciones = computed(() => [
   </div>
 </template>
 
-<style scoped>
+<style scoped lang="scss">
 .label-value {
   margin-bottom: 8px;
-}
 
-.label-value>label {
-  color: var(--bs-gray-600);
-  font-size: .875em;
-}
+  >label {
+    color: var(--bs-gray-600);
+    font-size: .875em;
+  }
 
-.label-value>div {
-  padding: 2px 0;
+  >div {
+    padding: 2px 0;
+  }
 }
 </style>

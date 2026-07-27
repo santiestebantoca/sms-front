@@ -1,6 +1,6 @@
 <script setup>
-import ImpersonateUser from '@/components/features/auth/impersonate/ImpersonateUser.vue'
-import ImpersonateUsers from '@/components/features/auth/impersonate/ImpersonateUsers.vue'
+import UserCard from '@/components/features/auth/impersonate/UserCard.vue'
+import UsersList from '@/components/features/auth/impersonate/UsersList.vue'
 import { useAuthStore, useImpersonateablesQuery } from '@/stores/auth'
 import { computed } from 'vue'
 
@@ -20,8 +20,8 @@ const canSearch = computed(() => authUser.can_impersonate)
         <BSearchInput v-if="canSearch" v-model="search" placeholder="Buscar usuario" class="c" />
       </div>
       <div class="overflow-auto mt-3">
-        <ImpersonateUsers v-if="isFiltered" />
-        <ImpersonateUser v-else />
+        <UsersList v-if="isFiltered" />
+        <UserCard v-else />
       </div>
     </div>
   </div>

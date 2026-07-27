@@ -33,7 +33,7 @@ const acciones = ref([
   </div>
 </template>
 
-<style scoped>
+<style scoped lang="scss">
 .root {
   position: relative;
   padding: 0.7em .875em 0.7em 1.5em;
@@ -42,37 +42,37 @@ const acciones = ref([
   --bs-border-color: var(--bs-gray-400);
   border: solid 1px var(--bs-border-color);
   transition: all .6s;
-}
 
-.root::after {
-  position: absolute;
-  content: '';
-  top: 10px;
-  bottom: 10px;
-  left: 5px;
-  width: 3px;
-  border-radius: 4px;
-  background-color: var(--bs-yellow-700);
-  background-image: var(--bs-gradient) !important;
-  transition: all .6s;
-}
+  &::after {
+    position: absolute;
+    content: '';
+    top: 10px;
+    bottom: 10px;
+    left: 5px;
+    width: 3px;
+    border-radius: 4px;
+    background-color: var(--bs-yellow-700);
+    background-image: var(--bs-gradient) !important;
+    transition: all .6s;
+  }
 
-.root:hover {
-  --bs-border-color: var(--bs-gray-500);
-}
+  &:hover {
+    --bs-border-color: var(--bs-gray-500);
 
-/* Contenedor de botones */
-.root .ms-auto {
-  opacity: 0;
-  visibility: hidden;
-  transition: opacity 0.3s ease, visibility 0s linear 0.3s;
-}
+    /* Delay */
+    .ms-auto {
+      opacity: 1;
+      visibility: visible;
+      transition: opacity 0.3s ease, visibility 0s linear 0s;
+      transition-delay: 0.3s;
+    }
+  }
 
-/* Mostrar con delay */
-.root:hover .ms-auto {
-  opacity: 1;
-  visibility: visible;
-  transition: opacity 0.3s ease, visibility 0s linear 0s;
-  transition-delay: 0.3s;
+  /* Contenedor de botones */
+  .ms-auto {
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.3s ease, visibility 0s linear 0.3s;
+  }
 }
 </style>
