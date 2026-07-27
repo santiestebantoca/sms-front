@@ -1,7 +1,4 @@
 <script setup>
-import { BButton } from 'bootstrap-vue-next'
-import { computed } from 'vue'
-
 const props = defineProps({
   variant: {
     type: String,
@@ -10,8 +7,10 @@ const props = defineProps({
   loading: Boolean
 })
 
-const baseVariant = computed(() => props.variant.split('-').at(-1))
+import { BButton } from 'bootstrap-vue-next'
+import { computed } from 'vue'
 
+const baseVariant = computed(() => props.variant.split('-').at(-1))
 const isFlat = computed(() => props.variant?.startsWith('flat-'))
 const isFlatOutline = computed(() => props.variant?.startsWith('flat-outline-'))
 const internalVariant = computed(() => isFlat.value ? `outline-${baseVariant.value}` : props.variant)
@@ -20,8 +19,6 @@ const flatModifierClass = computed(() => {
   else if (isFlat.value) return 'btn-flat'
   else return ''
 })
-
-// Mapeo de variantes de Bootstrap a sus variables CSS RGB
 const variantMap = {
   primary: 'var(--bs-primary-rgb)',
   secondary: 'var(--bs-secondary-rgb)',
@@ -32,9 +29,7 @@ const variantMap = {
   light: 'var(--bs-light-rgb)',
   dark: 'var(--bs-dark-rgb)'
 }
-
 const rgbValue = computed(() => variantMap[baseVariant.value])
-
 const rootStyle = computed(() => ({
   '--flat-hover': `rgba(${rgbValue.value}, 0.08)`,
   '--flat-active': `rgba(${rgbValue.value}, 0.15)`,

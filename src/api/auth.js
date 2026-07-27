@@ -1,4 +1,3 @@
-// api/auth.js
 import { api } from './client'
 
 export const authApi = {
@@ -6,5 +5,5 @@ export const authApi = {
   logout: () => api.delete('/auth/login').then(res => res.data),
   getCurrentUser: () => api.get('/auth/login').then(res => res.data),
   impersonate: (userId) => api.post(`/auth/impersonate/${userId}`).then(res => res.data),
-  getUsersForImpersonate: (params) => api.get('/auth/users', { params }).then(res => res.data)
+  getImpersonateables: (params) => api.get('/auth/users', { params }).then(res => res.data)
 }

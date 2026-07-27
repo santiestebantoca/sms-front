@@ -2,6 +2,7 @@
 import { useMensajesQuery, useMensajesFilter } from '@/stores/mensajes'
 import MensajeCard from '@/components/features/mensaje/coleccion/MensajeCard.vue'
 import { provide, computed, watchEffect } from 'vue'
+import DateRangePicker from '../../components/commons/DateRangePicker.vue'
 
 const { continua, search, filter } = useMensajesFilter()
 const { mensajes, conversaciones, isLoading, query, refresh } = useMensajesQuery()

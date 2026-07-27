@@ -1,30 +1,29 @@
 <script setup>
-//✗ Build failed in 2.71s
-// error during build:
-// Could not resolve "./ImpersonateSearch.vue" from "src/views/auth/impersonate.vue"
-// import ImpersonateSearch from './ImpersonateSearch.vue'
-// import ImpersonateUser from './ImpersonateUser.vue'
-// import ImpersonateUsers from './ImpersonateUsers.vue'
-// import { useAuthStore } from '@/stores/auth'
-// import { computed } from 'vue'
+import ImpersonateUser from '@/components/features/auth/impersonate/ImpersonateUser.vue'
+import ImpersonateUsers from '@/components/features/auth/impersonate/ImpersonateUsers.vue'
+import { useAuthStore, useImpersonateablesQuery } from '@/stores/auth'
+import { computed } from 'vue'
 
-// const auth = useAuthStore()
-// const list = computed(() => auth.impersonate.users.isFiltered)
+const { authUser } = useAuthStore()
+const { users, isFiltered, search } = useImpersonateablesQuery()
+const canSearch = computed(() => authUser.can_impersonate)
 </script>
 
 <template>
   <div class="grid">
-    <!-- <div class="card border-0 pt-md-4">
+    <div class="card border-0 pt-md-4">
       <div class="header">
-        <bs-btn-back to="/home" style="margin-left: -8px;" class="a" />
+        <BButton to="/home" style="margin-left: -8px;" class="a" variant="flat-secondary">
+          <UIcon name="bi-arrow-left" />
+        </BButton>
         <h5 class="mb-0 b">Personificar</h5>
-        <ImpersonateSearch class="c" />
+        <BSearchInput v-if="canSearch" v-model="search" placeholder="Buscar usuario" class="c" />
       </div>
       <div class="overflow-auto mt-3">
-        <ImpersonateUsers v-if="list" />
+        <ImpersonateUsers v-if="isFiltered" />
         <ImpersonateUser v-else />
       </div>
-    </div> -->
+    </div>
   </div>
 </template>
 
@@ -67,6 +66,14 @@
 
   .header .b {
     display: block;
+  }
+}
+
+@media (max-width: 767.98px) {
+  .form-control {
+    border: none;
+    box-shadow: none;
+    padding-left: 4px;
   }
 }
 </style>

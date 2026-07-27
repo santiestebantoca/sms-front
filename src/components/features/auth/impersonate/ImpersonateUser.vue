@@ -1,24 +1,23 @@
 <script setup>
-import { useAuthStore } from '@/stores/auth'
+import { useAuthStore, useImpersonate } from '@/stores/auth'
 import { useTeleportTarget } from '@/composables/useTeleportTarget'
 import { computed, inject } from 'vue'
 
-const auth = useAuthStore()
+const { authUser } = useAuthStore()
+const { mutateAsync: impersonate, asyncStatus: status } = useImpersonate()
 const mobile = inject('app:mobile')
 const target = useTeleportTarget('#app-footer-content')
 const items = computed(() => [
-  { label: 'Id', value: auth.authUser.id },
-  { label: 'Nombre', value: auth.authUser.name },
-  { label: 'Nombre de usuario', value: auth.authUser.username },
+  { label: 'Id', value: authUser.id },
+  { label: 'Nombre', value: authUser.name },
+  { label: 'Nombre de usuario', value: authUser.username },
 ])
-const impersonate = () => auth.impersonate.post()
-  .then(() => window.location.reload())
 </script>
 
 <template>
   <p class="fw-semibold">
     Usuario actual
-    <span v-if="!auth.authUser.can_impersonate" class="text-danger">(no puede personificar)</span>
+    <span v-if="!authUser.can_impersonate" class="text-danger">(no puede personificar)</span>
   </p>
   <ul class="list-group">
     <li v-for="{ label, value } in items" class="list-group-item">
@@ -26,19 +25,22 @@ const impersonate = () => auth.impersonate.post()
       <div v-text="value" />
     </li>
   </ul>
-  <template v-if="auth.authUser.is_impersonating">
-    <template v-if="mobile">
+  <template v-if="authUser.is_impersonating">
+    <!-- <template v-if="mobile">
       <Teleport v-if="target" to="#app-footer-content">
         <div class="bg-light hstack justify-content-center">
           <bs-btn-footer label="Usuario anterior" icon="arrow-return-left" @click="impersonate" />
         </div>
       </Teleport>
     </template>
-    <template v-else>
-      <div class="mt-4">
-        <bs-btn color="primary" label="Usuario anterior" icon="arrow-return-left" @click="impersonate" />
-      </div>
-    </template>
+<template v-else> -->
+    <div class="mt-4">
+      <BButton @click="impersonate(0)">
+        <UIcon name="arrow-return-left" />
+        Usuario anterior
+      </BButton>
+    </div>
+    <!-- </template> -->
   </template>
 </template>
 

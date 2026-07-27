@@ -33,14 +33,12 @@ const vPicker = {
 </script>
 
 <template>
-  <bs-dropdown class="d-inline-block">
-    <bs-dropdown-toggle v-model="dropdown" auto="outside">
+  <BPopover v-model="dropdown" focus>
+    <template #target>
       <input v-model="display" class="form-control" readonly style="width: 256px" />
-    </bs-dropdown-toggle>
-    <bs-dropdown-menu>
-      <div id="monthPicker" @changeDate="change" v-picker />
-    </bs-dropdown-menu>
-  </bs-dropdown>
+    </template>
+    <div id="monthPicker" @changeDate="change" v-picker />
+  </BPopover>
 </template>
 
 <style scoped>

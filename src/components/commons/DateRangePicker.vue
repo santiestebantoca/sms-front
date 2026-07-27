@@ -35,22 +35,25 @@ const setRange = val => {
   if (val === 4) args = [new Date(year - 1, 0, 1), new Date(year, 0, 0)]
   rangePicker.value.setDates(...args)
 }
+
 watch([start, end], () => error.value = null)
 </script>
 
 <template>
   <div class="hstack gap-1">
-    <bs-dropdown>
-      <bs-dropdown-toggle>
-        <bs-btn flat icon="three-dots-vertical" class="px-1" />
-      </bs-dropdown-toggle>
-      <bs-dropdown-menu>
-        <bs-dropdown-item @click="setRange(1)">Este mes</bs-dropdown-item>
-        <bs-dropdown-item @click="setRange(2)">Mes pasado</bs-dropdown-item>
-        <bs-dropdown-item @click="setRange(3)">Este año</bs-dropdown-item>
-        <bs-dropdown-item @click="setRange(4)">Año pasado</bs-dropdown-item>
-      </bs-dropdown-menu>
-    </bs-dropdown>
+    <BDropdown>
+      <template #button-content>
+        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
+          class="bi bi-three-dots-vertical mb-1" viewBox="0 0 16 16">
+          <path
+            d="M9.5 13a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0m0-5a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0m0-5a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0" />
+        </svg>
+      </template>
+      <BDropdownItem @click="setRange(1)">Este mes</BDropdownItem>
+      <BDropdownItem @click="setRange(2)">Mes pasado</BDropdownItem>
+      <BDropdownItem @click="setRange(3)">Este año</BDropdownItem>
+      <BDropdownItem @click="setRange(4)">Año pasado</BDropdownItem>
+    </BDropdown>
     <div class="hstack gap-3" v-picker @changeDate="change">
       <input class="form-control" placeholder="Fecha de inicio" />
       <input class="form-control" placeholder="Fecha final" />

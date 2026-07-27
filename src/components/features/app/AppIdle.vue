@@ -110,7 +110,6 @@ watch(() => auth.auth, auth => {
   else idleTimer.value.stop()
 })
 
-// ✅ El watch sigue funcionando exactamente igual
 watch(() => lastServerAccessStore.lastServerAccess.value, () => {
   idleTimer.value.reset()
 })

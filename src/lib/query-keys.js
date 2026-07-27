@@ -43,5 +43,10 @@ export const queryKeys = {
     root: ['envios'],
     listas: () => [...queryKeys.envios.root, 'lista'],
     lista: (filtros) => [...queryKeys.envios.listas(), { ...filtros }],
+  },
+  users: {
+    root: ['users'],
+    listas: () => [...queryKeys.users.root, 'lista'],
+    lista: (filtros) => [...queryKeys.users.listas(), { ...filtros }],
   }
 }

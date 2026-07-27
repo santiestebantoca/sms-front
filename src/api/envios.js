@@ -1,4 +1,3 @@
-// api/componer.js
 import { api } from './client'
 
 export const enviosApi = {

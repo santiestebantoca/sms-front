@@ -1,6 +1,4 @@
 <script setup>
-import { iconMap, isValidIcon } from './iconMap.js'
-
 const props = defineProps({
   name: {
     type: String || undefined,
@@ -8,6 +6,8 @@ const props = defineProps({
     validator: (val) => isValidIcon(val) || console.warn(`Icono "${val}" no registrado en UIcon`)
   },
 })
+
+import { iconMap, isValidIcon } from './iconMap.js'
 </script>
 
 <template>

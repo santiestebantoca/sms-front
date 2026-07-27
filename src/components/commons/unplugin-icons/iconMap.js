@@ -35,9 +35,15 @@ import BiPencil from '~icons/bi/pencil'
 import BiCheck2Square from '~icons/bi/check2-square'
 import BiExclamationCircle from '~icons/bi/exclamation-circle'
 import BiSearch from '~icons/bi/search'
+import BiArrowReturnRight from '~icons/bi/arrow-return-right'
+import BiArrowReturnLeft from '~icons/bi/arrow-return-left'
+import BiArrowLeft from '~icons/bi/arrow-left'
 
 export const iconMap = {
     // 'mdi-home': MdiHome,
+    'bi-arrow-left': BiArrowLeft,
+    'bi-arrow-return-left': BiArrowReturnLeft,
+    'bi-arrow-return-right': BiArrowReturnRight,
     'bi-search': BiSearch,
     'bi-exclamation-circle': BiExclamationCircle,
     'bi-check2-square': BiCheck2Square,

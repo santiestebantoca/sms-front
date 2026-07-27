@@ -4,43 +4,45 @@ const props = defineProps({
   lineHeight: { type: Number, default: 1.5 } // --bs-body-line-height
 })
 
-import { ref } from 'vue'
+import { ref, computed } from 'vue'
 
-const height = ref(`${props.lines * props.lineHeight}rem`)
+const collapsed = ref(true)
 const overflow = ref(null)
-const vOverflow = el => overflow.value = el.offsetHeight < el.scrollHeight
+const rootStyle = computed(() => ({
+  '--content-max-height': collapsed.value
+    ? `${props.lines * props.lineHeight}rem`
+    : 'unset',
+  '--footer-display': overflow.value && collapsed.value
+    ? 'block'
+    : 'hidden',
+}))
+
+const vOverflow = (el) => {
+  overflow.value = el.offsetHeight < el.scrollHeight
+}
 </script>
 
 <template>
-  <div :class="{ overflow }">
-    <div class="a" v-overflow>
+  <div :style="rootStyle">
+    <div class="content" v-overflow>
       <slot></slot>
     </div>
-    <div v-if="height" class="b mt-1">
-      <bs-badge rounded color="info" type="button" @click="height = null" label="MÁS" />
+    <div v-if="overflow" class="footer">
+      <span class="mark small fw-semibold rounded" type="button" @click="collapsed = false">
+        MÁS
+      </span>
     </div>
   </div>
 </template>
 
 <style scoped>
-.a {
+.content {
   white-space: pre-wrap;
   overflow: hidden;
-  /* --line-clamp: v-bind(lines);
-  display: -webkit-box;
-  -webkit-box-orient: vertical;
-  -webkit-line-clamp: var(--line-clamp, none); */
-  /* another less beautiful but more compatible way:
-   --bs-body-line-height = 1.5 */
-  --max-height: v-bind(height);
-  max-height: var(--max-height);
+  max-height: var(--content-max-height);
 }
 
-.b {
-  display: none;
-}
-
-.overflow .b {
-  display: block;
+.footer {
+  display: var(--footer-display);
 }
 </style>
