@@ -6,7 +6,7 @@ export const mensajesApi = {
         ...d,
         subgrupo: d.subgrupo || d.id
     }))),
-    getById: (id, params) => api.get(`/mensajes/mensajes/${id}`, { params }).then(res => res.data),
+    getById: (id) => api.get(`/mensajes/mensajes/${id}`).then(res => res.data),
     update: (id, data) => api.put(`/mensajes/mensajes/${id}`, data).then(res => res.data),
     send: (data) => api.post('/mensajes/mensajes', data).then(res => res.data),
 }

@@ -3,9 +3,6 @@ import { queryKeys } from '@/lib/query-keys'
 import { suscriptoresApi as api } from '@/api/suscriptores'
 import { push, replace } from '@/utils'
 
-//
-// Queries: listas y detalle expandido del grupo que lo contiene
-//
 export function useSuscriptorCreate() {
   const queryCache = useQueryCache()
 

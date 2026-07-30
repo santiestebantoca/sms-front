@@ -1,21 +1,18 @@
 <script setup>
 const props = defineProps({ plantillaId: Number, back: Function })
 
-import { usePlantillasQuery, usePlantillaDelete } from '@/stores/plantillas'
+import { usePlantillaDelete } from '@/stores/plantillas'
 import { useToast } from 'bootstrap-vue-next'
-import { ref, computed, inject, onMounted } from 'vue'
+import { ref, computed, onMounted } from 'vue'
 
 const model = ref(false)
-const filtro = inject('plantillas:filtro')
 const toast = useToast()
-const { plantillas, isPending } = usePlantillasQuery()
-const plantilla = computed(() => plantillas.value?.find(d => d.id === props.plantillaId))
-const { mutateAsync: eliminarPlantilla, asyncStatus } = usePlantillaDelete(filtro.value)
+const { mutateAsync: eliminarPlantilla, asyncStatus } = usePlantillaDelete()
 const loading = computed(() => asyncStatus.value === 'loading')
 
 onMounted(() => model.value = true)
 
-const submit = () => eliminarPlantilla(plantilla.value)
+const submit = () => eliminarPlantilla(props.plantillaId)
   .then(() => {
     toast.create({ body: 'Plantilla eliminada.', variant: 'success' })
     model.value = false
@@ -31,7 +28,7 @@ const submit = () => eliminarPlantilla(plantilla.value)
       Se eliminará la plantilla permanentemente.
     </p>
     <template #footer>
-      <BButton variant="secondary" @click="model = false" :disabled="loading">
+      <BButton variant="secondary" @click="model = false">
         Cancelar
       </BButton>
       <BButton variant="danger" @click="submit" :loading="loading" loading-fill style="width: 90px;">

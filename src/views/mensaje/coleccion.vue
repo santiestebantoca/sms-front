@@ -1,15 +1,12 @@
 <script setup>
 import { useMensajesQuery, useMensajesFilter } from '@/stores/mensajes'
 import MensajeCard from '@/components/features/mensaje/coleccion/MensajeCard.vue'
-import { provide, computed, watchEffect } from 'vue'
-import DateRangePicker from '../../components/commons/DateRangePicker.vue'
+import { computed, watchEffect } from 'vue'
 
 const { continua, search, filter } = useMensajesFilter()
 const { mensajes, conversaciones, isLoading, query, refresh } = useMensajesQuery()
 
 watchEffect(() => query.value = filter.value)
-
-provide('mensajes:filtro', computed(() => filter.value))
 
 continua.value = true
 

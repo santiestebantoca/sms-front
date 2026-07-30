@@ -4,12 +4,11 @@ const props = defineProps({ back: Function })
 import { isValidationError } from '@/api/client'
 import { usePlantillaCreate } from '@/stores/plantillas'
 import { useToast } from 'bootstrap-vue-next'
-import { ref, computed, inject, onMounted } from 'vue'
+import { ref, computed, onMounted } from 'vue'
 
 const model = ref(false)
-const filtro = inject('plantillas:filtro')
 const toast = useToast()
-const { mutateAsync: crearPlantilla, asyncStatus } = usePlantillaCreate(filtro.value)
+const { mutateAsync: crearPlantilla, asyncStatus } = usePlantillaCreate()
 const loading = computed(() => asyncStatus.value === 'loading')
 const form = ref({
   texto: null,

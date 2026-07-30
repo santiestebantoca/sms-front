@@ -33,6 +33,7 @@ export function useGruposNotificablesQuery() {
   })
 
   return {
+    data,
     grupos: tree,
     isPending,
   }

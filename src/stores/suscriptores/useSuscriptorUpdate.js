@@ -14,6 +14,7 @@ export function useSuscriptorUpdate() {
 
     onMutate: async ({ id, ...updatedData }) => {
       // Variables para sincronizar el detalle expandido del grupo que lo contiene
+      // TODO: Cambiar este enfoque tan enredado e ineficiente
       const parentId = updatedData?.grupo
 
       // Claves que interesan
@@ -29,95 +30,91 @@ export function useSuscriptorUpdate() {
       ])
 
       // Estado anterior
-      const previousListas = queryCache.getQueryData(keyListas)
-      const previousDetalle = queryCache.getQueryData(keyDetalle)
-      const previousGrupo = queryCache.getQueryData(keyGrupo)
+      // const previousListas = queryCache.getQueryData(keyListas)
+      // const previousDetalle = queryCache.getQueryData(keyDetalle)
+      // const previousGrupo = queryCache.getQueryData(keyGrupo)
 
       // Actualización optimista
-      if (previousListas) {
-        queryCache.setQueryData(
-          keyListas,
-          (old) => patch(old, updatedData)
-        )
-      }
+      // if (previousListas) {
+      //   queryCache.setQueryData(
+      //     keyListas,
+      //     (old) => patch(old, updatedData)
+      //   )
+      // }
 
-      if (previousDetalle) {
-        queryCache.setQueryData(
-          keyDetalle,
-          (old) => patch(old, updatedData)
-        )
-      }
-      console.log(updatedData)
-      if (previousGrupo) {
-        queryCache.setQueryData(
-          keyGrupo,
-          (old) => patch(old, updatedData, 'suscriptores')
-        )
-      }
+      // if (previousDetalle) {
+      //   queryCache.setQueryData(
+      //     keyDetalle,
+      //     (old) => patch(old, updatedData)
+      //   )
+      // } No juegan los nombres de los campos :(
+
+      // if (previousGrupo) {
+      //   queryCache.setQueryData(
+      //     keyGrupo,
+      //     (old) => patch(old, updatedData, 'suscriptores')
+      //   )
+      // }
 
       return {
         keyListas,
         keyDetalle,
         keyGrupo,
-        previousListas,
-        previousDetalle,
-        previousGrupo,
-        id,
-        parentId,
+        // previousListas,
+        // previousDetalle,
+        // previousGrupo,
+        // id,
+        // parentId,
       }
     },
 
     onSuccess: (data, variables, context) => {
-      if (context.previousListas) {
-        queryCache.setQueryData(
-          context.keyListas,
-          (old) => patch(old, data)
-        )
-      }
+      // if (context.previousListas) {
+      //   queryCache.setQueryData(
+      //     context.keyListas,
+      //     (old) => patch(old, data)
+      //   )
+      // }
 
-      if (context.previousDetalle) {
-        queryCache.setQueryData(
-          context.keyDetalle,
-          (old) => patch(old, data)
-        )
-      }
+      // if (context.previousDetalle) {
+      //   queryCache.setQueryData(
+      //     context.keyDetalle,
+      //     (old) => patch(old, data)
+      //   )
+      // }
 
-      if (context.previousGrupo) {
-        queryCache.setQueryData(
-          context.keyGrupo,
-          (old) => patch(old, data, 'suscriptores')
-        )
-      }
+      // if (context.previousGrupo) {
+      //   queryCache.setQueryData(
+      //     context.keyGrupo,
+      //     (old) => patch(old, data, 'suscriptores')
+      //   )
+      // }
+      queryCache.invalidateQueries(context.keyListas)
+      queryCache.invalidateQueries(context.keyDetalle)
+      queryCache.invalidateQueries(context.keyGrupo)
     },
 
     onError: (error, variables, context) => {
-      if (context.previousListas) {
-        queryCache.setQueryData(
-          context.keyListas,
-          context.previousListas
-        )
-      }
+      // if (context.previousListas) {
+      //   queryCache.setQueryData(
+      //     context.keyListas,
+      //     context.previousListas
+      //   )
+      // }
 
-      if (context.previousDetalle) {
-        queryCache.setQueryData(
-          context.keyDetalle,
-          context.previousDetalle
-        )
-      }
+      // if (context.previousDetalle) {
+      //   queryCache.setQueryData(
+      //     context.keyDetalle,
+      //     context.previousDetalle
+      //   )
+      // }
 
-      if (context.previousGrupo) {
-        queryCache.setQueryData(
-          context.keyGrupo,
-          context.previousGrupo
-        )
-      }
-
-      if (context.previousPadreDetalleExpandido) {
-        queryCache.setQueryData(
-          context.keyPadreDetalleExpandido,
-          context.previousPadreDetalleExpandido
-        )
-      }
+      // if (context.previousGrupo) {
+      //   queryCache.setQueryData(
+      //     context.keyGrupo,
+      //     context.previousGrupo
+      //   )
+      // }
     }
   })
 }

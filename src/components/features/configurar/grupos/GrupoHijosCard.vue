@@ -1,8 +1,10 @@
 <script setup>
-const props = defineProps({ data: Object })
+const props = defineProps({ padreId: Number })
 
-import { ref, computed, watch } from 'vue'
+import { useGrupoHijosQuery } from '@/stores/grupos'
+import { ref, computed, watchEffect } from 'vue'
 
+const { grupos, isPending, padreId } = useGrupoHijosQuery()
 const active = ref(null)
 const acciones = computed(() => [
   {
@@ -27,46 +29,33 @@ const acciones = computed(() => [
     disabled: !active.value
   },
 ])
-//
-// Cuando se elimina un item, active no está en items, entonces active = null
-watch(() => props.data.hijos, (items) => {
-  if (!items.some(item => item.id === active.value)) active.value = null
-})
+
+watchEffect(() => padreId.value = props.padreId)
 </script>
 
 <template>
-  <div class="mt-2 hstack gap-2 justify-content-end">
-    <BButton v-for="accion in acciones" variant="flat-outline-dark" :to="accion.to" :disabled="accion.disabled"
-      class="btn-sm">
-      <UIcon :name="accion.icon" /> {{ accion.texto }}
-    </BButton>
+  <div v-if="isPending" class="text-center p-5">
+    <BSpinner />
   </div>
-  <div class="px-3 py-2">
-    <div v-if="!data.hijos.length" class="mt-2">
-      No hay grupos aquí.
+  <template v-else>
+    <div class="mt-2 hstack gap-2 justify-content-end">
+      <BButton v-for="accion in acciones" variant="flat-outline-dark" :to="accion.to" :disabled="accion.disabled"
+        class="btn-sm">
+        <UIcon :name="accion.icon" /> {{ accion.texto }}
+      </BButton>
     </div>
-    <RootTree v-else list selectable v-model="active">
-      <TreeNode v-for="data in data.hijos" :data="data" :key="data.id">
-        <template #default="{ data }">
-          <UIcon name="bi-subtract" style="color:var(--bs-yellow);flex-shrink: 0;" />
-          <span v-text="data.nombre" class="text-truncate" />
-        </template>
-      </TreeNode>
-    </RootTree>
-  </div>
+    <div class="px-3 py-2">
+      <div v-if="!grupos.length" class="mt-2">
+        No hay grupos aquí.
+      </div>
+      <RootTree v-else list selectable v-model="active">
+        <TreeNode v-for="data in grupos" :data="data" :key="data.id">
+          <template #default="{ data }">
+            <UIcon name="bi-subtract" style="color:var(--bs-yellow);flex-shrink: 0;" />
+            <span v-text="data.nombre" class="text-truncate" />
+          </template>
+        </TreeNode>
+      </RootTree>
+    </div>
+  </template>
 </template>
-
-<style scoped lang="scss">
-.label-value {
-  margin-bottom: 8px;
-
-  >label {
-    color: var(--bs-gray-600);
-    font-size: .875em;
-  }
-
-  >div {
-    padding: 2px 0;
-  }
-}
-</style>

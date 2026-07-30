@@ -1,7 +1,10 @@
 <script setup>
-const props = defineProps({ data: Object })
+const props = defineProps({ grupoId: Number })
 
-import { ref, computed, watch } from 'vue'
+import { useGrupoSuscriptoresQuery } from '@/stores/grupos'
+import { ref, computed, watchEffect } from 'vue'
+
+const { suscriptores, isPending, grupoId } = useGrupoSuscriptoresQuery()
 
 const active = ref(null)
 const acciones = computed(() => [
@@ -27,48 +30,37 @@ const acciones = computed(() => [
     disabled: !active.value
   },
 ])
-//
-// Cuando se elimina un item, active no está en items, entonces active = null
-watch(() => props.data.suscriptores, (items) => {
-  if (!items.some(item => item.id === active.value)) active.value = null
-})
+
+watchEffect(() => grupoId.value = props.grupoId)
 </script>
 
 <template>
-  <div class="mt-2 hstack gap-2 justify-content-end">
-    <BButton v-for="accion in acciones" variant="flat-outline-dark" :to="accion.to" :disabled="accion.disabled"
-      class="btn-sm">
-      <UIcon :name="accion.icon" /> {{ accion.texto }}
-    </BButton>
+  <div v-if="isPending" class="text-center p-5">
+    <BSpinner />
   </div>
-  <div class="px-3 py-2">
-    <div v-if="!data.suscriptores.length" class="mt-2">
-      No hay suscriptores aquí.
+  <template v-else>
+    <div class="mt-2 hstack gap-2 justify-content-end">
+      <BButton v-for="accion in acciones" variant="flat-outline-dark" :to="accion.to" :disabled="accion.disabled"
+        class="btn-sm">
+        <UIcon :name="accion.icon" /> {{ accion.texto }}
+      </BButton>
     </div>
-    <RootTree v-else list selectable v-model="active">
-      <TreeNode v-for="data in data.suscriptores" :data="data" :key="data.id">
-        <template #default="{ data }">
-          <UIcon name="bi-person-fill" style="color:var(--bs-info-700)" />
-          {{ data.nombre }}
-          <span v-text="data.telefono" style="color:var(--bs-pink)" />
-          <span v-if="data.correo" v-text="`<${data.correo}>`" />
-        </template>
-      </TreeNode>
-    </RootTree>
-  </div>
+    <div class="px-3 py-2">
+      <div v-if="!suscriptores.length" class="mt-2">
+        No hay suscriptores aquí.
+      </div>
+      <RootTree v-else list selectable v-model="active">
+        <TreeNode v-for="data in suscriptores" :data="data" :key="data.id">
+          <template #default="{ data }">
+            <div class="hstack gap-2">
+              <UIcon name="bi-person" style="color:var(--bs-info-700)" />
+              {{ data.nombre }}
+              <span v-text="data.telefono" style="color:var(--bs-pink)" />
+              <span v-if="data.correo" v-text="`<${data.correo}>`" class="text-secondary" />
+            </div>
+          </template>
+        </TreeNode>
+      </RootTree>
+    </div>
+  </template>
 </template>
-
-<style scoped lang="scss">
-.label-value {
-  margin-bottom: 8px;
-
-  >label {
-    color: var(--bs-gray-600);
-    font-size: .875em;
-  }
-
-  >div {
-    padding: 2px 0;
-  }
-}
-</style>

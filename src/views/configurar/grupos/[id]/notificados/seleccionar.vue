@@ -23,7 +23,7 @@ const submit = () => actualizarNotificados({ id: props.grupoId, ...form.value })
   .then(() => model.value = false)
 </script>
 
-<template>hola
+<template>
   <BModal v-model="model" title="Notificados" @hidden="back">
     <div v-if="isPending" class="p-5 text-center">
       <BSpinner />

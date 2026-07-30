@@ -1,20 +1,19 @@
 <script setup>
 const props = defineProps({ grupoId: Number, back: Function, forward: Function })
 
-import { useGrupoExpandidoQuery, useGrupoDelete } from '@/stores/grupos'
+import { useGrupoDelete } from '@/stores/grupos'
 import { useToast } from 'bootstrap-vue-next'
 import { ref, computed, onMounted } from 'vue'
 
 const model = ref(false)
 const deleted = ref(false)
 const toast = useToast()
-const { grupo, isPending } = useGrupoExpandidoQuery(props.grupoId)
-const { mutateAsync: deleteGrupo, asyncStatus } = useGrupoDelete()
+const { mutateAsync: eliminarGrupo, asyncStatus } = useGrupoDelete()
 const loading = computed(() => asyncStatus.value === 'loading')
 
 onMounted(() => model.value = true)
 
-const submit = () => deleteGrupo(grupo.value)
+const submit = () => eliminarGrupo(props.grupoId)
   .then(() => {
     toast.create({ body: 'Grupo eliminado.', variant: 'success' })
     deleted.value = true
@@ -41,7 +40,7 @@ const hidden = () => {
     </ul>
     <p class="text-danger fw-semibold">Esta acción no se puede deshacer.</p>
     <template #footer>
-      <BButton variant="secondary" @click="model = false" :disabled="loading">
+      <BButton variant="secondary" @click="model = false">
         Cancelar
       </BButton>
       <BButton variant="danger" @click="submit" :loading="loading" loading-fill style="width: 90px;">

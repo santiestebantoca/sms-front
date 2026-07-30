@@ -3,17 +3,16 @@ const props = defineProps({ plantillaId: Number, back: Function })
 
 import { isValidationError } from '@/api/client'
 import { usePlantillasQuery, usePlantillaUpdate } from '@/stores/plantillas'
-import { ref, computed, inject, onMounted, watchEffect } from 'vue'
+import { ref, computed, onMounted, watchEffect } from 'vue'
 
 const model = ref(false)
-const filtro = inject('plantillas:filtro')
 const form = ref({
   texto: null,
 })
 const errors = ref({})
 const { plantillas, isPending } = usePlantillasQuery()
 const plantilla = computed(() => plantillas.value?.find(d => d.id === props.plantillaId))
-const { mutateAsync: actualizarPlantilla, asyncStatus } = usePlantillaUpdate(filtro.value)
+const { mutateAsync: actualizarPlantilla, asyncStatus } = usePlantillaUpdate()
 const loading = computed(() => asyncStatus.value === 'loading')
 
 watchEffect(() => {

@@ -89,18 +89,3 @@ const tab = ref('general')
   </div>
   <router-view />
 </template>
-
-<style scoped>
-.label-value {
-  margin-bottom: 8px;
-}
-
-.label-value>label {
-  color: var(--bs-gray-600);
-  font-size: .875em;
-}
-
-.label-value>div {
-  padding: 2px 0;
-}
-</style>

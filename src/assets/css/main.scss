@@ -1,4 +1,5 @@
 // @import 'vanillajs-datepicker/sass/datepicker';
+@import 'bootstrap-vue-next';
 
 :root {
   /* Variables que Bootstrap no incluye por defecto */
@@ -123,16 +124,14 @@
 
 // Custom classes
 .label-value {
-  position: relative;
-  margin-bottom: 16px !important;
+  margin-bottom: 16px;
 
-  &::after {
-    position: absolute;
-    // content: '';
-    // top: 6px;
-    // bottom: 2px;
-    // left: -10px;
-    // width: 2px;
-    // background-color: var(--bs-yellow-600);
+  >label {
+    color: var(--bs-gray-600);
+    font-size: .875em;
+  }
+
+  >div {
+    padding: 2px 0;
   }
 }

@@ -17,7 +17,7 @@ const active = computed({
 </script>
 
 <template>
-  <div class="main">
+  <div class="root">
     <div class="border-end overflow-auto">
       <div class="hstack sticky-top p-1 ps-3">
         <span class="small fw-semibold me-auto">GRUPOS</span>
@@ -51,17 +51,16 @@ const active = computed({
   </div>
 </template>
 
-<style scoped>
-.main {
+<style scoped lang="scss">
+.root {
   height: 100%;
   display: grid;
   grid-template-columns: 1fr 3fr;
-  /* column-gap: 8px; */
   overflow: hidden;
-}
 
-.sticky-top {
-  background-color: white;
-  box-shadow: 0px 8px 10px 1px white;
+  .sticky-top {
+    background-color: white;
+    box-shadow: 0px 8px 10px 1px white;
+  }
 }
 </style>

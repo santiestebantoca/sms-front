@@ -4,8 +4,9 @@ const props = defineProps({
   level: { type: Number, default: 0 },
 })
 
-import { ref, inject, computed, watch, watchEffect } from 'vue'
+import { ref, inject, computed, onMounted, onUnmounted } from 'vue'
 
+const ids = inject('tree:ids')
 const list = inject('tree:list')
 const childrenNames = inject('tree:childrenNames')
 const itemIdName = inject('tree:itemIdName')
@@ -15,6 +16,9 @@ const childrenName = computed(() => [...childrenNames.value, 'children'].find(na
 const leaf = computed(() => !props.data[childrenName.value]?.length)
 const descendantIds = computed(() => getAllNodeIds(props.data))
 const isDescendantActive = computed(() => active.value && descendantIds.value.some(d => d === active.value))
+
+onMounted(() => ids.value.add(props.data[itemIdName.value]))
+onUnmounted(() => ids.value.delete(props.data[itemIdName.value]))
 
 function getAllNodeIds(node) {
   let ids = []

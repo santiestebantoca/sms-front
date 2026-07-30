@@ -1,18 +1,11 @@
 <script setup>
-const props = defineProps({
-  // plantillaId: Number,
-  // setPlantillaId: Function,
-  flows: Object
-})
+const props = defineProps({ flows: Object })
 
 import { usePlantillasQuery } from '@/stores/plantillas'
 import PlantillaCard from '@/components/features/configurar/plantillas/PlantillaCard.vue'
 import CrearPlantilla from '@/views/configurar/plantillas/_flows/crear.vue'
-import { provide, computed } from 'vue'
 
 const { plantillas, search } = usePlantillasQuery()
-
-provide('plantillas:filtro', computed(() => ({ search: search.value })))
 </script>
 
 <template>

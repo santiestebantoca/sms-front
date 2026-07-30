@@ -26,35 +26,3 @@
   <router-view />
   <!-- </div> -->
 </template>
-
-<style scoped>
-/* :deep(.nav-link) {
-  border: none !important;
-  margin-bottom: 0 !important;
-  line-height: normal;
-  --bs-nav-tabs-link-active-color: var(--bs-primary);
-  position: relative;
-  padding-bottom: 12px;
-}
-
-:deep(.nav-link::after) {
-  display: block;
-  content: '';
-  position: absolute;
-  bottom: 2px;
-  left: 0;
-  height: 2px;
-  width: 100%;
-  --up-after-background-color: transparent;
-  background-color: var(--up-after-background-color);
-  transition: all .3s;
-}
-
-:deep(.nav-link.active::after) {
-  --up-after-background-color: var(--bs-primary) !important;
-}
-
-:deep(.nav-link:hover::after) {
-  --up-after-background-color: var(--bs-gray-300);
-} */
-</style>

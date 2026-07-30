@@ -156,7 +156,6 @@ const routesConfigurar = [
                 name: 'configurar-grupo-suscriptor-eliminar',
                 component: () => import('@/views/configurar/grupos/[id]/suscriptores/[id]/eliminar.vue'),
                 props: route => ({
-                  grupoId: parseInt(route.params.grupoId),
                   suscriptorId: parseInt(route.params.suscriptorId),
                   back: () => router.push({ name: 'configurar-grupo' }),
                 })
@@ -179,50 +178,51 @@ const routesConfigurar = [
         name: 'configurar-suscriptores',
         component: () => import('@/views/configurar/suscriptores/index.vue'),
         props: route => ({
-          id: route.params.id ? parseInt(route.params.id) : null,
-          setId: id => router.push({ name: 'configurar-suscriptor', params: { id } }),
-          compose: {
-            new: route.query.compose === 'new',
-            back: () => router.replace({
-              query: {
-                compose: undefined,
-              }
-            })
+          suscriptorId: route.params.suscriptorId ? parseInt(route.params.suscriptorId) : null,
+          setSuscriptorId: (suscriptorId) => suscriptorId && router.push({
+            name: 'configurar-suscriptor',
+            params: { suscriptorId }
+          }),
+          flows: {
+            crear: {
+              active: route.query.crear === 'true',
+              go: () => router.replace({ query: { crear: 'true' } }),
+              back: () => router.replace({ query: { crear: undefined } }),
+              forward: (suscriptorId) => router.push({
+                name: 'configurar-suscriptor',
+                params: { suscriptorId }
+              })
+            }
           }
         }),
         children: [
           {
-            path: ':id',
+            path: ':suscriptorId',
             name: 'configurar-suscriptor',
-            redirect: { name: 'configurar-suscriptor-data' },
-            component: () => import('@/views/configurar/suscriptores/Suscriptor.vue'),
+            component: () => import('@/views/configurar/suscriptores/[id]/index.vue'),
             props: route => ({
-              id: parseInt(route.params.id),
+              suscriptorId: parseInt(route.params.suscriptorId),
+              back: () => router.push({ name: 'configurar-suscriptores' })
             }),
             children: [
               {
-                path: '',
-                name: 'configurar-suscriptor-data',
-                component: () => import('@/views/configurar/suscriptores/SuscriptorData.vue'),
-                children: [
-                  {
-                    path: 'edit',
-                    name: 'configurar-suscriptor-edit',
-                    component: () => import('@/views/configurar/suscriptores/SuscriptorEdit.vue'),
-                    props: () => ({
-                      back: () => router.push({ name: 'configurar-suscriptor' })
-                    })
-                  },
-                  {
-                    path: 'del',
-                    name: 'configurar-suscriptor-del',
-                    component: () => import('@/views/configurar/suscriptores/SuscriptorDel.vue'),
-                    props: () => ({
-                      back: () => router.push({ name: 'configurar-suscriptores' }),
-                      cancel: () => router.push({ name: 'configurar-suscriptor' }),
-                    })
-                  },
-                ]
+                path: 'editar',
+                name: 'configurar-suscriptor-editar',
+                component: () => import('@/views/configurar/suscriptores/[id]/editar.vue'),
+                props: (route) => ({
+                  suscriptorId: parseInt(route.params.suscriptorId),
+                  back: () => router.push({ name: 'configurar-suscriptor' })
+                })
+              },
+              {
+                path: 'eliminar',
+                name: 'configurar-suscriptor-eliminar',
+                component: () => import('@/views/configurar/suscriptores/[id]/eliminar.vue'),
+                props: route => ({
+                  suscriptorId: parseInt(route.params.suscriptorId),
+                  forward: () => router.push({ name: 'configurar-suscriptores' }),
+                  back: () => router.push({ name: 'configurar-suscriptor' }),
+                })
               },
             ]
           },
@@ -336,7 +336,7 @@ const routesConfigurar = [
   }
 ]
 
-const routesSms = [
+const routesMensajes = [
   {
     path: '/sms',
     name: 'sms',
@@ -415,7 +415,7 @@ export const router = createRouter({
   routes: [
     ...routesAuth,
     ...routesConfigurar,
-    ...routesSms,
+    ...routesMensajes,
     ...routesApp,
     {
       path: '/home',

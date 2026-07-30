@@ -4,6 +4,7 @@ export const gruposApi = {
   getAll: (params) => api.get('/grupos/grupos', { params }).then(res => res.data),
   create: (data) => api.post('/grupos/grupos', data).then(res => res.data),
   delete: (id) => api.delete(`/grupos/grupos/${id}`).then(res => res.data),
-  getById: (id, params) => api.get(`/grupos/grupos/${id}`, { params }).then(res => res.data),
+  getById: (id) => api.get(`/grupos/grupos/${id}`).then(res => res.data),
+  // getExpandidoById: (id) => api.get(`/grupos/grupos/${id}`, { params: { include: 'all' } }).then(res => res.data),
   update: (id, data) => api.put(`/grupos/grupos/${id}`, data).then(res => res.data),
 }
