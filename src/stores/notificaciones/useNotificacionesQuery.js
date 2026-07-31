@@ -1,12 +1,12 @@
 import { useQuery, defineQuery } from '@pinia/colada'
 import { useDebounce } from '@vueuse/core'
-import { mensajesApi as api } from '@/api/mensajes'
+import { notificacionesApi as api } from '@/api/notificaciones'
 import { queryKeys } from '@/lib/query-keys'
 import { ref, computed } from 'vue'
 
-export const useMensajesNotificacionesQuery = () => {
+export const useNotificacionesQuery = () => {
   const { data, isPending, refresh } = useQuery({
-    key: () => queryKeys.mensajes.notificaciones(),
+    key: () => queryKeys.notificaciones.listas(),
     query: () => api.notificaciones(),
     autoRefetch: true,
     staleTime: 60000

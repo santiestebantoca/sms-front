@@ -22,7 +22,7 @@ const active = computed({
       <div class="hstack sticky-top p-1 ps-3">
         <span class="small fw-semibold me-auto">SUSCRIPTORES</span>
         <BButton @click="flows.crear.go" variant="primary" v-tippy="'Crear suscriptor'" class="btn-sm"
-          style="height:32px;width: 32px;">
+          style="height:32px;width: 33px;">
           <UIcon name="bi-plus-lg" />
         </BButton>
       </div>

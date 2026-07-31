@@ -1,9 +1,8 @@
 <script setup>
-const props = defineProps({ grupoId: Number, suscriptorId: Number, back: Function })
+const props = defineProps({ suscriptorId: Number, back: Function })
 
 import { isValidationError } from '@/api/client'
 import { useSuscriptorQuery, useSuscriptorUpdate } from '@/stores/suscriptores'
-import { useGrupoExpandidoQuery } from '@/stores/grupos'
 import { ref, computed, onMounted, watchEffect } from 'vue'
 
 const model = ref(false)
@@ -12,11 +11,9 @@ const form = ref({
   cargo: null,
   telefono: null,
   correo: null,
-  grupo: null
 })
 const errors = ref({})
-const { grupo, isPending } = useGrupoExpandidoQuery(props.grupoId)
-const suscriptor = computed(() => grupo.value?.suscriptores.find(d => d.id === props.suscriptorId))
+const { suscriptor, isPending } = useSuscriptorQuery(props.suscriptorId)
 const { mutateAsync: actualizarSuscriptor, asyncStatus } = useSuscriptorUpdate()
 const loading = computed(() => asyncStatus.value === 'loading')
 
@@ -26,7 +23,6 @@ watchEffect(() => {
     form.value.cargo = suscriptor.value.cargo
     form.value.telefono = suscriptor.value.telefono
     form.value.correo = suscriptor.value.correo
-    form.value.grupo = suscriptor.value.grupo
   }
 })
 onMounted(() => model.value = true)

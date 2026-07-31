@@ -10,17 +10,14 @@ export function useNotificadosUpdate() {
 
     onMutate: async () => {
       await Promise.all([
-        // En el futuro serán solo las dos primeras líneas
-        // queryCache.cancelQueries({ key: queryKeys.notificados.listas() }),
-        // queryCache.cancelQueries({ key: queryKeys.notificados.detallas() }),
-        queryCache.cancelQueries({ key: queryKeys.grupos.detalles() }),
+        queryCache.cancelQueries({ key: queryKeys.notificados.listas() }),
+        queryCache.cancelQueries({ key: queryKeys.notificados.detalles() }),
       ])
     },
 
     onSuccess: () => {
-      queryCache.invalidateQueries({ key: queryKeys.grupos.listas() })
-      // Caso especial: actualiza el grupo si se actualizan sus notificados
-      queryCache.invalidateQueries({ key: queryKeys.grupos.detalles() })
+      queryCache.invalidateQueries({ key: queryKeys.notificados.listas() })
+      queryCache.invalidateQueries({ key: queryKeys.notificados.detalles() })
     }
   })
 }

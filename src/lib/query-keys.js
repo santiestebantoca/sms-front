@@ -3,12 +3,8 @@ export const queryKeys = {
     root: ['grupos'],
     listas: () => [...queryKeys.grupos.root, 'lista'],
     lista: (filtros) => [...queryKeys.grupos.listas(), { ...filtros }],
-    listaNotificables: () => [...queryKeys.grupos.listas(), 'notificables'],
-    listaOrigenes: () => [...queryKeys.grupos.listas(), 'origenes'],
     detalles: () => [...queryKeys.grupos.root, 'detalle'],
     detalle: (id) => [...queryKeys.grupos.detalles(), id],
-    detalleExpandido: (id) => [...queryKeys.grupos.detalle(id), 'expandido'],
-    // miembros: (grupoId) => [...queryKeys.grupos.detalle(grupoId), 'miembros'],
   },
   notificados: {
     root: ['notificados'],
@@ -37,7 +33,6 @@ export const queryKeys = {
     lista: (filtros) => [...queryKeys.mensajes.listas(), { ...filtros }],
     detalles: () => [...queryKeys.mensajes.root, 'detalle'],
     detalle: (id) => [...queryKeys.mensajes.detalles(), id],
-    notificaciones: () => [...queryKeys.mensajes.root, 'notificaciones']
   },
   envios: {
     root: ['envios'],
@@ -48,5 +43,9 @@ export const queryKeys = {
     root: ['users'],
     listas: () => [...queryKeys.users.root, 'lista'],
     lista: (filtros) => [...queryKeys.users.listas(), { ...filtros }],
+  },
+  notificaciones: {
+    root: ['notificaciones'],
+    listas: () => [...queryKeys.notificaciones.root, 'lista'],
   }
 }

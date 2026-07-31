@@ -1,7 +1,7 @@
 <script setup>
 const props = defineProps({ grupoId: Number, back: Function })
 
-import { useGruposNotificablesQuery, useGrupoExpandidoQuery } from '@/stores/grupos'
+import { useGruposNotificablesQuery, useGrupoNotificadosQuery } from '@/stores/grupos'
 import { useNotificadosUpdate } from '@/stores/notificados'
 import { ref, computed, watchEffect, onMounted } from 'vue'
 
@@ -9,13 +9,13 @@ const model = ref(false)
 const form = ref({
   grupo_b: []
 })
-const { grupos, isPending } = useGruposNotificablesQuery()
-const { grupo } = useGrupoExpandidoQuery(props.grupoId)
+const { grupos, isPending: notificablesPendientes } = useGruposNotificablesQuery()
+const { notificados, isPending: notificadosPendientes } = useGrupoNotificadosQuery(props.grupoId)
 const { mutateAsync: actualizarNotificados, asyncStatus } = useNotificadosUpdate()
 const loading = computed(() => asyncStatus.value === 'loading')
 
 watchEffect(() => {
-  form.value.grupo_b = (grupo.value?.notificados || []).map(d => d.grupo_b)
+  form.value.grupo_b = (notificados.value || []).map(d => d.id)
 })
 onMounted(() => model.value = true)
 

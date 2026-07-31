@@ -1,5 +1,5 @@
 <script setup>
-const props = defineProps({ grupoId: Number, back: Function })
+const props = defineProps({ padreId: Number, back: Function })
 
 import { isValidationError } from '@/api/client'
 import { useGrupoCreate } from '@/stores/grupos'
@@ -11,7 +11,7 @@ const form = ref({
   apodo: null,
   label: null,
   descripcion: null,
-  pertenece: props.grupoId,
+  pertenece: props.padreId,
 })
 const errors = ref({})
 const { mutateAsync: crearGrupo, asyncStatus } = useGrupoCreate()

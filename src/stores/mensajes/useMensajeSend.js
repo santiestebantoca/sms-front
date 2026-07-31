@@ -9,17 +9,11 @@ export function useMensajeSend() {
     mutation: (newData) => api.send(newData),
 
     onMutate: async () => {
-      await Promise.all([
-        // Caso en que se muestre una lista de enviados
-        // queryCache.cancelQueries({ key: queryKeys.mensajes.listas() }),
-        queryCache.cancelQueries({ key: queryKeys.mensajes.notificaciones() })
-      ])
+      await queryCache.cancelQueries({ key: queryKeys.notificaciones.listas() })
     },
 
     onSuccess: () => {
-      // Caso en que se muestre una lista de enviados
-      // queryCache.invalidateQueries({ key: queryKeys.mensajes.listas() })
-      queryCache.invalidateQueries({ key: queryKeys.mensajes.notificaciones() })
+      queryCache.invalidateQueries({ key: queryKeys.notificaciones.listas() })
     }
   })
 }

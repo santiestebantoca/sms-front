@@ -1,8 +1,8 @@
 <script setup>
-const props = defineProps({ grupoId: Number, hijoId: Number, back: Function })
+const props = defineProps({ grupoId: Number, back: Function })
 
 import { isValidationError } from '@/api/client'
-import { useGrupoExpandidoQuery, useGrupoUpdate } from '@/stores/grupos'
+import { useGrupoQuery, useGrupoUpdate } from '@/stores/grupos'
 import { ref, computed, onMounted, watchEffect } from 'vue'
 
 const model = ref(false)
@@ -13,8 +13,7 @@ const form = ref({
   descripcion: null
 })
 const errors = ref({})
-const { grupo: padre, isPending } = useGrupoExpandidoQuery(props.grupoId)
-const grupo = computed(() => padre.value?.hijos.find(d => d.id === props.hijoId))
+const { grupo, isPending } = useGrupoQuery(props.grupoId)
 const { mutateAsync: actualizarGrupo, asyncStatus } = useGrupoUpdate()
 const loading = computed(() => asyncStatus.value === 'loading')
 

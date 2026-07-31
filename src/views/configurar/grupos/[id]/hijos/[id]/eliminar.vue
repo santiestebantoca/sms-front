@@ -1,5 +1,5 @@
 <script setup>
-const props = defineProps({ hijoId: Number, back: Function })
+const props = defineProps({ grupoId: Number, back: Function })
 
 import { useGrupoDelete } from '@/stores/grupos'
 import { useToast } from 'bootstrap-vue-next'
@@ -12,7 +12,7 @@ const loading = computed(() => asyncStatus.value === 'loading')
 
 onMounted(() => model.value = true)
 
-const submit = () => eliminarGrupo(props.hijoId)
+const submit = () => eliminarGrupo(props.grupoId)
   .then(() => model.value = false)
   .catch((err) => {
     toast.create({ body: 'No se pudo ejecutar la acción.', variant: 'danger' })

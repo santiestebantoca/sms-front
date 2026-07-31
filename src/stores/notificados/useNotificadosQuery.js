@@ -3,26 +3,6 @@ import { queryKeys } from '@/lib/query-keys'
 import { notificadosApi as api } from '@/api/notificados'
 import { computed, ref, watch, watchEffect } from 'vue'
 
-// export function useNotificadosConSuscriptoresQuery() {
-//   const origenes = ref([])
-//   const filtro = computed(() => ({ origen: origenes.value, include: 'suscriptor' }))
-
-//   const { data, isPending } = useQuery({
-//     key: () => queryKeys.notificados.lista(filtro.value),
-//     query: () => api.getAll(filtro.value),
-//     enabled: () => origenes.value.length
-//   })
-
-//   const total = computed(() => data.value.length)
-
-//   return {
-//     notificados: data,
-//     isPending,
-//     origenes,
-//     total
-//   }
-// }
-
 export function useNotificadosQuery() {
   const origenes = ref([])
   const origenesIds = computed(() => origenes.value.map(d => d.id))
@@ -36,10 +16,8 @@ export function useNotificadosQuery() {
 
   const total = computed(() => data.value.length)
 
-  //
   // Lógica de selección fina de suscriptores de los grupos notificados
   // Inicialmente son todos pero se pueden cambiar directamente o a través de sus grupos 
-  //
   const gruposIds = ref([])
   const destinatariosIds = ref([])
   const oldVal = ref([]) // Permite resetear cuando cambia notificados 
@@ -66,8 +44,6 @@ export function useNotificadosQuery() {
       }))
     oldVal.value = newVal
   })
-  //
-  //
 
   return {
     notificados: data,
@@ -79,16 +55,3 @@ export function useNotificadosQuery() {
     destinatariosIds // Para formularios
   }
 }
-
-//   const post = async (_data) => {
-//     status.value.loading = true
-//     const result = await api.create(_data)
-//     status.value.loading = false
-//     return result
-//   }
-
-//   const reset = () => {
-//     status.value.loaded = status.value.resetting = true
-//     data.value = []
-//     nextTick(() => status.value.resetting = false)
-//   }

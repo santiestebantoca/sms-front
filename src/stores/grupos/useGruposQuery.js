@@ -23,7 +23,7 @@ export function useGruposQuery() {
 
 export function useGruposNotificablesQuery() {
   const { data, isPending } = useQuery({
-    key: queryKeys.grupos.listaNotificables(),
+    key: queryKeys.grupos.lista({ label: 'grupo,centro' }),
     query: () => api.getAll({ label: 'grupo,centro' }),
   })
 
@@ -41,7 +41,7 @@ export function useGruposNotificablesQuery() {
 
 export function useGruposOrigenesQuery() {
   const { data, isPending } = useQuery({
-    key: queryKeys.grupos.listaOrigenes(),
+    key: queryKeys.grupos.lista({ label: 'centro,origen' }),
     query: () => api.getAll({ label: 'centro,origen' }),
   })
 

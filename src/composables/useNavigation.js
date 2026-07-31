@@ -1,5 +1,5 @@
 import { useAuthStore } from '@/stores/auth'
-import { useMensajesNotificacionesQuery } from '@/stores/mensajes'
+import { useNotificacionesQuery } from '@/stores/notificaciones'
 import { computed, onUnmounted, watch } from 'vue'
 
 export function useNavigationHeader() {
@@ -12,7 +12,7 @@ export function useNavigationHeader() {
 }
 
 export function useNavigationMensaje() {
-  const { notificaciones } = useMensajesNotificacionesQuery()
+  const { notificaciones } = useNotificacionesQuery()
   const options = computed(() => [
     {
       to: { name: 'sms-componer' },

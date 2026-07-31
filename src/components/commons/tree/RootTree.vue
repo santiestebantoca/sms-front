@@ -7,7 +7,7 @@ const props = defineProps({
   itemIdName: { type: String, default: 'id' },
 })
 
-import { provide, toRef, ref, watchEffect } from 'vue'
+import { provide, toRef, ref, watchEffect, onUnmounted } from 'vue'
 
 const ids = ref(new Set())
 const handleNodeClick = id => active.value = id
@@ -21,6 +21,7 @@ provide('tree:childrenNames', toRef(props, 'childrenNames'))
 provide('tree:itemIdName', toRef(props, 'itemIdName'))
 
 watchEffect(() => !ids.value.has(active.value) && (active.value = null))
+onUnmounted(() => active.value = null)
 </script>
 
 <template>

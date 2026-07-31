@@ -9,16 +9,11 @@ export function useGrupoDelete() {
     mutation: (deletedId) => api.delete(deletedId),
 
     onMutate: async () => {
-      await Promise.all([
-        queryCache.cancelQueries({ key: queryKeys.grupos.listas() }),
-        queryCache.cancelQueries({ key: queryKeys.grupos.detalles() }),
-      ])
+      await queryCache.cancelQueries({ key: queryKeys.grupos.listas() })
     },
 
     onSuccess: () => {
       queryCache.invalidateQueries({ key: queryKeys.grupos.listas() })
-      // Caso especial: actualiza el padre si se elimina un grupo hijo
-      queryCache.invalidateQueries({ key: queryKeys.grupos.detalles() })
     }
   })
 }

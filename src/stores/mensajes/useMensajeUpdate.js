@@ -16,8 +16,8 @@ export function useMensajeUpdate() {
     },
 
     onSuccess: () => {
-      queryCache.invalidateQueries({ key: queryKeys.grupos.listas() })
-      queryCache.invalidateQueries({ key: queryKeys.grupos.detalles() })
+      queryCache.invalidateQueries({ key: queryKeys.mensajes.listas() })
+      queryCache.invalidateQueries({ key: queryKeys.mensajes.detalles() })
     }
   })
 }
