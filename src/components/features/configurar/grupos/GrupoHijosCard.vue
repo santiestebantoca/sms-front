@@ -1,10 +1,10 @@
 <script setup>
 const props = defineProps({ padreId: Number })
 
-import { useGrupoHijosQuery } from '@/stores/grupos'
+import { useGruposDelGrupoQuery } from '@/stores/grupos'
 import { ref, computed, watchEffect } from 'vue'
 
-const { grupos, isPending, padreId } = useGrupoHijosQuery()
+const { grupos, isPending, padreId } = useGruposDelGrupoQuery()
 const active = ref(null)
 const acciones = computed(() => [
   {

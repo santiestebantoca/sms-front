@@ -1,13 +1,23 @@
 import { useQuery } from '@pinia/colada'
 import { enviosApi as api } from '@/api/envios'
 import { queryKeys } from '@/lib/query-keys'
+import { ref, computed } from 'vue'
 
-export const useEnviosQuery = (mensaje_id, enabled) => {
-  const query = { mensaje_id }
-  return useQuery({
-    key: () => queryKeys.envios.lista(query),
-    query: () => api.getAll(query),
+export const useEnviosQuery = (id) => {
+  const mensajeId = ref(id)
+  const filtro = computed(() => ({ mensaje_id: mensajeId.value }))
+
+  const { data, isLoading } = useQuery({
+    key: () => queryKeys.envios.lista(filtro.value),
+    query: () => api.getAll(filtro.value),
+    enabled: () => !!mensajeId.value,
     staleTime: Infinity,
-    enabled
   })
+
+  return {
+    destinatarios: data,
+    suscriptores: data,
+    isLoading,
+    mensajeId
+  }
 }

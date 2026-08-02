@@ -1,5 +1,5 @@
 <script setup>
-const props = defineProps({ back: Function })
+// const props = defineProps({ back: Function })
 
 import {
   // useGruposNotificadosStore,
@@ -12,9 +12,9 @@ import { storeToRefs } from 'pinia'
 const { create: showToast } = useToast()
 // const notificados = useGruposNotificadosStore()
 // const { gruposIds, destinatariosIds } = storeToRefs(useNotificadosCheckedStore())
-const model = ref(false)
+// const model = ref(false)
 
-onMounted(() => model.value = true)
+// onMounted(() => model.value = true)
 
 // watch(destinatariosIds, val => {
 //   if (val.length === 0)
@@ -23,7 +23,7 @@ onMounted(() => model.value = true)
 </script>
 
 <template>
-  <BModal v-model="model" @hidden="back" title="Grupos notificados">
+  <BModal title="Grupos notificados">
     <!-- <RootTree :childrenNames="['suscriptores']">
       <TreeNode v-for="data in notificados.data" :data="data" :key="data.id">
         <template #default="{ data }">

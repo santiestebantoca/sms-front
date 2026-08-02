@@ -1,2 +1,5 @@
 export { useNotificadosUpdate } from './useNotificadosUpdate'
-export { useNotificadosQuery } from './useNotificadosQuery'
+export {
+    useNotificadosDeLosGruposQuery,
+    useNotificadosDelGrupoQuery
+} from './useNotificadosQuery'

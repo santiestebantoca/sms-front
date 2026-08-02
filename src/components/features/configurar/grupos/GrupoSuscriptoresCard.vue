@@ -1,10 +1,10 @@
 <script setup>
 const props = defineProps({ grupoId: Number })
 
-import { useGrupoSuscriptoresQuery } from '@/stores/grupos'
+import { useSuscriptoresDelGrupoQuery } from '@/stores/suscriptores'
 import { ref, computed, watchEffect } from 'vue'
 
-const { suscriptores, isPending, grupoId } = useGrupoSuscriptoresQuery()
+const { suscriptores, isPending, grupoId } = useSuscriptoresDelGrupoQuery()
 
 const active = ref(null)
 const acciones = computed(() => [

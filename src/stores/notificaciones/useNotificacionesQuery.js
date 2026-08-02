@@ -7,8 +7,8 @@ import { ref, computed } from 'vue'
 export const useNotificacionesQuery = () => {
   const { data, isPending, refresh } = useQuery({
     key: () => queryKeys.notificaciones.listas(),
-    query: () => api.notificaciones(),
-    autoRefetch: true,
+    query: () => api.getAll(),
+    // autoRefetch: true,
     staleTime: 60000
   })
 

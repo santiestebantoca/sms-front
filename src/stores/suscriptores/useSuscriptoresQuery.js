@@ -14,3 +14,19 @@ export function useSuscriptoresQuery() {
     isPending,
   }
 }
+
+export function useSuscriptoresDelGrupoQuery(id) {
+  const grupoId = ref(id)
+
+  const { data, isPending } = useQuery({
+    key: () => queryKeys.suscriptores.lista({ grupo: grupoId.value }),
+    query: () => api.getAll({ grupo: grupoId.value }),
+    staleTime: Infinity
+  })
+
+  return {
+    suscriptores: data,
+    isPending,
+    grupoId
+  }
+}

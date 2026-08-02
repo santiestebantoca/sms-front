@@ -346,15 +346,18 @@ const routesMensajes = [
         component: () => import('@/views/mensaje/home.vue')
       },
       {
+        path: 'continuar/:mensajePrevioId',
+        name: 'sms-continuar',
+        component: () => import('@/views/mensaje/continuar/index.vue'),
+        props: (route) => ({
+          mensajePrevioId: parseInt(route.params.mensajePrevioId),
+          componer: () => router.push({ name: 'sms-componer' })
+        }),
+      },
+      {
         path: 'componer',
         name: 'sms-componer',
         component: () => import('@/views/mensaje/componer/index.vue'),
-        props: route => ({
-          previo: {
-            id: route.query.previo ? parseInt(route.query.previo) : null,
-            back: () => router.replace({ query: { previo: undefined } })
-          }
-        }),
         children: [
           {
             path: 'origenes',
@@ -364,22 +367,22 @@ const routesMensajes = [
               back: () => router.push({ name: 'sms-componer' })
             })
           },
-          {
-            path: 'notificados',
-            name: 'sms-componer-notificados',
-            component: () => import('@/views/mensaje/componer/notificados.vue'),
-            props: () => ({
-              back: () => router.push({ name: 'sms-componer' })
-            })
-          },
-          {
-            path: 'suscriptores',
-            name: 'sms-componer-suscriptores',
-            component: () => import('@/views/mensaje/componer/suscriptores.vue'),
-            props: () => ({
-              back: () => router.push({ name: 'sms-componer' })
-            })
-          }
+          // {
+          //   path: 'notificados',
+          //   name: 'sms-componer-notificados',
+          //   component: () => import('@/views/mensaje/componer/notificados.vue'),
+          //   props: () => ({
+          //     back: () => router.push({ name: 'sms-componer' })
+          //   })
+          // },
+          // {
+          //   path: 'suscriptores',
+          //   name: 'sms-componer-suscriptores',
+          //   component: () => import('@/views/mensaje/componer/suscriptores.vue'),
+          //   props: () => ({
+          //     back: () => router.push({ name: 'sms-componer' })
+          //   })
+          // }
         ]
       },
       {

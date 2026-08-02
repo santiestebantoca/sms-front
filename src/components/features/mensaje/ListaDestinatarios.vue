@@ -4,19 +4,18 @@ const props = defineProps({ mensajeId: Number })
 import { useEnviosQuery } from '@/stores/envios'
 import { ref } from 'vue'
 
-const enabled = ref(false)
-const { data: destinatarios, isPending, } = useEnviosQuery(props.mensajeId, enabled)
+const { destinatarios, isLoading, mensajeId } = useEnviosQuery()
 </script>
 
 <template>
-  <BModal title="Destinatarios" no-footer @show="enabled = true">
-    <div v-if="isPending" class="text-center py-4">
+  <BModal title="Destinatarios" no-footer @show="mensajeId = props.mensajeId">
+    <div v-if="isLoading" class="text-center py-4">
       <BSpinner />
     </div>
     <RootTree v-else-if="destinatarios?.length" list no-hover>
       <TreeNode v-for="data in destinatarios" :data="data" :key="data.id">
         <template #default="{ data }">
-          <span v-text="data.suscriptor" />
+          <span v-text="data.nombre" />
           <span v-text="'..\\' + data.grupo" style="color:var(--bs-yellow-700)" />
         </template>
       </TreeNode>

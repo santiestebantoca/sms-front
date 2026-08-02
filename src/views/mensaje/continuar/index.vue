@@ -1,42 +1,53 @@
 <script setup>
+const props = defineProps({ mensajePrevioId: Number, componer: Function })
+
+import ListaDestinatarios from '@/components/features/mensaje/ListaDestinatarios.vue'
 import ListaPlantillas from '@/components/features/mensaje/componer/ListaPlantillas.vue'
-import SeleccionarDesdeOrigenes from '@/components/features/mensaje/componer/seleccionar-desde-origenes/SeleccionarDesdeOrigenes.vue'
 import { usePlantillaCreate } from '@/stores/plantillas'
-import { useMensajeSend } from '@/stores/mensajes'
+import { useMensajeSend, useMensajeQuery } from '@/stores/mensajes'
+import { useEnviosQuery } from '@/stores/envios'
 import { useToast } from 'bootstrap-vue-next'
-import { ref, watch, computed, provide, watchEffect } from 'vue'
+import { ref, watch, computed, watchEffect } from 'vue'
 
 const formDefault = {
   destinatarios: [],
   texto: null,
-  continua: true
+  continua: false,
+  previo: null
 }
 const form = ref({ ...formDefault })
 const errors = ref({})
-const tipoSelButtons = computed(() => [
-  {
-    text: 'Orígenes (grupo#origen)',
-    to: { name: 'sms-componer-origenes' },
-    disabled: false
-  },
-  {
-    text: 'Grupos',
-    disabled: true
-  },
-  {
-    text: 'Personas',
-    disabled: true
-  }
-])
-const origenes = ref([])
+const selButtons = ref({
+  text: '',
+  click: () => verListaDestinatarios.value = true,
+  variant: 'flat-primary'
+})
 const verPlantillas = ref(false)
 const { mutateAsync: enviarSms, asyncStatus: asyncStatusSms } = useMensajeSend()
 const enviandoSms = computed(() => asyncStatusSms.value === 'loading')
 const { mutateAsync: crearPlantilla, asyncStatus: asyncStatusPlantilla } = usePlantillaCreate()
 const creandoPlantilla = computed(() => asyncStatusPlantilla.value === 'loading')
 const { create: toast } = useToast()
+const { data: mensajePrevio, isLoading: cargandoMensajePrevio } = useMensajeQuery(props.mensajePrevioId)
+const { destinatarios, isLoading: cargandoDestinatarios } = useEnviosQuery(props.mensajePrevioId)
+const verListaDestinatarios = ref(false)
 
-provide('componer:origenes', origenes) // compartido con la vista /origenes
+watchEffect(() => {
+  if (mensajePrevio.value) {
+    form.value.texto = mensajePrevio.value.texto
+    form.value.previo = mensajePrevio.value.id
+  }
+})
+watchEffect(() => {
+  if (destinatarios.value)
+    form.value.destinatarios = destinatarios.value.map(d => d.id)
+})
+watchEffect(() => {
+  if (mensajePrevio.value && destinatarios.value)
+    selButtons.value.text = destinatarios.value.length === 1
+      ? '1 destinatario'
+      : `${destinatarios.value.length} destinatarios`
+})
 
 const validate = () => {
   errors.value = {}
@@ -57,10 +68,6 @@ const submit = () => {
     body: Object.values(errors.value)[0],
     variant: 'warning',
   })
-}
-const resetState = () => {
-  origenes.value = []
-  form.value = { ...formDefault }
 }
 const insertarPlantilla = texto => form.value.texto = (form.value.texto ?? '') + texto
 const guardarPlantilla = texto => {
@@ -88,21 +95,23 @@ const guardarPlantilla = texto => {
         <!-- Botones de tipo de selección (+ descartar) / Barra de resultados de selección -->
         <div class="flex-fill">
           <div class="d-flex gap-2 mb-3">
-            <template v-for="btn in tipoSelButtons">
-              <BButton :to="btn.to" variant="flat-outline-success" class="btn-sm" :disabled="btn.disabled">
-                {{ btn.text }}
-              </BButton>
-            </template>
-            <BButton variant="flat-outline-dark" class="btn-sm ms-auto" @click="resetState"
-              v-tippy="'Descartar mensaje'">
+            <BButton variant="flat-outline-success" class="btn-sm" disabled="disabled">
+              Destinatarios de la conversación
+            </BButton>
+            <BButton variant="flat-outline-dark" class="btn-sm ms-auto" @click="componer" v-tippy="'Descartar mensaje'">
               Descartar
             </BButton>
           </div>
-          <!-- Barra de selección -->
-          <template v-if="origenes.length">
-            <SeleccionarDesdeOrigenes v-model:origenes="origenes" v-model:destinatariosIds="form.destinatarios" />
-          </template>
-          <div class="btn btn-sm fs-6" v-else>Nada seleccionado aún.</div>
+          <!-- Barra de resultados de selección -->
+          <div class="hstack flex-wrap overflow-hidden" style="height: 34px;">
+            <UIcon name="bi-people-fill" class="flex-shrink-0 text-secondary me-2" />
+            <span v-if="cargandoMensajePrevio || cargandoDestinatarios">
+              ...
+            </span>
+            <BButton v-else :variant="selButtons.variant" class="btn-sm fs-6" @click="selButtons.click">
+              <span v-text="selButtons.text" style="margin-bottom: 2px;" />
+            </BButton>
+          </div>
         </div>
       </div>
       <!-- Top Bar 2 -->
@@ -123,6 +132,7 @@ const guardarPlantilla = texto => {
     </div>
     <ListaPlantillas v-model="verPlantillas" @select="insertarPlantilla" />
   </div>
+  <ListaDestinatarios v-model="verListaDestinatarios" :mensajeId="mensajePrevioId" />
   <router-view />
 </template>
 

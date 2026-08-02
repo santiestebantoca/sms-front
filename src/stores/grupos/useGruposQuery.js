@@ -21,6 +21,22 @@ export function useGruposQuery() {
   }
 }
 
+export function useGruposDelGrupoQuery(id) {
+  const padreId = ref(id)
+
+  const { data, isPending } = useQuery({
+    key: () => queryKeys.grupos.lista({ pertenece: padreId.value }),
+    query: () => api.getAll({ pertenece: padreId.value }),
+    staleTime: Infinity
+  })
+
+  return {
+    grupos: data,
+    isPending,
+    padreId
+  }
+}
+
 export function useGruposNotificablesQuery() {
   const { data, isPending } = useQuery({
     key: queryKeys.grupos.lista({ label: 'grupo,centro' }),

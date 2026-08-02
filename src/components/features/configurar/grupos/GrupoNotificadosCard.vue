@@ -1,10 +1,10 @@
 <script setup>
 const props = defineProps({ grupoId: Number })
 
-import { useGrupoNotificadosQuery } from '@/stores/grupos'
+import { useNotificadosDelGrupoQuery } from '@/stores/notificados'
 import { ref, computed, watchEffect } from 'vue'
 
-const { notificados, isPending, grupoId } = useGrupoNotificadosQuery()
+const { notificados, isPending, grupoId } = useNotificadosDelGrupoQuery()
 
 const active = ref(null)
 const acciones = computed(() => [
