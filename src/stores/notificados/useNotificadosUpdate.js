@@ -8,11 +8,9 @@ export function useNotificadosUpdate() {
   return useMutation({
     mutation: ({ id, ...updatedData }) => api.update(id, updatedData),
 
-    onMutate: async () => {
-      await Promise.all([
-        queryCache.cancelQueries({ key: queryKeys.notificados.listas() }),
-        queryCache.cancelQueries({ key: queryKeys.notificados.detalles() }),
-      ])
+    onMutate: () => {
+      queryCache.cancelQueries({ key: queryKeys.notificados.listas() })
+      queryCache.cancelQueries({ key: queryKeys.notificados.detalles() })
     },
 
     onSuccess: () => {

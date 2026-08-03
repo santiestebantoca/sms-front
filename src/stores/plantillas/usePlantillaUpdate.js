@@ -8,11 +8,9 @@ export function usePlantillaUpdate() {
   return useMutation({
     mutation: ({ id, ...updatedData }) => api.update(id, updatedData),
 
-    onMutate: async () => {
-      await Promise.all([
-        queryCache.cancelQueries({ key: queryKeys.plantillas.listas() }),
-        queryCache.cancelQueries({ key: queryKeys.plantillas.detalles() }),
-      ])
+    onMutate: () => {
+      queryCache.cancelQueries({ key: queryKeys.plantillas.listas() })
+      queryCache.cancelQueries({ key: queryKeys.plantillas.detalles() })
     },
 
     onSuccess: () => {

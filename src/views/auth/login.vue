@@ -46,18 +46,18 @@ const toggleType = () => type.value = type.value === 'password' ? 'text' : 'pass
       <form @submit.prevent>
         <div class="position-relative mb-3">
           <UIcon name="bi-person" class="p-icon" />
-          <input type="text" class="form-control" name="username" placeholder="Nombre de usuario"
-            v-model="form.username" @input="errors.username = null" />
+          <BFormInput v-model="form.username" name="username" placeholder="Nombre de usuario"
+            @input="errors.username = null" />
           <div class="invalid-feedback d-block" v-text="errors.username" />
         </div>
         <div class="position-relative mb-3">
           <UIcon name="bi-lock" class="p-icon" />
-          <input :type="type" class="form-control" name="password" placeholder="Contraseña" v-model="form.password"
-            @input="errors.password = null">
+          <BFormInput :type="type" v-model="form.password" name="password" placeholder="Contraseña"
+            @input="errors.password = null" />
           <div class="invalid-feedback d-block" v-text="errors.password" />
-          <div class="position-absolute top-0 end-0" @click.stop="toggleType">
-            <UIcon :name="type === 'password' ? 'bi-eye' : 'bi-eye-slash'" class="eye-icon" />
-          </div>
+          <BButton @click.stop="toggleType" variant="flat" class="btn-sm p-end-button">
+            <UIcon :name="type === 'password' ? 'bi-eye' : 'bi-eye-slash'" />
+          </BButton>
         </div>
         <div class="mt-4">
           <BButton @click="submit" variant="primary" :disabled="loading" class="w-100 lh-lg">
@@ -66,9 +66,7 @@ const toggleType = () => type.value = type.value === 'password' ? 'text' : 'pass
         </div>
       </form>
       <div class="alert bg-light bg-gradient small mt-4 d-flex gap-3 border">
-        <span>
-          <UIcon name="bi-exclamation-triangle-fill" font-size="1.2em" />
-        </span>
+        <UIcon name="bi-exclamation-triangle-fill" font-size="1.2em" class="flex-shrink-0" />
         El registro de usuario siempre es realizado por un administrador
       </div>
     </div>
@@ -103,7 +101,10 @@ const toggleType = () => type.value = type.value === 'password' ? 'text' : 'pass
   left: 10px;
 }
 
-.eye-icon {
-  margin: 10px;
+.p-end-button {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  right: 4px;
 }
 </style>

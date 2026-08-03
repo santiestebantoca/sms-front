@@ -1,5 +1,4 @@
 import { useQuery, defineQuery } from '@pinia/colada'
-import { useDebounce } from '@vueuse/core'
 import { mensajesApi as api } from '@/api/mensajes'
 import { queryKeys } from '@/lib/query-keys'
 import { useDateFormat } from '@vueuse/core'
@@ -37,18 +36,11 @@ export const useMensajesQuery = () => {
   }
 }
 
-// export const useMensajesFiltrosStore = defineStore('mensajes-filtros', () => {})
 export const useMensajesFilter = () => {
   const desde = ref(null)
   const hasta = ref(null)
 
-  const _search = ref(null)
-  const search = computed({
-    get: () => _search.value
-      ? useDebounce(_search, 600).value // 300 usually
-      : null,
-    set: (val) => _search.value = val
-  })
+  const search = ref(null)
 
   const _continua = ref(null)
   const continua = computed({

@@ -8,8 +8,8 @@ export function useMensajeSend() {
   return useMutation({
     mutation: (newData) => api.send(newData),
 
-    onMutate: async () => {
-      await queryCache.cancelQueries({ key: queryKeys.notificaciones.listas() })
+    onMutate: () => {
+      queryCache.cancelQueries({ key: queryKeys.notificaciones.listas() })
     },
 
     onSuccess: () => {

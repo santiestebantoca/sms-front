@@ -8,11 +8,9 @@ export function useGrupoUpdate() {
   return useMutation({
     mutation: ({ id, ...updatedData }) => api.update(id, updatedData),
 
-    onMutate: async () => {
-      await Promise.all([
-        queryCache.cancelQueries({ key: queryKeys.grupos.listas() }),
-        queryCache.cancelQueries({ key: queryKeys.grupos.detalles() }),
-      ])
+    onMutate: () => {
+      queryCache.cancelQueries({ key: queryKeys.grupos.listas() })
+      queryCache.cancelQueries({ key: queryKeys.grupos.detalles() })
     },
 
     onSuccess: () => {

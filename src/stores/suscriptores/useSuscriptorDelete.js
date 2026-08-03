@@ -8,11 +8,11 @@ export function useSuscriptorDelete() {
   return useMutation({
     mutation: (deletedId) => api.delete(deletedId),
 
-    onMutate: async () => {
-      await queryCache.cancelQueries({ key: queryKeys.suscriptores.listas() })
+    onMutate: () => {
+      queryCache.cancelQueries({ key: queryKeys.suscriptores.listas() })
     },
 
-    onSuccess: async () => {
+    onSuccess: () => {
       queryCache.invalidateQueries({ key: queryKeys.suscriptores.listas() })
     }
   })

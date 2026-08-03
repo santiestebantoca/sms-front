@@ -4,7 +4,8 @@ const props = defineProps({
   placeholder: { type: String, default: 'Buscar...' },
   searchIcon: Boolean,
   resetIcon: { type: Boolean, default: true },
-  disabled: Boolean
+  disabled: Boolean,
+  debounce: { type: String, default: '600' }
 })
 
 import { computed } from 'vue';
@@ -17,7 +18,7 @@ const rootStyle = computed(() => ({
 
 <template>
   <div class="search-group" :style="rootStyle">
-    <input v-model="model" class="form-control" :placeholder="placeholder" :disabled="disabled">
+    <BFormInput v-model="model" :debounce="debounce" :placeholder="placeholder" :disabled="disabled" />
     <UIcon v-if="searchIcon" name="bi-search" />
     <BButton v-if="model" variant="flat-dark" class="btn-sm" @click="model = ''">
       <UIcon name="bi-x-lg" font-size="12px" />

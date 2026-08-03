@@ -1,7 +1,7 @@
 import { useQuery } from '@pinia/colada'
 import { queryKeys } from '@/lib/query-keys'
 import { notificadosApi as api } from '@/api/notificados'
-import { computed, ref, watch, watchEffect } from 'vue'
+import { ref } from 'vue'
 
 export function useNotificadosDeLosGruposQuery() {
   const gruposIds = ref([])

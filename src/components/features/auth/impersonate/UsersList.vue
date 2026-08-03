@@ -1,12 +1,12 @@
 <script setup>
 import {
-  useImpersonateablesQuery,
+  useImpersonateQuery,
   useImpersonate
 } from '@/stores/auth'
 import { BAccordion } from 'bootstrap-vue-next'
 import { ref, computed, inject } from 'vue'
 
-const { users } = useImpersonateablesQuery()
+const { users } = useImpersonateQuery()
 const { mutateAsync: impersonate, asyncStatus: status } = useImpersonate()
 const mobile = inject('app:mobile')
 </script>

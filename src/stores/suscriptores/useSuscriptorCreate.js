@@ -8,8 +8,8 @@ export function useSuscriptorCreate() {
   return useMutation({
     mutation: (newData) => api.create(newData),
 
-    onMutate: async () => {
-      await queryCache.cancelQueries({ key: queryKeys.suscriptores.listas() })
+    onMutate: () => {
+      queryCache.cancelQueries({ key: queryKeys.suscriptores.listas() })
     },
 
     onSuccess: () => {

@@ -8,7 +8,9 @@ const props = defineProps({ next: String })
       <p>Tiempo de sesión expirado.</p>
       <br>
       <div class="text-end">
-        <bs-btn :to="next" label="Continuar trabajando" color="primary" />
+        <BButton :to="next" color="primary">
+          Continuar trabajando
+        </BButton>
       </div>
     </div>
   </div>

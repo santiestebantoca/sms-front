@@ -8,8 +8,8 @@ export function useGrupoCreate() {
   return useMutation({
     mutation: (newData) => api.create(newData),
 
-    onMutate: async () => {
-      await queryCache.cancelQueries({ key: queryKeys.grupos.listas() })
+    onMutate: () => {
+      queryCache.cancelQueries({ key: queryKeys.grupos.listas() })
     },
 
     onSuccess: () => {

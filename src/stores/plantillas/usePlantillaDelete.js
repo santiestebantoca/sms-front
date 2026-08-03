@@ -8,11 +8,11 @@ export function usePlantillaDelete() {
   return useMutation({
     mutation: (deletedId) => api.delete(deletedId),
 
-    onMutate: async () => {
-      await queryCache.cancelQueries({ key: queryKeys.plantillas.listas() })
+    onMutate: () => {
+      queryCache.cancelQueries({ key: queryKeys.plantillas.listas() })
     },
 
-    onSuccess: async () => {
+    onSuccess: () => {
       queryCache.invalidateQueries({ key: queryKeys.plantillas.listas() })
     }
   })

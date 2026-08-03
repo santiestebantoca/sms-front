@@ -8,8 +8,8 @@ export function useGrupoDelete() {
   return useMutation({
     mutation: (deletedId) => api.delete(deletedId),
 
-    onMutate: async () => {
-      await queryCache.cancelQueries({ key: queryKeys.grupos.listas() })
+    onMutate: () => {
+      queryCache.cancelQueries({ key: queryKeys.grupos.listas() })
     },
 
     onSuccess: () => {

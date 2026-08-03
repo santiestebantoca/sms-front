@@ -8,8 +8,8 @@ export function usePlantillaCreate() {
   return useMutation({
     mutation: (newData) => api.create(newData),
 
-    onMutate: async () => {
-      await queryCache.cancelQueries({ key: queryKeys.plantillas.listas() })
+    onMutate: () => {
+      queryCache.cancelQueries({ key: queryKeys.plantillas.listas() })
     },
 
     onSuccess: () => {

@@ -8,11 +8,9 @@ export function useMensajeUpdate() {
   return useMutation({
     mutation: ({ id, ...updatedData }) => api.update(id, updatedData),
 
-    onMutate: async () => {
-      await Promise.all([
-        queryCache.cancelQueries({ key: queryKeys.mensajes.listas() }),
-        queryCache.cancelQueries({ key: queryKeys.mensajes.detalles() }),
-      ])
+    onMutate: () => {
+      queryCache.cancelQueries({ key: queryKeys.mensajes.listas() })
+      queryCache.cancelQueries({ key: queryKeys.mensajes.detalles() })
     },
 
     onSuccess: () => {

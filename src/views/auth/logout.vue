@@ -9,7 +9,9 @@ import { BButton } from 'bootstrap-vue-next';
       <p>Sesión terminada por el usuario.</p>
       <br>
       <div class="text-end">
-        <BButton :to="{ name: 'auth-login' }" variant="primary">Iniciar sesión</BButton>
+        <BButton :to="{ name: 'auth-login' }" variant="primary">
+          Iniciar sesión
+        </BButton>
       </div>
     </div>
   </div>

@@ -8,11 +8,9 @@ export function useSuscriptorUpdate() {
   return useMutation({
     mutation: ({ id, ...updatedData }) => api.update(id, updatedData),
 
-    onMutate: async () => {
-      await Promise.all([
-        queryCache.cancelQueries({ key: queryKeys.suscriptores.listas() }),
-        queryCache.cancelQueries({ key: queryKeys.suscriptores.detalles() }),
-      ])
+    onMutate: () => {
+      queryCache.cancelQueries({ key: queryKeys.suscriptores.listas() })
+      queryCache.cancelQueries({ key: queryKeys.suscriptores.detalles() })
     },
 
     onSuccess: () => {
