@@ -1,16 +1,16 @@
 <script setup>
-import { useAuthStore, useImpersonate } from '@/stores/auth'
+import { useAuthQuery, useImpersonate } from '@/stores/auth'
 import { useTeleportTarget } from '@/composables/useTeleportTarget'
 import { computed, inject } from 'vue'
 
-const { authUser } = useAuthStore()
+const { authUser } = useAuthQuery()
 const { mutateAsync: impersonate, asyncStatus: status } = useImpersonate()
 const mobile = inject('app:mobile')
 const target = useTeleportTarget('#app-footer-content')
 const items = computed(() => [
-  { label: 'Id', value: authUser.id },
-  { label: 'Nombre', value: authUser.name },
-  { label: 'Nombre de usuario', value: authUser.username },
+  { label: 'Id', value: authUser.value.id },
+  { label: 'Nombre', value: authUser.value.name },
+  { label: 'Nombre de usuario', value: authUser.value.username },
 ])
 </script>
 

@@ -1,14 +1,12 @@
 <script setup>
 const props = defineProps({ next: Function })
 
-import { useAuthStore } from '@/stores/auth'
-import { ref, computed, watch } from 'vue'
+import { useLogin } from '@/stores/auth'
+import { ref, computed, watch, watchEffect } from 'vue'
 import { useToast } from 'bootstrap-vue-next'
-import { isValidationError } from '@/api/client'
+import { transition } from '@vueuse/core'
 
 const { create: showToast } = useToast()
-const auth = useAuthStore()
-const sending = ref(false)
 const errors = ref({})
 const type = ref('password')
 const formDefault = {
@@ -16,16 +14,12 @@ const formDefault = {
   password: null,
 }
 const form = ref({ ...formDefault })
-const label = computed(() => sending.value ? 'Autenticando' : 'Iniciar sesión')
-const loginError = ref(false)
-const loginErrorInterval = ref(null)
-watch(loginError, (newVal, oldVal) => {
-  if (newVal) {
-    if (oldVal === false) clearInterval(loginErrorInterval.value)
-    loginErrorInterval.value = setTimeout(() => loginError.value = false, 5000)
-  }
-})
-//
+const alert = ref(0)
+const { mutateAsync: login, state: loginState, asyncStatus } = useLogin()
+const loading = computed(() => asyncStatus.value === 'loading')
+
+watchEffect(() => loginState.value.error ? alert.value = 5000 : 0)
+
 const validate = () => {
   errors.value = {}
   if (!form.value.username) errors.value.username = 'Valor requerido'
@@ -34,11 +28,7 @@ const validate = () => {
 }
 const submit = () => {
   if (!validate()) return
-  sending.value = true
-  auth.login(form.value)
-    .then(() => props.next())
-    .catch(err => isValidationError(err) && (loginError.value = true))
-    .finally(() => sending.value = false)
+  login(form.value).then(() => props.next())
 }
 const toggleType = () => type.value = type.value === 'password' ? 'text' : 'password'
 </script>
@@ -47,15 +37,12 @@ const toggleType = () => type.value = type.value === 'password' ? 'text' : 'pass
   <div class="grid">
     <div class="content">
       <h5 class="text-primary-emphasis fw-semibold">Inicio de sesión</h5>
-      <transition name="fade" mode="out-in">
-        <h6 v-if="loginError" class="text-danger hstack gap-3" style="height: 22px;">
-          <UIcon name="bi-exclamation-circle" style="position: relative;top:2px" />
-          Credenciales no válidas
-        </h6>
-        <h6 v-else class="text-muted hstack" style="height: 22px;">
-          Credenciales del dominio "etecsa.cu"
-        </h6>
-      </transition>
+      <div class="text-muted" style="line-height: 21px; padding: 12px 2px">
+        Usuario del dominio "etecsa.cu"
+      </div>
+      <BToast v-model="alert" variant="warning" class="mb-3">
+        Credenciales no válidas
+      </BToast>
       <form @submit.prevent>
         <div class="position-relative mb-3">
           <UIcon name="bi-person" class="p-icon" />
@@ -73,7 +60,9 @@ const toggleType = () => type.value = type.value === 'password' ? 'text' : 'pass
           </div>
         </div>
         <div class="mt-4">
-          <BButton @click="submit" variant="primary" :disabled="sending" class="w-100 lh-lg">{{ label }}</BButton>
+          <BButton @click="submit" variant="primary" :disabled="loading" class="w-100 lh-lg">
+            {{ loading ? 'Autenticando' : 'Iniciar sesión' }}
+          </BButton>
         </div>
       </form>
       <div class="alert bg-light bg-gradient small mt-4 d-flex gap-3 border">

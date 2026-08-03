@@ -1,12 +1,12 @@
 <script setup>
 import UserCard from '@/components/features/auth/impersonate/UserCard.vue'
 import UsersList from '@/components/features/auth/impersonate/UsersList.vue'
-import { useAuthStore, useImpersonateablesQuery } from '@/stores/auth'
+import { useAuthQuery, useImpersonateQuery } from '@/stores/auth'
 import { computed } from 'vue'
 
-const { authUser } = useAuthStore()
-const { users, isFiltered, search } = useImpersonateablesQuery()
-const canSearch = computed(() => authUser.can_impersonate)
+const { authUser } = useAuthQuery()
+const { users, isFiltered, search } = useImpersonateQuery()
+const canSearch = computed(() => authUser.value.can_impersonate)
 </script>
 
 <template>

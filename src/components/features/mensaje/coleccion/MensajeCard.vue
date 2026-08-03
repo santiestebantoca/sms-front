@@ -1,7 +1,7 @@
 <script setup>
 const props = defineProps({ data: Object })
 
-import { useAuthStore } from '@/stores/auth/index'
+import { useAuthQuery } from '@/stores/auth/index'
 import { useMensajeUpdate } from '@/stores/mensajes'
 import { useClipboard } from '@vueuse/core'
 import { shortTime } from '@/composables/useDates'
@@ -15,7 +15,8 @@ const source = ref(props.data.texto)
 const to = ref({ name: 'sms-continuar', params: { mensajePrevioId: props.data.id } })
 const { mutateAsync: actualizarMensaje, asyncStatus } = useMensajeUpdate()
 const { copy, copied, isSupported } = useClipboard({ source })
-const ageno = computed(() => props.data.de !== useAuthStore().authUser.name)
+const { authUser } = useAuthQuery()
+const ageno = computed(() => props.data.de !== authUser.value.name)
 const tippyText = ref('Menú del mensaje')
 const tippy = ref({ content: tippyText.value })
 const rootStyle = computed(() => ({
@@ -28,8 +29,9 @@ const noContinuar = () => actualizarMensaje({ id: props.data.id, continua: false
 </script>
 
 <template>
-  <div class="card shadow-sm" style="width: 20rem;" :style="rootStyle">
-    <div class="card-body pt-2 gap-3">
+  <BCard class="shadow-sm" style="width: 20rem;" :style="rootStyle">
+    <BCardText>
+
       <BPopover placement="bottom-start" class="shadow ms-2" v-model="popover" @mouseleave="popover = false">
         <template #target>
           <div class="card-text flex-fill">
@@ -54,8 +56,8 @@ const noContinuar = () => actualizarMensaje({ id: props.data.id, continua: false
           {{ copied ? 'Copiado' : 'Copiar texto' }}
         </BButton>
       </BPopover>
-    </div>
-    <div class="card-footer px-2 hstack">
+    </BCardText>
+    <template #footer>
       <BDropdown variant="link" no-caret v-tippy="tippy" @show="tippy.content = ''" @hide="tippy.content = tippyText">
         <template #button-content>
           <UIcon name="bi-three-dots" />
@@ -80,9 +82,9 @@ const noContinuar = () => actualizarMensaje({ id: props.data.id, continua: false
         class="btn-sm ms-auto">
         <UIcon name="bi-arrow-right" />
       </BButton>
-    </div>
-    <ListaDestinatarios v-model="showDestinatarios" :mensajeId="data.id" />
-  </div>
+    </template>
+  </BCard>
+  <ListaDestinatarios v-model="showDestinatarios" :mensajeId="data.id" />
 </template>
 
 <style scoped>
@@ -93,15 +95,15 @@ const noContinuar = () => actualizarMensaje({ id: props.data.id, continua: false
   border-radius: var(--bs-border-radius);
 }
 
-.card {
+:deep(.card) {
   border-color: var(--border-badge);
 }
 
-.card-body {
-  min-height: 72px;
+:deep(.card-body) {
+  min-height: 80px;
 }
 
-.card-text {
+:deep(.card-text) {
   display: -webkit-box;
   max-height: 3em;
   line-height: 1.5em;
@@ -113,7 +115,11 @@ const noContinuar = () => actualizarMensaje({ id: props.data.id, continua: false
   color: var(--bs-gray-700);
 }
 
-.card-footer {
-  height: 42px;
+:deep(.card-footer) {
+  /* height: 42px; */
+  display: flex;
+  align-items: center;
+  --bs-card-cap-padding-y: 4px;
+  --bs-card-cap-padding-x: 8px;
 }
 </style>

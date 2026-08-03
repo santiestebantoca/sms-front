@@ -9,7 +9,8 @@ export function useSuscriptorQuery(id) {
   const { data, isPending } = useQuery({
     key: () => queryKeys.suscriptores.detalle(suscriptorId.value),
     query: () => api.getById(suscriptorId.value),
-    enabled: () => !!suscriptorId.value
+    enabled: () => !!suscriptorId.value,
+    staleTime: Infinity
   })
 
   return {

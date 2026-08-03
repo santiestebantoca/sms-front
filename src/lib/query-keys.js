@@ -1,4 +1,8 @@
 export const queryKeys = {
+  auth: {
+    root: ['auth'],
+    user: () => [...queryKeys.auth.root, 'user']
+  },
   grupos: {
     root: ['grupos'],
     listas: () => [...queryKeys.grupos.root, 'lista'],

@@ -1,5 +1,5 @@
 <script setup>
-const active = defineModel()
+const active = defineModel('active')
 const props = defineProps({
   list: Boolean,
   selectable: Boolean,
@@ -7,10 +7,11 @@ const props = defineProps({
   itemIdName: { type: String, default: 'id' },
 })
 
-import { provide, toRef, ref, watchEffect, onUnmounted } from 'vue'
+import { provide, toRef, ref, watchEffect, onMounted, onUnmounted } from 'vue'
 
 const ids = ref(new Set())
 const handleNodeClick = id => active.value = id
+const mounted = ref(false)
 
 provide('tree:ids', ids)
 provide('tree:selectable', toRef(props, 'selectable'))
@@ -20,7 +21,13 @@ provide('tree:list', toRef(props, 'list'))
 provide('tree:childrenNames', toRef(props, 'childrenNames'))
 provide('tree:itemIdName', toRef(props, 'itemIdName'))
 
-watchEffect(() => !ids.value.has(active.value) && (active.value = null))
+watchEffect(() => {
+  if (mounted.value) { // Sino hace active = null mientras se genera el Set ids
+    if (!ids.value.has(active.value)) active.value = null
+  }
+})
+
+onMounted(() => mounted.value = true)
 onUnmounted(() => active.value = null)
 </script>
 

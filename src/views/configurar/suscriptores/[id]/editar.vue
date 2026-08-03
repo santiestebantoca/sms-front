@@ -111,7 +111,7 @@ const submit = async () => {
           <div v-if="gruposPendientes" class="p-5 text-center">
             <BSpinner />
           </div>
-          <RootTree v-else :childrenNames="['hijos']" v-model="form.grupo" selectable>
+          <RootTree v-else :childrenNames="['hijos']" v-model:active="form.grupo" selectable>
             <TreeNode v-for="data in grupos" :data="data" :key="data.id">
               <template #default="{ data }">
                 <UIcon name="bi-subtract" style="color:var(--bs-yellow);flex-shrink: 0;" />

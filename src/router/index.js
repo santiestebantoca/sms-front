@@ -1,5 +1,6 @@
 import { createRouter, createWebHashHistory } from 'vue-router'
-import { useAuthStore } from '@/stores/auth'
+import { useAuthQuery, useLogout } from '@/stores/auth'
+import { until } from '@vueuse/core'
 
 const routesAuth = [
   {
@@ -366,23 +367,7 @@ const routesMensajes = [
             props: () => ({
               back: () => router.push({ name: 'sms-componer' })
             })
-          },
-          // {
-          //   path: 'notificados',
-          //   name: 'sms-componer-notificados',
-          //   component: () => import('@/views/mensaje/componer/notificados.vue'),
-          //   props: () => ({
-          //     back: () => router.push({ name: 'sms-componer' })
-          //   })
-          // },
-          // {
-          //   path: 'suscriptores',
-          //   name: 'sms-componer-suscriptores',
-          //   component: () => import('@/views/mensaje/componer/suscriptores.vue'),
-          //   props: () => ({
-          //     back: () => router.push({ name: 'sms-componer' })
-          //   })
-          // }
+          }
         ]
       },
       {
@@ -431,17 +416,17 @@ export const router = createRouter({
 })
 
 router.afterEach((to) => {
-  const auth = useAuthStore()
-  if (to.matched.some((record) => record.meta.logout)) auth.auth && auth.logout()
+  const { authUser } = useAuthQuery()
+  const { mutate: logout } = useLogout()
+  if (to.matched.some((record) => record.meta.logout) && authUser.value)
+    logout()
 })
 
 router.beforeEach(async (to, from) => {
-  const auth = useAuthStore()
-  // console.log(auth)
+  const { authUser, isPending } = useAuthQuery()
   if (to.matched.some(record => record.meta.requiresAuth)) {
-    if (auth.auth === null) // browser navigation (initial state)
-      await auth.getAuthUser()
-    if (!auth.auth) return { name: 'auth-login', query: { next: to.fullPath } }
+    await until(isPending).toBe(false) // browser initial navigation
+    if (!authUser.value) return { name: 'auth-login', query: { next: to.fullPath } }
   }
 })
 

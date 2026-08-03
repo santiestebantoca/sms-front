@@ -1,5 +1,10 @@
 // index.js
-export { api, events, initAxiosInterceptors, getLastServerAccess } from './client'
+export {
+  api,
+  events,
+  initAxiosInterceptors,
+  lastServerAccess
+} from './client'
 export {
   ApiError,
   NetworkError,

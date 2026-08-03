@@ -37,9 +37,7 @@ export const api = axios.create({
 })
 
 // Estado reactivo // shallowRef es más eficiente para objetos Date
-const lastServerAccess = shallowRef(new Date())
-
-export const getLastServerAccess = () => lastServerAccess
+export const lastServerAccess = shallowRef(new Date())
 
 const touchLastServerAccess = () => lastServerAccess.value = new Date()
 

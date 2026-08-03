@@ -90,31 +90,24 @@ const props = defineProps({
   warning: Number
 })
 
-import { useLastServerAccess } from '@/composables/useLastServerAccess'
-import { useAuthStore } from '@/stores/auth'
-import { ref, computed, watch, onBeforeUnmount } from 'vue'
+import { lastServerAccess } from '@/api/client'
+import { useAuthQuery } from '@/stores/auth'
+import { ref, computed, watch, onBeforeUnmount, watchEffect } from 'vue'
 
-const lastServerAccessStore = useLastServerAccess()
-const auth = useAuthStore()
+const { authUser, refetch: refetchUser } = useAuthQuery()
+const idleTimer = ref(new IdleTimer(props.timeout, props.warning))
+const warning = computed(() => idleTimer.value.status === 'warning')
 const emit = defineEmits(['expired'])
 
-const idleTimer = ref(new IdleTimer(props.timeout, props.warning))
-
-idleTimer.value.heartBeat = () => auth.getAuthUser()
-idleTimer.value.onTimeout = () => emit('expired')
-
-const warning = computed(() => idleTimer.value.status === 'warning')
-
-watch(() => auth.auth, auth => {
-  if (auth) idleTimer.value.start()
+watchEffect(() => {
+  if (authUser.value) idleTimer.value.start()
   else idleTimer.value.stop()
 })
-
-watch(() => lastServerAccessStore.lastServerAccess.value, () => {
-  idleTimer.value.reset()
-})
-
+watch(lastServerAccess, () => idleTimer.value.reset())
 onBeforeUnmount(() => idleTimer.value.stop())
+
+idleTimer.value.heartBeat = () => refetchUser()
+idleTimer.value.onTimeout = () => emit('expired')
 </script>
 
 <template>

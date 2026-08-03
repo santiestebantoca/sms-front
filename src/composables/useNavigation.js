@@ -1,4 +1,4 @@
-import { useAuthStore } from '@/stores/auth'
+import { useAuthQuery } from '@/stores/auth'
 import { useNotificacionesQuery } from '@/stores/notificaciones'
 import { computed, onUnmounted, watch } from 'vue'
 
@@ -35,7 +35,7 @@ export function useNavigationMensaje() {
 }
 
 export function useNavigationConfigurar() {
-  const auth = useAuthStore()
+  const { authUser } = useAuthQuery()
   const options = computed(() => [
     {
       to: { name: 'configurar-grupos' },
@@ -58,7 +58,7 @@ export function useNavigationConfigurar() {
       name: 'plantillas',
       id: 'nav-options-configurar-plantillas'
     },
-    ...auth.authUser.admin ? [{
+    ...authUser.value.admin ? [{
       to: { name: 'configurar-users' },
       icon: 'bi-person-workspace',
       label: 'Usuarios',

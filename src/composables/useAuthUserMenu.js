@@ -1,8 +1,8 @@
-import { useAuthStore } from '@/stores/auth'
+import { useAuthQuery } from '@/stores/auth'
 import { computed } from 'vue'
 
 export default function useAuthUserMenu() {
-  const user = computed(() => useAuthStore().authUser)
+  const { authUser } = useAuthQuery()
 
   const actions = computed(() => {
     const res = [
@@ -11,7 +11,7 @@ export default function useAuthUserMenu() {
         path: { name: 'auth-logout' },
         icon: 'bi-box-arrow-right'
       },]
-    if (user.value?.can_impersonate || user.value?.is_impersonating)
+    if (authUser.value?.can_impersonate || authUser.value?.is_impersonating)
       res.push({
         title: 'Personificar',
         path: { name: 'auth-impersonate' },
@@ -19,7 +19,11 @@ export default function useAuthUserMenu() {
       })
     return res
   })
-  const isImpersonating = computed(() => user.value.is_impersonating)
+  const isImpersonating = computed(() => authUser.value.is_impersonating)
 
-  return { user, actions, isImpersonating }
+  return {
+    authUser,
+    actions,
+    isImpersonating
+  }
 }
