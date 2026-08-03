@@ -38,9 +38,11 @@ import BiSearch from '~icons/bi/search'
 import BiArrowReturnRight from '~icons/bi/arrow-return-right'
 import BiArrowReturnLeft from '~icons/bi/arrow-return-left'
 import BiArrowLeft from '~icons/bi/arrow-left'
+import BiBoxArrowUpRight from '~icons/bi/box-arrow-up-right'
 
 export const iconMap = {
     // 'mdi-home': MdiHome,
+    'bi-box-arrow-up-right': BiBoxArrowUpRight,
     'bi-arrow-left': BiArrowLeft,
     'bi-arrow-return-left': BiArrowReturnLeft,
     'bi-arrow-return-right': BiArrowReturnRight,

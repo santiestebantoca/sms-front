@@ -9,8 +9,6 @@ import { ref, computed, onMounted } from 'vue'
 const model = ref(false)
 const created = ref(null)
 const toast = useToast()
-const { mutateAsync: crearGrupo, asyncStatus } = useGrupoCreate()
-const loading = computed(() => asyncStatus.value === 'loading')
 const form = ref({
   nombre: null,
   apodo: null,
@@ -18,6 +16,8 @@ const form = ref({
   descripcion: null,
 })
 const errors = ref({})
+const { mutateAsync: crearGrupo, asyncStatus } = useGrupoCreate()
+const loading = computed(() => asyncStatus.value === 'loading')
 
 onMounted(() => model.value = true)
 

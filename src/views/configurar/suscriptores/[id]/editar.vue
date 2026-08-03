@@ -4,7 +4,7 @@ const props = defineProps({ suscriptorId: Number, back: Function })
 import { isValidationError } from '@/api/client'
 import { useSuscriptorQuery, useSuscriptoresQuery, useSuscriptorUpdate } from '@/stores/suscriptores'
 import { useGruposNotificablesQuery } from '@/stores/grupos'
-import { ref, computed, onMounted, watchEffect, watch } from 'vue'
+import { ref, computed, onMounted, watchEffect } from 'vue'
 
 const model = ref(false)
 const tabs = ref(0)
@@ -111,7 +111,7 @@ const submit = async () => {
           <div v-if="gruposPendientes" class="p-5 text-center">
             <BSpinner />
           </div>
-          <RootTree v-else :childrenNames="['hijos']" v-model:active="form.grupo" selectable>
+          <RootTree v-else :childrenNames="['hijos']" v-model="form.grupo" selectable>
             <TreeNode v-for="data in grupos" :data="data" :key="data.id">
               <template #default="{ data }">
                 <UIcon name="bi-subtract" style="color:var(--bs-yellow);flex-shrink: 0;" />
@@ -130,7 +130,6 @@ const submit = async () => {
         <UIcon name="bi-check2" />
         Listo
       </BButton>
-      <div class="ms-auto" />
     </template>
   </BModal>
 </template>

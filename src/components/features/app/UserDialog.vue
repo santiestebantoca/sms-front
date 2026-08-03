@@ -20,7 +20,7 @@ const dialog = ref(null)
   <BButton @click="dialog = !dialog" class="btn-header" variant="flat">
     <img src="@/assets/images/user.png" width="22" height="22" class="me-2">
     <span class="text-truncate pe-2" v-text="authUser.name" />
-    <bs-icon name="box-arrow-up-right" class="ms-auto" />
+    <UIcon name="bi-box-arrow-up-right" class="ms-auto" />
   </BButton>
   <BModal v-model="dialog" title="Usuario">
     <p v-if="impersonatingAlert" class="text-center text-danger fw-bold">

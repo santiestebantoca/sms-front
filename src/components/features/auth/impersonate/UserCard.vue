@@ -29,15 +29,18 @@ const items = computed(() => [
     <!-- <template v-if="mobile">
       <Teleport v-if="target" to="#app-footer-content">
         <div class="bg-light hstack justify-content-center">
-          <bs-btn-footer label="Usuario anterior" icon="arrow-return-left" @click="impersonate" />
+          <BButton variant="flat" @click="impersonate">
+            Usuario anterior
+            <UIcon name="bi-arrow-return-left" />
+          </BButton>
         </div>
       </Teleport>
     </template>
 <template v-else> -->
     <div class="mt-4">
       <BButton @click="impersonate(0)">
-        <UIcon name="arrow-return-left" />
-        Usuario anterior
+        <UIcon name="bi-arrow-return-left" />
+        <span class="ms-2">Usuario anterior</span>
       </BButton>
     </div>
     <!-- </template> -->

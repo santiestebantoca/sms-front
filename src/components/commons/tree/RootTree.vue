@@ -1,5 +1,5 @@
 <script setup>
-const active = defineModel('active')
+const active = defineModel()
 const props = defineProps({
   list: Boolean,
   selectable: Boolean,
