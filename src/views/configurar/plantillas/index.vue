@@ -9,7 +9,7 @@ const { plantillas, search } = usePlantillasQuery()
 </script>
 
 <template>
-  <div class="main">
+  <div class="root">
     <div style="max-width: 700px" class="ps-3 pe-1">
       <div class="sticky-top">
         <div class="hstack py-1">
@@ -33,7 +33,7 @@ const { plantillas, search } = usePlantillasQuery()
 </template>
 
 <style scoped>
-.main {
+.root {
   height: 100%;
   display: grid;
   grid-template-columns: 1fr;

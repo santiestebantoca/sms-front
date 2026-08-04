@@ -38,7 +38,8 @@ onUnmounted(() => events.off('error', handleError))
     <AppPresentation>
       <RouterView />
     </AppPresentation>
-    <AppIdle :timeout="1440" :warning="0.7" @expired="$router.push({ name: 'auth-expired' })" />
+    <!-- <AppIdle :timeout="1440" :warning="0.7" @expired="$router.push({ name: 'auth-expired' })" /> -->
+    <AppIdle :timeout="1" :warning="0.7" @expired="$router.push({ name: 'auth-expired' })" />
     <!-- <AppLoading v-if="loading" /> -->
 
     <!-- Errores globales (de Axios) -->

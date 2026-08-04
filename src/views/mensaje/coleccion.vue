@@ -18,7 +18,7 @@ const mostrando = computed(() => {
 </script>
 
 <template>
-  <div class="main">
+  <div class="root">
     <div class="border-end px-1 overflow-auto">
       <div class="hstack bg-white ps-12" style="height: 40px">
         <span class="small fw-semibold">MENSAJES</span>
@@ -50,7 +50,7 @@ const mostrando = computed(() => {
 </template>
 
 <style scoped>
-.main {
+.root {
   height: 100%;
   display: grid;
   grid-template-columns: 260px 1fr;

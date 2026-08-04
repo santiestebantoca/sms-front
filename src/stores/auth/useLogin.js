@@ -10,7 +10,7 @@ export function useLogin() {
     mutation: (credentials) => api.login(credentials),
 
     onSuccess: (data, variables, context) => {
-      queryCache.setQueryData(() => queryKeys.auth.user(), () => data)
+      queryCache.setQueryData(queryKeys.auth.user(), () => data)
     }
   })
 }

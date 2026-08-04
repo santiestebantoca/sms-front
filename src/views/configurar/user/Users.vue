@@ -22,7 +22,7 @@ const to = ref({ query: { compose: 'new' } })
 </script>
 
 <template>
-  <div class="main">
+  <div class="root">
     <div class="border-end px-1 overflow-auto">
       <div class="hstack sticky-top bg-white" style="height: 40px;padding-left: 12px;">
         <span class="small fw-semibold">USUARIOS</span>
@@ -51,7 +51,7 @@ const to = ref({ query: { compose: 'new' } })
 </template>
 
 <style scoped>
-.main {
+.root {
   height: 100%;
   display: grid;
   grid-template-columns: 1fr 3fr;
