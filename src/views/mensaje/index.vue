@@ -3,13 +3,13 @@ import MainLayout from '@/layouts/MainLayout.vue'
 import DrawerContent from '@/components/features/DrawerContent.vue'
 import { useNavigationMensaje } from '@/composables/useNavigation'
 
-const navMensaje = useNavigationMensaje().options
+const { options } = useNavigationMensaje()
 </script>
 
 <template>
   <MainLayout>
     <template #drawer-content="{ down, closeDrawer }">
-      <DrawerContent :down="down" :closeDrawer="closeDrawer" :options="navMensaje" />
+      <DrawerContent :down="down" :closeDrawer="closeDrawer" :options="options" />
     </template>
   </MainLayout>
 </template>

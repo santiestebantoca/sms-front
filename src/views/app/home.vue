@@ -1,8 +1,8 @@
 <script setup>
 import { useNavigationMensaje, useNavigationConfigurar } from '@/composables/useNavigation'
 
-const navMensaje = useNavigationMensaje().options
-const navConfigurar = useNavigationConfigurar().options
+const { options: mOptions } = useNavigationMensaje()
+const { options: cOptions } = useNavigationConfigurar()
 </script>
 <template>
   <div class="grid">
@@ -11,14 +11,14 @@ const navConfigurar = useNavigationConfigurar().options
       <div class="links">
         <div>
           <h5 class="text-muted mb-3">Mensaje</h5>
-          <router-link v-for="{ to, label, icon } in navMensaje" :to="to" class="text-decoration-none d-block py-2">
+          <router-link v-for="{ to, label, icon } in mOptions" :to="to" class="text-decoration-none d-block py-2">
             <UIcon :name="icon" class="me-2 mb-1" />
             {{ label }}
           </router-link>
         </div>
         <div>
           <h5 class="text-muted mb-3">Configurar</h5>
-          <router-link v-for="{ to, label, icon } in navConfigurar" :to="to" class="text-decoration-none d-block py-2">
+          <router-link v-for="{ to, label, icon } in cOptions" :to="to" class="text-decoration-none d-block py-2">
             <UIcon :name="icon" class="me-2 mb-1" />
             {{ label }}
           </router-link>

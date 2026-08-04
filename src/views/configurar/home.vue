@@ -1,13 +1,13 @@
 <script setup>
 import { useNavigationConfigurar } from '@/composables/useNavigation'
 
-const navConfigurar = useNavigationConfigurar().options
+const { options } = useNavigationConfigurar()
 </script>
 <template>
   <div class="grid">
     <div style="margin-top: 10%;">
       <h5 class="text-muted mb-3">Configurar</h5>
-      <router-link v-for="{ to, label, icon } in navConfigurar" :to="to" class="text-decoration-none d-block py-2">
+      <router-link v-for="{ to, label, icon } in options" :to="to" class="text-decoration-none d-block py-2">
         <UIcon :name="icon" class="me-2 mb-1" />
         {{ label }}
       </router-link>

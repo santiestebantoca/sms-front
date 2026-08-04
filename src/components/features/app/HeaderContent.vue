@@ -10,7 +10,7 @@ const props = defineProps({
 import { useNavigationHeader } from '@/composables/useNavigation'
 import UserWidget from '@/components/features/app/UserDropdown.vue'
 
-const navHeader = useNavigationHeader().options
+const { options } = useNavigationHeader()
 </script>
 
 <template>
@@ -21,7 +21,7 @@ const navHeader = useNavigationHeader().options
       </BButton>
     </template>
     <BNavbarBrand to="/home">{{ title }}</BNavbarBrand>
-    <template v-for="{ label, tooltip, icon, to, id } in navHeader">
+    <template v-for="{ label, tooltip, icon, to, id } in options">
       <BButton :to="to" variant="flat-primary" :id="id" v-tippy="tooltip">
         <UIcon :name="icon" />
         {{ label }}
