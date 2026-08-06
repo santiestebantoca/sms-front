@@ -99,6 +99,7 @@ const guardarPlantilla = texto => {
               Destinatarios de la conversación
             </BButton>
             <BButton variant="flat-outline-dark" class="btn-sm ms-auto" @click="componer" v-tippy="'Descartar mensaje'">
+              <UIcon name="bi-trash" class="text-danger" />
               Descartar
             </BButton>
           </div>

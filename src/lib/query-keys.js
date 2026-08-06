@@ -3,6 +3,15 @@ export const queryKeys = {
     root: ['auth'],
     user: () => [...queryKeys.auth.root, 'user']
   },
+  authGroups: {
+    root: ['authGroups'],
+    listas: () => [...queryKeys.authGroups.root, 'lista'],
+  },
+  authMembership: {
+    root: ['authMembership'],
+    listas: () => [...queryKeys.authMembership.root, 'lista'],
+    lista: (filtros) => [...queryKeys.authMembership.listas(), { ...filtros }],
+  },
   grupos: {
     root: ['grupos'],
     listas: () => [...queryKeys.grupos.root, 'lista'],
@@ -43,10 +52,12 @@ export const queryKeys = {
     listas: () => [...queryKeys.envios.root, 'lista'],
     lista: (filtros) => [...queryKeys.envios.listas(), { ...filtros }],
   },
-  users: {
-    root: ['users'],
-    listas: () => [...queryKeys.users.root, 'lista'],
-    lista: (filtros) => [...queryKeys.users.listas(), { ...filtros }],
+  usuarios: {
+    root: ['usuarios'],
+    listas: () => [...queryKeys.usuarios.root, 'lista'],
+    lista: (filtros) => [...queryKeys.usuarios.listas(), { ...filtros }],
+    detalles: () => [...queryKeys.usuarios.root, 'detalle'],
+    detalle: (id) => [...queryKeys.usuarios.detalles(), id],
   },
   notificaciones: {
     root: ['notificaciones'],

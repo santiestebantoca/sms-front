@@ -2,8 +2,7 @@
 const props = defineProps({ grupoId: Number, back: Function })
 
 import { useGruposNotificablesQuery } from '@/stores/grupos'
-import { useNotificadosDelGrupoQuery } from '@/stores/notificados'
-import { useNotificadosUpdate } from '@/stores/notificados'
+import { useNotificadosDelGrupoQuery, useNotificadosUpdate } from '@/stores/notificados'
 import { ref, computed, watchEffect, onMounted } from 'vue'
 
 const model = ref(false)

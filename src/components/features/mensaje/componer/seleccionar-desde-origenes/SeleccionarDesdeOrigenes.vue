@@ -5,7 +5,7 @@ const destinatariosIds = defineModel('destinatariosIds')
 import ListaNotificados from './ListaNotificados.vue'
 import ListaDestinatarios from './ListaDestinatarios.vue'
 import { useNotificadosDeLosGruposQuery } from '@/stores/notificados'
-import { ref, computed, watch, watchEffect } from 'vue';
+import { ref, computed, watch, watchEffect } from 'vue'
 
 const notificadosIds = ref([]) // notificados ids first but UI can changes it to control destinatariosIds
 const oldVal = ref([])

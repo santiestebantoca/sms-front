@@ -1,21 +1,21 @@
 <script setup>
-const props = defineProps({ suscriptorId: Number, back: Function, forward: Function })
+const props = defineProps({ usuarioId: Number, back: Function, forward: Function })
 
-import { useSuscriptorDelete } from '@/stores/suscriptores'
+import { useUsuarioDelete } from '@/stores/usuarios'
 import { useToast } from 'bootstrap-vue-next'
 import { ref, computed, onMounted } from 'vue'
 
 const model = ref(false)
 const deleted = ref(false)
 const toast = useToast()
-const { mutateAsync: eliminarSuscriptor, asyncStatus } = useSuscriptorDelete()
+const { mutateAsync: eliminarUsuario, asyncStatus } = useUsuarioDelete()
 const loading = computed(() => asyncStatus.value === 'loading')
 
 onMounted(() => model.value = true)
 
-const submit = () => eliminarSuscriptor(props.suscriptorId)
+const submit = () => eliminarUsuario(props.usuarioId)
   .then(() => {
-    toast.create({ body: 'Suscriptor eliminado.', variant: 'success' })
+    toast.create({ body: 'Usuario eliminado.', variant: 'success' })
     deleted.value = true
     model.value = false
   })
@@ -29,12 +29,17 @@ const hidden = () => {
 </script>
 
 <template>
-  <BModal v-model="model" title="Eliminar suscriptor" @hidden="hidden">
+  <BModal v-model="model" title="Eliminar usuario" @hidden="hidden">
     <p>
-      Esta acción eliminará permanentemente al suscriptor pero
-      mantendrá los registros históricos asociados a él.
+      Esta acción eliminará permanentemente al usuario
+      y eliminará sus registros históricos asociados tales como,
+      mensajes enviados.
     </p>
     <p class="text-danger fw-semibold">Esta acción no se puede deshacer.</p>
+    <p class="bg-light rounded p-2 mx-n1">
+      Si solo busca desactivar al usuario,
+      actualice el campo "Clave de registro" con el valor "blocked".
+    </p>
     <template #footer>
       <BButton variant="secondary" @click="model = false">
         Cancelar

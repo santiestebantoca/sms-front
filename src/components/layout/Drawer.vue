@@ -5,7 +5,7 @@ const props = defineProps({
   title: String
 })
 
-import { breakpointsBootstrapV5, useBreakpoints } from "@vueuse/core";
+import { breakpointsBootstrapV5, useBreakpoints } from "@vueuse/core"
 import { ref, inject, computed, watch } from 'vue'
 
 const drawerId = ref(`drawer-${props.side}`)

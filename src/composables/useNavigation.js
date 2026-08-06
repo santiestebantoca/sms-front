@@ -59,11 +59,11 @@ export function useNavigationConfigurar() {
       id: 'nav-options-configurar-plantillas'
     },
     ...authUser.value.admin ? [{
-      to: { name: 'configurar-users' },
+      to: { name: 'configurar-usuarios' },
       icon: 'bi-person-workspace',
       label: 'Usuarios',
       name: 'users',
-      id: 'nav-options-configurar-users'
+      id: 'nav-options-configurar-usuarios'
     }] : [],
   ])
 

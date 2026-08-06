@@ -8,7 +8,7 @@ const props = defineProps({
   debounce: { type: String, default: '600' }
 })
 
-import { computed } from 'vue';
+import { computed } from 'vue'
 
 const rootStyle = computed(() => ({
   '--c-padding-left': props.searchIcon ? '2rem' : '0.75rem',

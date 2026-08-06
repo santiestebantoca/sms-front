@@ -95,6 +95,7 @@ const guardarPlantilla = texto => {
             </template>
             <BButton variant="flat-outline-dark" class="btn-sm ms-auto" @click="resetState"
               v-tippy="'Descartar mensaje'">
+              <UIcon name="bi-trash" class="text-danger" />
               Descartar
             </BButton>
           </div>

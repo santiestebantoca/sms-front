@@ -10,7 +10,7 @@ const active = ref(null)
 const acciones = computed(() => [
   {
     texto: "Seleccionar",
-    to: { name: 'configurar-grupo-notificados-seleccionar' },
+    to: { name: 'configurar-grupo-notificados-editar' },
     icon: "bi-check2-square"
   },
 ])

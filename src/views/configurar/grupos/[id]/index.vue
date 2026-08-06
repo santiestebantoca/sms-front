@@ -1,5 +1,5 @@
 <script setup>
-const props = defineProps({ grupoId: Number, back: Function })
+const props = defineProps({ grupoId: Number })
 
 import GrupoCard from '@/components/features/configurar/grupos/GrupoCard.vue'
 import HijosCard from '@/components/features/configurar/grupos/GrupoHijosCard.vue'

@@ -1,18 +1,18 @@
 <script setup>
 const props = defineProps({
-  suscriptorId: Number,
-  setSuscriptorId: Function,
+  usuarioId: Number,
+  setUsuarioId: Function,
   flows: Object
 })
 
-import { useSuscriptoresQuery } from '@/stores/suscriptores'
-import CrearSuscriptor from '@/views/configurar/suscriptores/_flows/crear.vue'
+import { useUsuariosQuery } from '@/stores/usuarios'
+import CrearUsuario from '@/views/configurar/usuarios/_flows/crear.vue'
 import { computed } from 'vue'
 
-const { suscriptores, isPending } = useSuscriptoresQuery()
+const { usuarios, isPending } = useUsuariosQuery()
 const active = computed({
-  get: () => props.suscriptorId,
-  set: (value) => props.setSuscriptorId(value)
+  get: () => props.usuarioId,
+  set: (value) => props.setUsuarioId(value)
 })
 </script>
 
@@ -20,8 +20,8 @@ const active = computed({
   <div class="root">
     <div class="border-end overflow-auto">
       <div class="hstack sticky-top p-1 ps-3">
-        <span class="small fw-semibold me-auto">SUSCRIPTORES</span>
-        <BButton @click="flows.crear.go" variant="primary" v-tippy="'Crear suscriptor'" class="btn-sm"
+        <span class="small fw-semibold me-auto">USUARIOS</span>
+        <BButton @click="flows.crear.go" variant="primary" v-tippy="'Crear usuario'" class="btn-sm"
           style="height:32px;width: 33px;">
           <UIcon name="bi-plus-lg" />
         </BButton>
@@ -31,23 +31,23 @@ const active = computed({
       </div>
       <div v-else class="px-1 py-3">
         <RootTree v-model="active" selectable list>
-          <TreeNode v-for="item in suscriptores" :data="item" :key="item.id">
+          <TreeNode v-for="item in usuarios" :data="item" :key="item.id">
             <template #default="{ data }">
               <UIcon name="bi-person" style="flex-shrink:0;color: var(--bs-success-400)" />
-              <span v-text="data.nombre" class="text-truncate" />
-              <BBadge v-if="!data.activo" variant="danger">Inactivo</BBadge>
+              <span v-text="data.name" class="text-truncate" />
+              <BBadge v-if="data.registration_key === 'blocked'" variant="danger">Inactivo</BBadge>
             </template>
           </TreeNode>
         </RootTree>
       </div>
     </div>
     <div class="overflow-auto px-3 pt-1 pb-4">
-      <div v-if="!suscriptorId" class="mt-5 text-center">
-        Seleccione un suscriptor para mostrarlo aquí.
+      <div v-if="!usuarioId" class="mt-5 text-center">
+        Seleccione un usuario para mostrarlo aquí.
       </div>
       <router-view v-else />
     </div>
-    <CrearSuscriptor v-if="flows.crear.active" :back="flows.crear.back" :forward="flows.crear.forward" />
+    <CrearUsuario v-if="flows.crear.active" :back="flows.crear.back" :forward="flows.crear.forward" />
   </div>
 </template>
 

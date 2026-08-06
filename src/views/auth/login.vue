@@ -40,9 +40,9 @@ const toggleType = () => type.value = type.value === 'password' ? 'text' : 'pass
       <div class="text-muted" style="line-height: 21px; padding: 12px 2px">
         Usuario del dominio "etecsa.cu"
       </div>
-      <BToast v-model="alert" variant="warning" class="mb-3">
+      <BAlert v-model="alert" variant="danger" class="mb-3 small">
         Credenciales no válidas
-      </BToast>
+      </BAlert>
       <form @submit.prevent>
         <div class="position-relative mb-3">
           <UIcon name="bi-person" class="p-icon" />
@@ -65,10 +65,9 @@ const toggleType = () => type.value = type.value === 'password' ? 'text' : 'pass
           </BButton>
         </div>
       </form>
-      <div class="alert bg-light bg-gradient small mt-4 d-flex gap-3 border">
-        <UIcon name="bi-exclamation-triangle-fill" font-size="1.2em" class="flex-shrink-0" />
+      <BAlert show variant="light" class="small mt-4">
         El registro de usuario siempre es realizado por un administrador
-      </div>
+      </BAlert>
     </div>
   </div>
 </template>

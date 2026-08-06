@@ -39,9 +39,15 @@ import BiArrowReturnRight from '~icons/bi/arrow-return-right'
 import BiArrowReturnLeft from '~icons/bi/arrow-return-left'
 import BiArrowLeft from '~icons/bi/arrow-left'
 import BiBoxArrowUpRight from '~icons/bi/box-arrow-up-right'
+import BiInfoCircle from '~icons/bi/info-circle'
+import BiDot from '~icons/bi/dot'
+import BiPersonGear from '~icons/bi/person-gear'
 
 export const iconMap = {
     // 'mdi-home': MdiHome,
+    'bi-person-gear': BiPersonGear,
+    'bi-dot': BiDot,
+    'bi-info-circle': BiInfoCircle,
     'bi-box-arrow-up-right': BiBoxArrowUpRight,
     'bi-arrow-left': BiArrowLeft,
     'bi-arrow-return-left': BiArrowReturnLeft,
@@ -83,6 +89,6 @@ export const iconMap = {
     'bi-x': BiX,
     'bi-chevron-right': BiChevronRight,
     'bi-chevron-down': BiChevronDown,
-};
+}
 
 export const isValidIcon = (name) => name && Object.prototype.hasOwnProperty.call(iconMap, name)

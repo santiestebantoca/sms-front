@@ -10,7 +10,7 @@ export const useImpersonateQuery = defineQuery(() => {
   const isFiltered = computed(() => search.value?.length >= 2)
 
   const { data, isLoading } = useQuery({
-    key: () => [...queryKeys.users.lista({ search: search.value })],
+    key: () => [...queryKeys.usuarios.lista({ search: search.value })],
     query: () => api.getImpersonateables({ search: search.value }),
     enabled: () => search.value?.length >= 2,
   })

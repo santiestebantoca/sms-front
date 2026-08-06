@@ -20,7 +20,7 @@ const ageno = computed(() => props.data.de !== authUser.value.name)
 const tippyText = ref('Menú del mensaje')
 const tippy = ref({ content: tippyText.value })
 const rootStyle = computed(() => ({
-  '--border-badge': props.data.continua && ageno.value
+  '--bs-card-border-color': props.data.continua && ageno.value
     ? 'orange'
     : props.data.continua ? 'orangered' : 'var(--bs-teal)',
 }))
@@ -31,7 +31,6 @@ const noContinuar = () => actualizarMensaje({ id: props.data.id, continua: false
 <template>
   <BCard class="shadow-sm" style="width: 20rem;" :style="rootStyle">
     <BCardText>
-
       <BPopover placement="bottom-start" class="shadow ms-2" v-model="popover" @mouseleave="popover = false">
         <template #target>
           <div class="card-text flex-fill">

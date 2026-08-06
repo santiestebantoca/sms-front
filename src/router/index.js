@@ -35,7 +35,9 @@ const routesAuth = [
         component: () => import('@/views/auth/expired.vue'),
         meta: { logout: true },
         beforeEnter: (to, from) => replaceQuery(to, 'next', from ? from.fullPath : '/'),
-        props: route => ({ next: route.query.next })
+        props: route => ({
+          next: () => router.push(route.query.next)
+        })
       }
     ]
   }
@@ -82,7 +84,6 @@ const routesConfigurar = [
             component: () => import('@/views/configurar/grupos/[id]/index.vue'),
             props: route => ({
               grupoId: parseInt(route.params.grupoId),
-              back: () => router.push({ name: 'configurar-grupos' })
             }),
             children: [
               {
@@ -159,9 +160,9 @@ const routesConfigurar = [
                 })
               },
               {
-                path: 'notificados/seleccionar',
-                name: 'configurar-grupo-notificados-seleccionar',
-                component: () => import('@/views/configurar/grupos/[id]/notificados/seleccionar.vue'),
+                path: 'notificados/editar',
+                name: 'configurar-grupo-notificados-editar',
+                component: () => import('@/views/configurar/grupos/[id]/notificados/editar.vue'),
                 props: route => ({
                   grupoId: parseInt(route.params.grupoId),
                   back: () => router.push({ name: 'configurar-grupo' }),
@@ -200,7 +201,6 @@ const routesConfigurar = [
             component: () => import('@/views/configurar/suscriptores/[id]/index.vue'),
             props: route => ({
               suscriptorId: parseInt(route.params.suscriptorId),
-              back: () => router.push({ name: 'configurar-suscriptores' })
             }),
             children: [
               {
@@ -227,60 +227,63 @@ const routesConfigurar = [
         ]
       },
       {
-        path: 'users',
-        name: 'configurar-users',
-        component: () => import('@/views/configurar/user/Users.vue'),
+        path: 'usuarios',
+        name: 'configurar-usuarios',
+        component: () => import('@/views/configurar/usuarios/index.vue'),
         props: route => ({
-          id: route.params.id ? parseInt(route.params.id) : null,
-          setId: id => router.push({ name: 'configurar-user', params: { id } }),
-          compose: {
-            new: route.query.compose === 'new',
-            back: () => router.replace({
-              query: {
-                compose: undefined,
-              }
-            })
+          usuarioId: route.params.usuarioId ? parseInt(route.params.usuarioId) : null,
+          setUsuarioId: (usuarioId) => usuarioId && router.push({
+            name: 'configurar-usuario',
+            params: { usuarioId }
+          }),
+          flows: {
+            crear: {
+              active: route.query.crear === 'true',
+              go: () => router.replace({ query: { crear: 'true' } }),
+              back: () => router.replace({ query: { crear: undefined } }),
+              forward: (usuarioId) => router.push({
+                name: 'configurar-usuario',
+                params: { usuarioId }
+              })
+            }
           }
         }),
         children: [
           {
-            path: ':id',
-            name: 'configurar-user',
-            redirect: { name: 'configurar-user-data' },
-            component: () => import('@/views/configurar/user/User.vue'),
-            props: route => ({ id: parseInt(route.params.id) }),
+            path: ':usuarioId',
+            name: 'configurar-usuario',
+            component: () => import('@/views/configurar/usuarios/[id]/index.vue'),
+            props: route => ({
+              usuarioId: parseInt(route.params.usuarioId),
+            }),
             children: [
               {
-                path: '',
-                name: 'configurar-user-data',
-                component: () => import('@/views/configurar/user/UserData.vue'),
-                children: [
-                  {
-                    path: 'edit',
-                    name: 'configurar-user-edit',
-                    component: () => import('@/views/configurar/user/UserEdit.vue'),
-                    props: () => ({
-                      back: () => router.push({ name: 'configurar-user' })
-                    })
-                  },
-                  {
-                    path: 'membership',
-                    name: 'configurar-user-membership',
-                    component: () => import('@/views/configurar/user/UserMembership.vue'),
-                    props: () => ({
-                      back: () => router.push({ name: 'configurar-user' }),
-                    })
-                  },
-                  {
-                    path: 'del',
-                    name: 'configurar-user-del',
-                    component: () => import('@/views/configurar/user/UserDel.vue'),
-                    props: () => ({
-                      back: () => router.push({ name: 'configurar-users' }),
-                      cancel: () => router.push({ name: 'configurar-user' }),
-                    })
-                  }
-                ]
+                path: 'editar',
+                name: 'configurar-usuario-editar',
+                component: () => import('@/views/configurar/usuarios/[id]/editar.vue'),
+                props: (route) => ({
+                  usuarioId: parseInt(route.params.usuarioId),
+                  back: () => router.push({ name: 'configurar-usuario' })
+                })
+              },
+              {
+                path: 'eliminar',
+                name: 'configurar-usuario-eliminar',
+                component: () => import('@/views/configurar/usuarios/[id]/eliminar.vue'),
+                props: route => ({
+                  usuarioId: parseInt(route.params.usuarioId),
+                  forward: () => router.push({ name: 'configurar-usuarios' }),
+                  back: () => router.push({ name: 'configurar-usuario' }),
+                })
+              },
+              {
+                path: 'roles/editar',
+                name: 'configurar-usuario-grupos-editar',
+                component: () => import('@/views/configurar/usuarios/[id]/grupos/editar.vue'),
+                props: route => ({
+                  usuarioId: parseInt(route.params.usuarioId),
+                  back: () => router.push({ name: 'configurar-usuario' }),
+                })
               },
             ]
           }

@@ -51,28 +51,13 @@ const acciones = ref([
     left: 5px;
     width: 3px;
     border-radius: 4px;
-    background-color: var(--bs-yellow-700);
+    background-color: var(--bs-teal);
     background-image: var(--bs-gradient) !important;
     transition: all .6s;
   }
 
   &:hover {
     --bs-border-color: var(--bs-gray-500);
-
-    /* Delay */
-    .ms-auto {
-      opacity: 1;
-      visibility: visible;
-      transition: opacity 0.3s ease, visibility 0s linear 0s;
-      transition-delay: 0.3s;
-    }
-  }
-
-  /* Contenedor de botones */
-  .ms-auto {
-    opacity: 0;
-    visibility: hidden;
-    transition: opacity 0.3s ease, visibility 0s linear 0.3s;
   }
 }
 </style>

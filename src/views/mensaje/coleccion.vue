@@ -32,7 +32,7 @@ const mostrando = computed(() => {
     <div class="px-1 overflow-auto position-relative">
       <!-- Filters -->
       <div class="filter-section">
-        <BSearchInput v-model="search" style="max-width: 400px;" />
+        <BSearchInput searchIcon v-model="search" style="max-width: 400px;" />
         <BButton class="me-auto" variant="flat-dark" @click="refresh">
           <UIcon name="bi-arrow-clockwise" /> Actualizar
         </BButton>

@@ -11,8 +11,8 @@ import App from './App.vue'
 import { router } from './router'
 import { initAxiosInterceptors } from '@/api/client'
 
-import 'bootstrap/dist/css/bootstrap.css';
-import 'bootstrap-vue-next/dist/bootstrap-vue-next.css';
+import 'bootstrap/dist/css/bootstrap.css'
+import 'bootstrap-vue-next/dist/bootstrap-vue-next.css'
 
 // import mitt from 'mitt'
 // export const emitter = mitt()

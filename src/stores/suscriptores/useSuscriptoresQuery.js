@@ -1,7 +1,7 @@
 import { useQuery } from '@pinia/colada'
 import { queryKeys } from '@/lib/query-keys'
 import { suscriptoresApi as api } from '@/api/suscriptores'
-import { computed } from 'vue'
+import { ref } from 'vue'
 
 export function useSuscriptoresQuery() {
   const { data, isPending } = useQuery({

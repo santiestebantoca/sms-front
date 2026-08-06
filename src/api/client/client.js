@@ -54,7 +54,7 @@ api.interceptors.response.use(
     // Siempre pone content-type: text/html, y pone un mensaje por defecto
     // No pone los headers para CORS en los mensajes de errores lanzados por su cuenta
     if (axios.isCancel(error)) throw error // Ya no importa
-    if (error instanceof ApiError) throw error; // Ya es error personalizado lanzado en "success"
+    if (error instanceof ApiError) throw error // Ya es error personalizado lanzado en "success"
 
     // Sin respuesta del servidor (error de conectividad o servidor no responde)
     // Webb2py no pone baceras CORS en status 500, luego el navegador invalida response 

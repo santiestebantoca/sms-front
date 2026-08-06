@@ -1,6 +1,5 @@
 <script setup lang="ts">
-import { BButton } from 'bootstrap-vue-next';
-
+import { BButton } from 'bootstrap-vue-next'
 </script>
 
 <template>

@@ -5,9 +5,9 @@ const props = defineProps({
   notificados: Array || undefined
 })
 
-import { computed } from 'vue';
+import { computed } from 'vue'
 
-const destinatarios = computed(() => props.notificados.flatMap(obj => obj.suscriptores))
+const destinatarios = computed(() => props.notificados?.flatMap(obj => obj.suscriptores) || [])
 </script>
 
 <template>

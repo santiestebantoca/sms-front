@@ -66,7 +66,7 @@ const submit = async () => {
 
 <template>
   <BModal v-model="model" title="Editar suscriptor" @hidden="back">
-    <form @submit.prevent="submit" ref="formEl">
+    <form @submit.prevent="submit">
       <BTabs v-model:index="tabs">
         <BTab>
           <div class="mb-3">

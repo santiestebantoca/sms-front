@@ -1,5 +1,5 @@
 <script setup>
-const props = defineProps({ next: String })
+const props = defineProps({ next: Function })
 </script>
 
 <template>
@@ -8,7 +8,7 @@ const props = defineProps({ next: String })
       <p>Tiempo de sesión expirado.</p>
       <br>
       <div class="text-end">
-        <BButton :to="next" color="primary">
+        <BButton @click="next" color="primary">
           Continuar trabajando
         </BButton>
       </div>

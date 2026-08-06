@@ -2,7 +2,7 @@ import { useQuery } from '@pinia/colada'
 import { flatToTree } from '@/utils'
 import { queryKeys } from '@/lib/query-keys'
 import { gruposApi as api } from '@/api/grupos'
-import { computed } from 'vue'
+import { ref, computed } from 'vue'
 
 export function useGruposQuery() {
   const { data, isPending } = useQuery({

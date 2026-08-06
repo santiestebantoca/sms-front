@@ -111,6 +111,5 @@ idleTimer.value.onTimeout = () => emit('expired')
 </script>
 
 <template>
-  <BOverlay v-model="warning" :no-wrap="true" blur="2px" variant="dark" opacity="0.6" z-index="1040"
-    class="position-fixed top-0 start-0 w-100 h-100" style="pointer-events: none;" />
+  <BOverlay :show="warning" no-wrap no-spinner variant="secondary" z-index="1040" />
 </template>
