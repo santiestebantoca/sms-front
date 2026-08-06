@@ -35,7 +35,7 @@ watchEffect(() => usuarioId.value = props.usuarioId)
       <RootTree v-else list>
         <TreeNode v-for="data in groups" :data="data" :key="data.id">
           <template #default="{ data }">
-            <UIcon name="bi-people" style="color:var(--bs-pink)" />
+            <UIcon name="bi-people" style="color:var(--bs-teal)" />
             <span v-text="data.role" class="text-truncate capitalize" />
           </template>
         </TreeNode>

@@ -84,7 +84,7 @@ const close = () => model.value = false
   left: 5px;
   width: 3px;
   border-radius: 4px;
-  background-color: var(--bs-yellow-700);
+  background-color: var(--bs-teal);
   background-image: var(--bs-gradient) !important;
   transition: all .6s;
 }

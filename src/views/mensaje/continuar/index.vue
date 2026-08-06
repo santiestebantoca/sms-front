@@ -88,7 +88,8 @@ const guardarPlantilla = texto => {
       <!-- Top Bar 1 -->
       <div class="border-bottom d-flex gap-1 gap-md-3 p-2 p-md-3" style="background-color: #fefefe">
         <!-- Botón enviar -->
-        <BButton v-tippy="'Enviar mensaje'" variant="flat-outline-primary" @click="submit" class="py-3 px-4">
+        <BButton v-tippy="'Enviar mensaje'" variant="flat-outline-primary" @click="submit" class="py-3 px-4"
+          style="height:80px">
           <UIcon name="bi-send" class="fs-5" />
         </BButton>
         <label class="ps-4" style="position: relative;top:2px">Para</label>
