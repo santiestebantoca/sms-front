@@ -1,4 +1,3 @@
-// api/client.js
 import axios from 'axios'
 import {
   NetworkError,
@@ -11,6 +10,9 @@ import {
 } from './errors'
 import mitt from 'mitt'
 import { shallowRef } from 'vue'
+
+// Importar los mensajes externalizados
+import { ERROR_MESSAGES } from '../constants/errorMessages'
 
 export const events = mitt()
 
@@ -32,34 +34,24 @@ export const api = axios.create({
     'X-Requested-With': 'XMLHttpRequest'
   },
   paramsSerializer: {
-    indexes: null // para name[] genera: ?name=1&name=4&name=5 (estándar de web2py)
+    indexes: null
   }
 })
 
-// Estado reactivo // shallowRef es más eficiente para objetos Date
 export const lastServerAccess = shallowRef(new Date())
-
 const touchLastServerAccess = () => lastServerAccess.value = new Date()
 
-// Interceptor de respuesta
 api.interceptors.response.use(
   response => {
     touchLastServerAccess()
-    // En alguna condición se pudiera lanzar un error personalizado aquí
-    // console.log(response)
     return response
   },
   error => {
-    // Webb2py con raise HTTP(code, mensaje, **headers)
-    // Siempre pone content-type: text/html, y pone un mensaje por defecto
-    // No pone los headers para CORS en los mensajes de errores lanzados por su cuenta
-    if (axios.isCancel(error)) throw error // Ya no importa
-    if (error instanceof ApiError) throw error // Ya es error personalizado lanzado en "success"
+    if (axios.isCancel(error)) throw error
+    if (error instanceof ApiError) throw error
 
-    // Sin respuesta del servidor (error de conectividad o servidor no responde)
-    // Webb2py no pone baceras CORS en status 500, luego el navegador invalida response 
     if (!error.response) {
-      notify('network', 'El servidor no responde: no está en línea o falla la conexión.')
+      notify('network', ERROR_MESSAGES.network)
       throw new NetworkError('Sin conexión o servidor inaccesible.', error)
     }
 
@@ -69,54 +61,54 @@ api.interceptors.response.use(
 
     let message = config?.url ? `Error en ${config.url}` : 'Error del servidor'
     if (!isHtml && data?.message) message = data.message
-    else if (isHtml) message = 'El servidor devolvió HTML en lugar de JSON.'
+    else if (isHtml) message = ERROR_MESSAGES.htmlResponse
 
     switch (status) {
-      case 401: // Unauthorized - Sesión expirada o no autenticado
-        try {
-          router.push({
-            name: 'auth-login',
-            query: { next: router.currentRoute.value.fullPath }
-          })
-        } catch (e) {
-          // Fallback si la store no está lista
-          // window.location.href = '/login'
+      case 401:
+        // Solución al try-catch peligroso: validar primero si el router existe
+        if (router) {
+          try {
+            router.push({
+              name: 'auth-login',
+              query: { next: router.currentRoute.value.fullPath }
+            })
+          } catch (e) {
+            console.error('[Router Error] Falló la redirección a login:', e)
+            window.location.href = '/login' // Fallback activo
+          }
+        } else {
+          // Si el router no se ha inyectado aún, hacemos fallback directo
+          window.location.href = '/login'
         }
-        notify('client', 'Tu sesión ha expirado. Inicia sesión nuevamente.')
+
+        notify('client', ERROR_MESSAGES.unauthorized)
         throw new AuthenticationError(message, error)
-        break
 
-      case 403: // Forbidden
-        notify('client', 'No tienes permisos para realizar esta acción.')
+      case 403:
+        notify('client', ERROR_MESSAGES.forbidden)
         throw new AuthorizationError(message, error)
-        break
 
-      case 404: // Not Found
-        notify('client', 'El recurso solicitado no existe.')
+      case 404:
+        notify('client', ERROR_MESSAGES.notFound)
         throw new NotFoundError(message, error)
-        break
 
-      case 422: // Validation Error - web2py no lo hace así por defecto
-        // notify('client', 'Datos inválidos. Por favor verifica la información.')
+      case 422:
         throw new ValidationError(message, data, error)
-        break
 
       case 500:
       case 502:
       case 503:
       case 504:
-        notify('server', 'Error en el servidor. Intenta nuevamente más tarde.')
-        throw new ServerError('Error interno del servidor. Revisa los tickets de soporte.', error)
-        break
+        notify('server', ERROR_MESSAGES.server)
+        throw new ServerError(ERROR_MESSAGES.internalServer, error)
 
       default:
-        // Error de red o desconocido
         if (error.code === 'ECONNABORTED') {
-          notify('network', 'Tiempo de espera agotado. Verifica tu conexión.')
+          notify('network', ERROR_MESSAGES.timeout)
         } else if (error.message === 'Network Error') {
-          notify('network', 'Error de conexión. Verifica tu conexión.')
+          notify('network', ERROR_MESSAGES.connection)
         } else {
-          notify('unknown', 'Ocurrió un error inesperado.')
+          notify('unknown', ERROR_MESSAGES.unknown)
         }
         throw new ApiError(message, status, data, error)
     }
