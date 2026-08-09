@@ -12,7 +12,7 @@ import mitt from 'mitt'
 import { shallowRef } from 'vue'
 
 // Importar los mensajes externalizados
-import { ERROR_MESSAGES } from '../constants/errorMessages'
+import { ERROR_MESSAGES } from '@/constants/errorMessages'
 
 export const events = mitt()
 
