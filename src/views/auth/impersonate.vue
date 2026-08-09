@@ -6,7 +6,7 @@ import { computed } from 'vue'
 
 const { authUser } = useAuthQuery()
 const { users, isFiltered, search } = useImpersonateQuery()
-const canSearch = computed(() => authUser.value.can_impersonate)
+const canSearch = computed(() => authUser.value?.can_impersonate)
 </script>
 
 <template>

@@ -18,7 +18,7 @@ const alert = ref(0)
 const { mutateAsync: login, state: loginState, asyncStatus } = useLogin()
 const loading = computed(() => asyncStatus.value === 'loading')
 
-watchEffect(() => loginState.value.error ? alert.value = 5000 : 0)
+watchEffect(() => alert.value = loginState.value.error ? 5000 : 0)
 
 const validate = () => {
   errors.value = {}

@@ -29,8 +29,7 @@ const rootStyle = computed(() => ({
 <style scoped lang="scss">
 .form-control {
   padding-left: var(--c-padding-left);
-  padding-left: var(--c-padding-left);
-
+  padding-right: var(--c-padding-right);
 }
 
 .search-group {

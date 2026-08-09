@@ -29,5 +29,3 @@ onUnmounted(() => events.off('error', handleError))
     </div>
   </Teleport>
 </template>
-
-<style scoped></style>

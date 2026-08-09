@@ -17,7 +17,7 @@ export const useImpersonateQuery = defineQuery(() => {
 
   const users = computed(() => data.value?.map(d => ({
     ...d,
-    actual: d.id === authUser.value.id
+    actual: d.id === authUser.value?.id
   })))
 
   return {

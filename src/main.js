@@ -9,7 +9,7 @@ import 'tippy.js/dist/tippy.css'      // Estilos base
 import 'tippy.js/themes/light.css'    // Tema claro (opcional)
 import App from './App.vue'
 import { router } from './router'
-import { initAxiosInterceptors } from '@/api/client'
+import { events, initAxiosInterceptors } from '@/api/client'
 
 import 'bootstrap/dist/css/bootstrap.css'
 import 'bootstrap-vue-next/dist/bootstrap-vue-next.css'
@@ -48,17 +48,16 @@ app.use(VueTippy, {
   },
 })
 
-// Inicializar interceptor con dependencias ya creadas
-initAxiosInterceptors({
-  router,
-  //   notify: (type, message) => {
-  //     emitter.emit('show-toast', {
-  //       message: message,
-  //       variant: type === 'network'
-  //         ? 'danger'
-  //         : type === 'server' ? 'warning' : 'info'
-  //     })
-  //   }
+events.on('unauthorized', () => {
+  router.push({
+    name: 'auth-login',
+    query: { next: router.currentRoute.value.fullPath }
+  }).catch(() => {
+    // Ignorar redirecciones duplicadas o bloqueos menores.
+  })
 })
+
+// Inicializar interceptor con dependencias ya creadas
+initAxiosInterceptors()
 
 app.mount('#app')

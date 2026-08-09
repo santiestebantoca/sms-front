@@ -19,7 +19,7 @@ export default function useAuthUserMenu() {
       })
     return res
   })
-  const isImpersonating = computed(() => authUser.value.is_impersonating)
+  const isImpersonating = computed(() => authUser.value?.is_impersonating)
 
   return {
     authUser,

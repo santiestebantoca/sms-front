@@ -18,12 +18,8 @@ export const events = mitt()
 
 const notify = (type, message) => events.emit('error', { message, type })
 
-// Referencias que se inyectarán después de crear la app Vue
-let router = null
-
-// Inicializa las dependencias del interceptor.
-export const initAxiosInterceptors = (deps) => {
-  router = deps.router
+export const initAxiosInterceptors = () => {
+  // No inyectamos el router aquí: solo registramos el interceptor.
 }
 
 export const api = axios.create({
@@ -65,23 +61,8 @@ api.interceptors.response.use(
 
     switch (status) {
       case 401:
-        // Solución al try-catch peligroso: validar primero si el router existe
-        if (router) {
-          try {
-            router.push({
-              name: 'auth-login',
-              query: { next: router.currentRoute.value.fullPath }
-            })
-          } catch (e) {
-            console.error('[Router Error] Falló la redirección a login:', e)
-            window.location.href = '/login' // Fallback activo
-          }
-        } else {
-          // Si el router no se ha inyectado aún, hacemos fallback directo
-          window.location.href = '/login'
-        }
-
         notify('client', ERROR_MESSAGES.unauthorized)
+        events.emit('unauthorized', { next: config?.url })
         throw new AuthenticationError(message, error)
 
       case 403:
