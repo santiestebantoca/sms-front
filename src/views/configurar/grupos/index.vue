@@ -21,8 +21,7 @@ const active = computed({
     <div class="border-end overflow-auto">
       <div class="hstack sticky-top p-1 ps-3">
         <span class="small fw-semibold me-auto">GRUPOS</span>
-        <BButton @click="flows.crear.go" variant="primary" v-tippy="'Crear grupo'" class="btn-sm"
-          style="height:32px;width: 33px;">
+        <BButton @click="flows.crear.go" variant="primary" v-tippy="'Crear grupo'" class="btn-sm h-32 w-33">
           <UIcon name="bi-plus-lg" />
         </BButton>
       </div>
@@ -33,8 +32,8 @@ const active = computed({
         <RootTree v-model="active" selectable>
           <TreeNode v-for="item in grupos" :data="item" :key="item.id">
             <template #default="{ data }">
-              <UIcon name="bi-subtract" style="flex-shrink:0"
-                :style="{ color: data.label === 'origen' ? 'var(--bs-success-400)' : 'var(--bs-yellow)' }" />
+              <UIcon name="bi-subtract" class="flex-shrink-0"
+                :class="data.label === 'origen' ? 'text-success-400' : 'text-yellow'" />
               <span v-text="data.nombre" class="text-truncate" />
             </template>
           </TreeNode>

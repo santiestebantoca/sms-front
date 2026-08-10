@@ -17,7 +17,7 @@ const tippy = ref({
     <template #button-content>
       <img src="@/assets/images/user2.png" width="22" height="22" tippy="`Abrir menú del usuario (${authUser.name})`">
     </template>
-    <div style="min-width:340px">
+    <div class="min-w-340">
       <p v-if="isImpersonating" class="text-center text-danger fw-bold pe-3">
         Personificado
       </p>

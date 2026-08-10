@@ -6,7 +6,7 @@ const { options: cOptions } = useNavigationConfigurar()
 </script>
 <template>
   <div class="grid">
-    <div style="margin-top: 7%;">
+    <div class="shift">
       <div class="logo">SMS</div>
       <div class="links">
         <div>
@@ -34,6 +34,10 @@ const { options: cOptions } = useNavigationConfigurar()
   display: grid;
   grid-template-columns: auto;
   justify-items: center;
+}
+
+.shift {
+  margin-top: 7%;
 }
 
 .logo {

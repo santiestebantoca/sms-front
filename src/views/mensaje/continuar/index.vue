@@ -1,6 +1,7 @@
 <script setup>
 const props = defineProps({ mensajePrevioId: Number, componer: Function })
 
+import ComposerTopBar from '@/components/features/mensaje/componer/ComposerTopBar.vue'
 import ListaDestinatarios from '@/components/features/mensaje/ListaDestinatarios.vue'
 import ListaPlantillas from '@/components/features/mensaje/componer/ListaPlantillas.vue'
 import { usePlantillaCreate } from '@/stores/plantillas'
@@ -85,51 +86,32 @@ const guardarPlantilla = texto => {
   <div class="root">
     <!-- Main -->
     <div class="vstack">
-      <!-- Top Bar 1 -->
-      <div class="border-bottom d-flex gap-1 gap-md-3 p-2 p-md-3" style="background-color: #fefefe">
-        <!-- Botón enviar -->
-        <BButton v-tippy="'Enviar mensaje'" variant="flat-outline-primary" @click="submit" class="py-3 px-4"
-          style="height:80px">
-          <UIcon name="bi-send" class="fs-5" />
-        </BButton>
-        <label class="ps-4" style="position: relative;top:2px">Para</label>
-        <!-- Botones de tipo de selección (+ descartar) / Barra de resultados de selección -->
-        <div class="flex-fill">
-          <div class="d-flex gap-2 mb-3">
-            <BButton variant="flat-outline-success" class="btn-sm" disabled="disabled">
-              Destinatarios de la conversación
-            </BButton>
-            <BButton variant="flat-outline-dark" class="btn-sm ms-auto" @click="componer" v-tippy="'Descartar mensaje'">
-              <UIcon name="bi-trash" class="text-danger" />
-              Descartar
-            </BButton>
-          </div>
+      <!-- Top Bar 1 + 2 -->
+      <ComposerTopBar :continua="form.continua" :save-enabled="!!form.texto" @submit="submit"
+        @update:continua="form.continua = $event" @toggle-plantillas="verPlantillas = !verPlantillas"
+        @save-plantilla="guardarPlantilla(form.texto)">
+        <template #type-buttons>
+          <BButton variant="flat-outline-success" class="btn-sm" disabled="disabled">
+            Destinatarios de la conversación
+          </BButton>
+          <BButton variant="flat-outline-dark" class="btn-sm ms-auto" @click="componer" v-tippy="'Descartar mensaje'">
+            <UIcon name="bi-trash" class="text-danger" />
+            Descartar
+          </BButton>
+        </template>
+        <template #selection>
           <!-- Barra de resultados de selección -->
-          <div class="hstack flex-wrap overflow-hidden" style="height: 34px;">
+          <div class="hstack flex-wrap overflow-hidden resultados">
             <UIcon name="bi-people-fill" class="flex-shrink-0 text-secondary me-2" />
             <span v-if="cargandoMensajePrevio || cargandoDestinatarios">
               ...
             </span>
             <BButton v-else :variant="selButtons.variant" class="btn-sm fs-6" @click="selButtons.click">
-              <span v-text="selButtons.text" style="margin-bottom: 2px;" />
+              <span v-text="selButtons.text" />
             </BButton>
           </div>
-        </div>
-      </div>
-      <!-- Top Bar 2 -->
-      <div class="border-bottom hstack px-2 px-md-3 py-1" style="background-color: #fdfdfd;">
-        <BFormCheckbox v-model="form.continua"> Mensaje con continuación </BFormCheckbox>
-        <!-- Plantillas -->
-        <div class="mx-auto">
-          <BButton variant="flat-dark" class="py-1" @click="verPlantillas = !verPlantillas" v-tippy="'Ver plantillas'">
-            <UIcon name="bi-card-text" /> Plantillas
-          </BButton>
-          <BButton variant="flat-dark" class="py-1" :disabled="!form.texto" @click="guardarPlantilla(form.texto)"
-            v-tippy="'Guardar texto en plantillas'">
-            <UIcon name="bi-floppy" />
-          </BButton>
-        </div>
-      </div>
+        </template>
+      </ComposerTopBar>
       <textarea class="m-0 p-2 p-md-3 flex-fill overflow-auto" v-model.trim="form.texto" />
     </div>
     <ListaPlantillas v-model="verPlantillas" @select="insertarPlantilla" />
@@ -161,5 +143,13 @@ textarea {
   width: 100%;
   resize: none;
   outline: none;
+}
+
+.resultados {
+  height: 34px;
+}
+
+.resultados span {
+  margin-bottom: 2px;
 }
 </style>

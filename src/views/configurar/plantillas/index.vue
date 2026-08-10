@@ -10,17 +10,16 @@ const { plantillas, search } = usePlantillasQuery()
 
 <template>
   <div class="root">
-    <div style="max-width: 700px" class="ps-3 pe-1">
+    <div class="listado ps-3 pe-1">
       <div class="sticky-top">
         <div class="hstack py-1">
           <span class="small fw-semibold me-auto">PLANTILLAS</span>
-          <BButton @click="flows.crear.go" variant="primary" v-tippy="'Crear plantilla'" class="btn-sm"
-            style="height:32px">
+          <BButton @click="flows.crear.go" variant="primary" v-tippy="'Crear plantilla'" class="btn-sm h-32">
             <UIcon name="bi-plus-lg" /> Agregar
           </BButton>
         </div>
         <div class="py-1">
-          <BSearchInput searchIcon v-model="search" style="max-width: 400px;" />
+          <BSearchInput searchIcon v-model="search" class="max-w-400" />
         </div>
       </div>
       <div class="py-4">
@@ -38,6 +37,10 @@ const { plantillas, search } = usePlantillasQuery()
   display: grid;
   grid-template-columns: 1fr;
   overflow: auto;
+}
+
+.listado {
+  max-width: 700px;
 }
 
 .sticky-top {

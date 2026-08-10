@@ -53,9 +53,9 @@ watchEffect(() => grupoId.value = props.grupoId)
         <TreeNode v-for="data in suscriptores" :data="data" :key="data.id">
           <template #default="{ data }">
             <div class="hstack gap-2">
-              <UIcon name="bi-person" style="color:var(--bs-teal)" />
+              <UIcon name="bi-person" class="text-teal" />
               {{ data.nombre }}
-              <span v-text="data.telefono" style="color:var(--bs-pink)" />
+              <span v-text="data.telefono" class="text-pink" />
               <span v-if="data.correo" v-text="`<${data.correo}>`" class="text-secondary" />
             </div>
           </template>

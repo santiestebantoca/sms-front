@@ -20,7 +20,7 @@ const destinatarios = computed(() => props.notificados?.flatMap(obj => obj.suscr
         <template #default="{ data }">
           <input type="checkbox" v-model="destinatariosIds" :value="data.id" />
           <span v-text="data.nombre" class="text-truncate" />
-          <span v-text="data.telefono" style="color:var(--bs-pink)" />
+          <span v-text="data.telefono" class="text-pink" />
         </template>
       </TreeNode>
     </RootTree>

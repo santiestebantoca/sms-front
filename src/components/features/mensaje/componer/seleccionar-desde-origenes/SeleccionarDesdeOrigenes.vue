@@ -70,24 +70,24 @@ const quitarOrigen = grupoId => {
 
 <template>
   <div class="hstack flex-wrap overflow-hidden">
-    <UIcon name="bi-subtract" style="color:var(--bs-yellow)" class="flex-shrink-0 me-2" />
+    <UIcon name="bi-subtract" class="flex-shrink-0 me-2 text-yellow" />
     <BButton v-for="origen, index in origenesButtons" :key="index" :variant="origen.variant" class="btn-sm fs-6"
       @click="origen.do" v-tippy="origen.tippy">
       {{ origen.text }}
     </BButton>
     <UIcon name="bi-chevron-right" class="flex-shrink-0 mx-1" font-size="12" />
     <template v-if="cargandoNotificados">
-      <span style="margin-bottom: 2px;">...</span>
+      <span class="btn-label">...</span>
     </template>
     <template v-else-if="notificados">
       <template v-if="notificadosButton">
         <BButton class="btn-sm fs-6" :variant="notificadosButton.variant" @click="notificadosButton.do">
-          <span v-text="notificadosButton.text" style="margin-bottom: 2px;" />
+          <span v-text="notificadosButton.text" class="btn-label" />
         </BButton>
       </template>
       <template v-if="destinatariosButton">
         <BButton class="btn-sm fs-6" :variant="destinatariosButton.variant" @click="destinatariosButton.do">
-          <span v-text="destinatariosButton.text" style="margin-bottom: 2px;" />
+          <span v-text="destinatariosButton.text" class="btn-label" />
         </BButton>
       </template>
     </template>
@@ -98,4 +98,8 @@ const quitarOrigen = grupoId => {
     v-model:destinatariosIds="destinatariosIds" />
 </template>
 
-<style scoped></style>
+<style scoped>
+.btn-label {
+  margin-bottom: 2px;
+}
+</style>

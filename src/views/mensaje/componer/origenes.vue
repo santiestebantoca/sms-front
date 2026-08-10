@@ -26,8 +26,8 @@ const submit = async () => {
       <TreeNode v-for="data in grupos" :data="data" :key="data.id">
         <template #default="{ data }">
           <input v-if="data.label == 'origen'" type="checkbox" v-model="origenesTmp" :value="data" />
-          <UIcon name="bi-subtract" style="flex-shrink:0"
-            :style="{ color: data.label === 'origen' ? 'var(--bs-teal)' : 'var(--bs-yellow)' }" />
+          <UIcon name="bi-subtract" class="flex-shrink-0"
+            :class="data.label === 'origen' ? 'text-teal' : 'text-yellow'" />
           <span v-text="data.nombre" class="text-truncate" />
         </template>
       </TreeNode>

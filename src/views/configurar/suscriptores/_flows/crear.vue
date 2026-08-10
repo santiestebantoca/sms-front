@@ -92,9 +92,9 @@ const hidden = () => {
           </div>
           <div class="mb-3">
             <label class="form-label">Grupo</label>
-            <div class="form-control hstack gap-2 pe-2" style="height: 38px;" @click="tabs = 1" type="button">
+            <div class="form-control hstack gap-2 pe-2 h-38" @click="tabs = 1" type="button">
               <template v-if="grupoSeleccionado">
-                <UIcon name="bi-subtract" style="color:var(--bs-yellow);flex-shrink: 0;" />
+                <UIcon name="bi-subtract" class="text-yellow flex-shrink-0" />
                 <span v-text="grupoSeleccionado" class="text-truncate" />
               </template>
               <UIcon name="bi-chevron-right" class="ms-auto" />
@@ -113,7 +113,7 @@ const hidden = () => {
           <RootTree v-else :childrenNames="['hijos']" v-model="form.grupo" selectable>
             <TreeNode v-for="data in grupos" :data="data" :key="data.id">
               <template #default="{ data }">
-                <UIcon name="bi-subtract" style="color:var(--bs-yellow);flex-shrink: 0;" />
+                <UIcon name="bi-subtract" class="text-yellow flex-shrink-0" />
                 <span v-text="data.nombre" class="text-truncate" />
               </template>
             </TreeNode>

@@ -51,7 +51,7 @@ const submit = async () => {
       <BButton variant="secondary" @click="model = false" :disabled="loading">
         Cancelar
       </BButton>
-      <BButton @click="submit" :loading="loading" loading-fill style="width: 90px;">
+      <BButton @click="submit" :loading="loading" loading-fill class="w-90">
         Guardar
       </BButton>
     </template>

@@ -16,7 +16,7 @@ const { destinatarios, isLoading, mensajeId } = useEnviosQuery()
       <TreeNode v-for="data in destinatarios" :data="data" :key="data.id">
         <template #default="{ data }">
           <span v-text="data.nombre" />
-          <span v-text="'..\\' + data.grupo" style="color:var(--bs-yellow-700)" />
+          <span v-text="'..\\' + data.grupo" class="text-yellow-700" />
         </template>
       </TreeNode>
     </RootTree>

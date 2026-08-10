@@ -31,7 +31,7 @@ const submit = () => eliminarPlantilla(props.plantillaId)
       <BButton variant="secondary" @click="model = false">
         Cancelar
       </BButton>
-      <BButton variant="danger" @click="submit" :loading="loading" loading-fill style="width: 90px;">
+      <BButton variant="danger" @click="submit" :loading="loading" loading-fill class="w-90">
         Eliminar
       </BButton>
     </template>

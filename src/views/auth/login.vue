@@ -37,7 +37,7 @@ const toggleType = () => type.value = type.value === 'password' ? 'text' : 'pass
   <div class="grid">
     <div class="content">
       <h5 class="text-primary-emphasis fw-semibold">Inicio de sesión</h5>
-      <div class="text-muted" style="line-height: 21px; padding: 12px 2px">
+      <div class="text-muted login-hint">
         Usuario del dominio "etecsa.cu"
       </div>
       <BAlert v-model="alert" variant="danger" class="mb-3 small">

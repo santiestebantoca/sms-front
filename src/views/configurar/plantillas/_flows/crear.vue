@@ -46,7 +46,7 @@ const submit = async () => {
       </div>
     </form>
     <template #footer>
-      <BButton @click="submit" :loading="loading" loading-fill style="width: 90px;">
+      <BButton @click="submit" :loading="loading" loading-fill class="w-90">
         Crear
       </BButton>
     </template>

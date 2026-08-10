@@ -20,7 +20,7 @@ const mostrando = computed(() => {
 <template>
   <div class="root">
     <div class="border-end px-1 overflow-auto">
-      <div class="hstack bg-white ps-12" style="height: 40px">
+      <div class="hstack bg-white ps-12 h-40">
         <span class="small fw-semibold">MENSAJES</span>
         <div class="mx-auto" />
       </div>
@@ -32,7 +32,7 @@ const mostrando = computed(() => {
     <div class="px-1 overflow-auto position-relative">
       <!-- Filters -->
       <div class="filter-section">
-        <BSearchInput searchIcon v-model="search" style="max-width: 400px;" />
+        <BSearchInput searchIcon v-model="search" class="max-w-400" />
         <BButton class="me-auto" variant="flat-dark" @click="refresh">
           <UIcon name="bi-arrow-clockwise" /> Actualizar
         </BButton>

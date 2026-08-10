@@ -13,7 +13,7 @@ const canSearch = computed(() => authUser.value?.can_impersonate)
   <div class="grid">
     <div class="card border-0 pt-md-4">
       <div class="header">
-        <BButton to="/home" style="margin-left: -8px;" class="a" variant="flat-secondary">
+        <BButton to="/home" class="a" variant="flat-secondary">
           <UIcon name="bi-arrow-left" />
         </BButton>
         <h5 class="mb-0 b">Personificar</h5>
@@ -47,6 +47,7 @@ const canSearch = computed(() => authUser.value?.can_impersonate)
 
 .header .a {
   grid-area: a;
+  margin-left: -8px;
 }
 
 .header .b {

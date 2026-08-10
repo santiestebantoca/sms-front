@@ -20,7 +20,7 @@ const acciones = ref([
 <template>
   <div class="root">
     <div v-text="data.texto" class="mb-2" />
-    <div class="small hstack" style="min-height: 32px;">
+    <div class="small hstack min-h-32">
       <span class="text-secondary text-opacity-50 fst-italic">
         — {{ data.modified_by }}
       </span>

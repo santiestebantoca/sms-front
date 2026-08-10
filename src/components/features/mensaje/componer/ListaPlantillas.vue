@@ -20,9 +20,9 @@ const close = () => model.value = false
   <div v-if="model" class="widget px-3">
     <!-- Header -->
     <div class="sticky-top pb-1">
-      <div class="hstack" style="height: 40px;">
+      <div class="hstack h-40">
         <span class="small fw-semibold">PLANTILLAS</span>
-        <BButton variant="flat-dark" class="ms-auto btn-sm" style="transform: translateX(.5em);" @click="close">
+        <BButton variant="flat-dark" class="ms-auto btn-sm shift-x" @click="close">
           <UIcon name="bi-x-lg" />
         </BButton>
       </div>
@@ -31,7 +31,7 @@ const close = () => model.value = false
         <div class="text-end mt-2 small">
           <router-link :to="{ name: 'configurar-plantillas' }" class="text-decoration-none">
             <UIcon name="bi-gear" font-size="12px" />
-            <span style="position:relative;top:1px"> Configurar plantillas</span>
+            <span class="gear-label"> Configurar plantillas</span>
           </router-link>
         </div>
       </div>
@@ -67,6 +67,15 @@ const close = () => model.value = false
 .sticky-top {
   background-color: white;
   box-shadow: 0px 8px 10px 1px white;
+}
+
+.shift-x {
+  transform: translateX(.5em);
+}
+
+.gear-label {
+  position: relative;
+  top: 1px;
 }
 
 .btn-card {

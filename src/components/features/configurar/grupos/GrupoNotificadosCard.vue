@@ -36,7 +36,7 @@ watchEffect(() => grupoId.value = props.grupoId)
       <RootTree v-else list selectable v-model="active">
         <TreeNode v-for="data in notificados" :data="data" :key="data.id">
           <template #default="{ data }">
-            <UIcon name="bi-subtract" style="color:var(--bs-yellow);flex-shrink: 0;" />
+            <UIcon name="bi-subtract" class="text-yellow flex-shrink-0" />
             <span v-text="data.nombre" class="text-truncate" />
           </template>
         </TreeNode>

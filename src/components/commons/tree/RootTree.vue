@@ -32,7 +32,7 @@ onUnmounted(() => active.value = null)
 </script>
 
 <template>
-  <ul style="margin: 0;padding: 0;">
+  <ul class="m-0 p-0">
     <slot></slot>
   </ul>
 </template>

@@ -17,13 +17,13 @@ const props = defineProps({
         <template #default="{ data }">
           <template v-if="!data.grupo">
             <input type="checkbox" v-model="notificadosIds" :value="data.id" />
-            <UIcon name="bi-subtract" style="color:var(--bs-yellow);flex-shrink: 0;" />
+            <UIcon name="bi-subtract" class="text-yellow flex-shrink-0" />
             <span v-text="data.apodo || data.nombre" class="text-truncate" />
           </template>
           <template v-else>
             <input type="checkbox" v-model="destinatariosIds" :value="data.id" />
             <span v-text="data.nombre" class="text-truncate" />
-            <span v-text="data.telefono" style="color:var(--bs-pink)" />
+            <span v-text="data.telefono" class="text-pink" />
           </template>
         </template>
       </TreeNode>

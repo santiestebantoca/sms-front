@@ -64,8 +64,8 @@ watchEffect(() => suscriptorId.value = props.suscriptorId)
       </div>
       <div class="label-value">
         <label>Grupo</label>
-        <div v-if="suscriptor.grupo" class="hstack" style="height: 32px;">
-          <UIcon name="bi-subtract me-2" style="color:var(--bs-yellow);flex-shrink: 0;" />
+        <div v-if="suscriptor.grupo" class="hstack h-32">
+          <UIcon name="bi-subtract me-2" class="text-yellow flex-shrink-0" />
           <span v-text="suscriptor.grupo" class="text-truncate" />
         </div>
         <div v-else>-</div>
@@ -76,7 +76,7 @@ watchEffect(() => suscriptorId.value = props.suscriptorId)
       </div>
       <div class="label-value">
         <label>Suplente</label>
-        <div v-if="suscriptor.suplente" class="hstack" style="height: 32px;">
+        <div v-if="suscriptor.suplente" class="hstack h-32">
           <UIcon class="bi-person text-secondary me-2" />
           <span v-text="suscriptor.suplente" />
         </div>

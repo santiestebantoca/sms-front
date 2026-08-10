@@ -29,13 +29,13 @@ const noContinuar = () => actualizarMensaje({ id: props.data.id, continua: false
 </script>
 
 <template>
-  <BCard class="shadow-sm" style="width: 20rem;" :style="rootStyle">
+  <BCard class="shadow-sm w-20rem" :style="rootStyle">
     <BCardText>
       <BPopover placement="bottom-start" class="shadow ms-2" v-model="popover" @mouseleave="popover = false">
         <template #target>
           <div class="card-text flex-fill">
-            <span style="color:var(--bs-gray-600)">
-              <UIcon name="bi-chat-left" style="color:var(--bs-gray-500)" />
+            <span class="text-gray-600">
+              <UIcon name="bi-chat-left" class="text-gray-500" />
               <span v-text="date" class="mx-2" />
             </span>
             <span v-text="data.texto" />
@@ -43,9 +43,9 @@ const noContinuar = () => actualizarMensaje({ id: props.data.id, continua: false
         </template>
         <!-- BPopover content -->
         <div class="text-secondary mb-3">
-          <UIcon name="bi-chat-left" style="color:var(--bs-gray-500)" />
+          <UIcon name="bi-chat-left" class="text-gray-500" />
           <span v-text="date" class="mx-2" />
-          <UIcon name="bi-dash" style="color:var(--bs-gray-500)" />
+          <UIcon name="bi-dash" class="text-gray-500" />
           <span v-text="data.de.split(' ')[0]" class="mx-1" />
         </div>
         <div v-text="data.texto" class="mb-3" />
