@@ -8,9 +8,19 @@ onUnmounted(() => clearInterval(interval.value))
 </script>
 
 <template>
-  <div class="position-fixed top-0 start-0 w-100 h-100 bg-light bg-opacity-50" style="z-index: 1055">
-    <div class="progress" role="progressbar" style="height: 2px;">
+  <div class="position-fixed top-0 start-0 w-100 h-100 bg-light bg-opacity-50 loading-overlay">
+    <div class="progress loader" role="progressbar">
       <div class="progress-bar" :style="{ width: `${progress}%` }" />
     </div>
   </div>
 </template>
+
+<style scoped>
+.loading-overlay {
+  z-index: 1055;
+}
+
+.loading-overlay .loader {
+  height: 2px;
+}
+</style>

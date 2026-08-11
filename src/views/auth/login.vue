@@ -90,6 +90,11 @@ const toggleType = () => type.value = type.value === 'password' ? 'text' : 'pass
   max-height: 400px;
 }
 
+.login-hint {
+  line-height: 21px;
+  padding: 12px 2px;
+}
+
 [name] {
   padding-left: 38px;
 }

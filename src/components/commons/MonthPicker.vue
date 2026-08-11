@@ -35,7 +35,7 @@ const vPicker = {
 <template>
   <BPopover v-model="dropdown" focus>
     <template #target>
-      <input v-model="display" class="form-control" readonly style="width: 256px" />
+      <input v-model="display" class="form-control w-256" readonly />
     </template>
     <div id="monthPicker" @changeDate="change" v-picker />
   </BPopover>
