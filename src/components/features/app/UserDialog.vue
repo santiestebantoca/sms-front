@@ -1,4 +1,4 @@
-<script setup>
+<script lang="ts" setup>
 import { useAuthQuery } from '@/stores/auth'
 import { BButton, BModal } from 'bootstrap-vue-next'
 import { ref, computed } from 'vue'

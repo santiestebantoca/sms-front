@@ -1,10 +1,10 @@
-<script setup>
+<script lang="ts" setup>
 const props = defineProps({ data: Object })
 
 import { useAuthQuery } from '@/stores/auth/index'
 import { useMensajeUpdate } from '@/stores/mensajes'
 import { useClipboard } from '@vueuse/core'
-import { shortTime } from '@/composables/useDates.ts'
+import { shortTime } from '@/composables/useDates'
 import { ref, computed, watch } from 'vue'
 import ListaDestinatarios from '@/components/features/mensaje/ListaDestinatarios.vue'
 

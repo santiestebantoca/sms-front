@@ -1,9 +1,9 @@
-<script setup>
-const show = defineModel('show')
-const destinatariosIds = defineModel('destinatariosIds') // Subset de ids de notificados
-const props = defineProps({
-  notificados: Array || undefined
-})
+<script lang="ts" setup>
+const show = defineModel<boolean>('show')
+const destinatariosIds = defineModel<Array<string | number>>('destinatariosIds') // Subset de ids de notificados
+const props = defineProps<{
+  notificados?: Array<{ id: string | number; nombre?: string; telefono?: string; suscriptores?: Array<{ id: string | number; nombre?: string; telefono?: string }> }>
+}>()
 
 import { computed } from 'vue'
 

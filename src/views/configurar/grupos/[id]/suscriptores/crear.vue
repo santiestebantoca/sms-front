@@ -1,4 +1,4 @@
-<script setup>
+<script lang="ts" setup>
 const props = defineProps({ grupoId: Number, back: Function })
 
 import { isValidationError } from '@/api/client'
@@ -6,14 +6,14 @@ import { useSuscriptorCreate } from '@/stores/suscriptores'
 import { ref, computed, onMounted } from 'vue'
 
 const model = ref(false)
-const form = ref({
+const form = ref<Record<string, any>>({
   nombre: null,
   cargo: null,
   telefono: null,
   correo: null,
   grupo: props.grupoId
 })
-const errors = ref({})
+const errors = ref<Record<string, any>>({})
 const { mutateAsync: crearSuscriptor, asyncStatus } = useSuscriptorCreate()
 const loading = computed(() => asyncStatus.value === 'loading')
 
@@ -31,7 +31,7 @@ const validate = () => {
 }
 const submit = () => {
   if (!validate()) return
-  crearSuscriptor(form.value)
+  (crearSuscriptor as any)(form.value)
     .then(() => model.value = false)
     .catch(err => {
       isValidationError(err) && (errors.value = err.errors)

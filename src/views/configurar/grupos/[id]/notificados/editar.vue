@@ -1,4 +1,4 @@
-<script setup>
+<script lang="ts" setup>
 const props = defineProps({ grupoId: Number, back: Function })
 
 import { useGruposNotificablesQuery } from '@/stores/grupos'
@@ -6,7 +6,7 @@ import { useNotificadosDelGrupoQuery, useNotificadosUpdate } from '@/stores/noti
 import { ref, computed, watchEffect, onMounted } from 'vue'
 
 const model = ref(false)
-const form = ref({
+const form = ref<Record<string, any>>({
   grupo_b: []
 })
 const { grupos, isPending: notificablesPendientes } = useGruposNotificablesQuery()
@@ -19,13 +19,13 @@ watchEffect(() => {
 })
 onMounted(() => model.value = true)
 
-const submit = () => actualizarNotificados({ id: props.grupoId, ...form.value })
+const submit = () => (actualizarNotificados as any)({ id: props.grupoId, ...form.value })
   .then(() => model.value = false)
 </script>
 
 <template>
   <BModal v-model="model" title="Notificados" @hidden="back">
-    <div v-if="isPending" class="p-5 text-center">
+    <div v-if="notificablesPendientes || notificadosPendientes" class="p-5 text-center">
       <BSpinner />
     </div>
     <RootTree v-else :childrenNames="['hijos']">

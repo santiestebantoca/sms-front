@@ -1,6 +1,6 @@
-<script setup>
-const origenes = defineModel('origenes')
-const destinatariosIds = defineModel('destinatariosIds')
+<script lang="ts" setup>
+const origenes = defineModel<Array<{ id: string | number; apodo?: string; nombre: string }>>('origenes')
+const destinatariosIds = defineModel<Array<string | number>>('destinatariosIds')
 
 import ListaNotificados from './ListaNotificados.vue'
 import ListaDestinatarios from './ListaDestinatarios.vue'

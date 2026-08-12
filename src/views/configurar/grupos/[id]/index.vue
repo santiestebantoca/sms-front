@@ -1,4 +1,4 @@
-<script setup>
+<script lang="ts" setup>
 const props = defineProps({ grupoId: Number })
 
 import GrupoCard from '@/components/features/configurar/grupos/GrupoCard.vue'

@@ -1,4 +1,4 @@
-<script setup>
+<script lang="ts" setup>
 const props = defineProps({
   name: {
     type: String || undefined,
@@ -7,7 +7,7 @@ const props = defineProps({
   },
 })
 
-import { iconMap, isValidIcon } from './iconMap.js'
+import { iconMap, isValidIcon } from './iconMap'
 </script>
 
 <template>

@@ -1,7 +1,7 @@
-<script setup>
+<script lang="ts" setup>
 import { ref, onMounted } from 'vue'
 
-const presentation = ref(performance.getEntriesByType('navigation')
+const presentation = ref((performance.getEntriesByType('navigation') as PerformanceNavigationTiming[])
   .some(d => d.type === 'navigate'))
 onMounted(() => setTimeout(() => presentation.value = false, 2000))
 </script>

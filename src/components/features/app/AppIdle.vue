@@ -1,7 +1,21 @@
 <!-- AppIdle.vue (actualizado) -->
-<script setup>
+<script lang="ts" setup>
 class IdleTimer {
-  constructor(timeout, warning) {
+  TIMEOUT: number
+  LISTENERS: number
+  WARNING: number
+  heartBeat: () => boolean
+  onTimeout: () => void
+  events: string[]
+  listenersTimer: ReturnType<typeof setTimeout> | null
+  warningTimer: ReturnType<typeof setTimeout> | null
+  timeoutTimer: ReturnType<typeof setTimeout> | null
+  bindedThrottler: () => void
+  isStarted: boolean
+  isListening: boolean
+  status: 'repose' | 'warning' | 'timeout' | 'listening' | null
+
+  constructor(timeout: number, warning: number) {
     this.TIMEOUT = timeout * 60 * 1000
     this.LISTENERS = (timeout / 3) * 60 * 1000
     this.WARNING = timeout * warning * 60 * 1000
@@ -106,7 +120,10 @@ watchEffect(() => {
 watch(lastServerAccess, () => idleTimer.value.reset())
 onBeforeUnmount(() => idleTimer.value.stop())
 
-idleTimer.value.heartBeat = () => refetchUser()
+idleTimer.value.heartBeat = () => {
+  void refetchUser()
+  return true
+}
 idleTimer.value.onTimeout = () => emit('expired')
 </script>
 

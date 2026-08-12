@@ -1,4 +1,4 @@
-<script setup>
+<script lang="ts" setup>
 const props = defineProps({ forward: Function, back: Function })
 
 import { isValidationError } from '@/api/client'
@@ -9,13 +9,13 @@ import { ref, computed, onMounted } from 'vue'
 const model = ref(false)
 const created = ref(null)
 const toast = useToast()
-const form = ref({
+const form = ref<Record<string, any>>({
   nombre: null,
   apodo: null,
   label: null,
   descripcion: null,
 })
-const errors = ref({})
+const errors = ref<Record<string, any>>({})
 const { mutateAsync: crearGrupo, asyncStatus } = useGrupoCreate()
 const loading = computed(() => asyncStatus.value === 'loading')
 
@@ -26,18 +26,17 @@ const validate = () => {
   if (!form.value.nombre) errors.value.nombre = 'Este campo no puede estar vacío'
   return !Object.keys(errors.value).length
 }
-const submit = () => {
+const submit = async () => {
   if (!validate()) return
-  crearGrupo(form.value)
-    .then(nuevoGrupo => {
-      toast.create({ body: 'Nuevo grupo creado.', variant: 'success' })
-      created.value = nuevoGrupo.id
-      model.value = false
-    })
-    .catch(err => {
-      isValidationError(err) && (errors.value = err.errors)
-      errors.value.form = 'Error al crear el grupo.'
-    })
+  try {
+    const nuevoGrupo = await (crearGrupo as unknown as (v: any) => Promise<any>)(form.value)
+    toast.create({ body: 'Nuevo grupo creado.', variant: 'success' })
+    created.value = nuevoGrupo?.id
+    model.value = false
+  } catch (err) {
+    if (isValidationError(err)) errors.value = err.errors
+    errors.value.form = 'Error al crear el grupo.'
+  }
 }
 const hidden = () => {
   if (created.value) props.forward(created.value)

@@ -1,4 +1,4 @@
-<script setup>
+<script lang="ts" setup>
 const props = defineProps({ forward: Function, back: Function })
 
 import { isValidationError } from '@/api/client'
@@ -9,12 +9,12 @@ import { ref, computed, onMounted } from 'vue'
 const model = ref(false)
 const created = ref(null)
 const toast = useToast()
-const form = ref({
+const form = ref<Record<string, any>>({
   first_name: null,
   last_name: null,
   username: null
 })
-const errors = ref({})
+const errors = ref<Record<string, any>>({})
 const { mutateAsync: crearUsuario, asyncStatus } = useUsuarioCreate()
 const loading = computed(() => asyncStatus.value === 'loading')
 
@@ -29,16 +29,15 @@ const validate = () => {
 }
 const submit = async () => {
   if (!validate()) return
-  crearUsuario(form.value)
-    .then(nuevoUsuario => {
-      toast.create({ body: 'Nuevo grupo creado.', variant: 'success' })
-      created.value = nuevoUsuario.id
-      model.value = false
-    })
-    .catch(err => {
-      isValidationError(err) && (errors.value = err.errors)
-      errors.value.form = 'Error al crear el usuario.'
-    })
+  try {
+    const nuevoUsuario = await (crearUsuario as unknown as (v: any) => Promise<any>)(form.value)
+    toast.create({ body: 'Nuevo usuario creado.', variant: 'success' })
+    created.value = nuevoUsuario?.id
+    model.value = false
+  } catch (err) {
+    if (isValidationError(err)) errors.value = err.errors
+    errors.value.form = 'Error al crear el usuario.'
+  }
 }
 const hidden = () => {
   if (created.value) props.forward(created.value)

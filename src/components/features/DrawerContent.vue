@@ -1,5 +1,9 @@
-<script setup>
-const props = defineProps({ down: Boolean, closeDrawer: Function, options: Object })
+<script lang="ts" setup>
+const props = defineProps<{
+  down?: boolean
+  closeDrawer?: (event: MouseEvent) => void
+  options?: Array<{ to: any; icon: string; label: string; count?: number }>
+}>()
 </script>
 
 <template>

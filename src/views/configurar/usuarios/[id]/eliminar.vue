@@ -1,4 +1,4 @@
-<script setup>
+<script lang="ts" setup>
 const props = defineProps({ usuarioId: Number, back: Function, forward: Function })
 
 import { useUsuarioDelete } from '@/stores/usuarios'
@@ -13,7 +13,7 @@ const loading = computed(() => asyncStatus.value === 'loading')
 
 onMounted(() => model.value = true)
 
-const submit = () => eliminarUsuario(props.usuarioId)
+const submit = () => (eliminarUsuario as any)(props.usuarioId)
   .then(() => {
     toast.create({ body: 'Usuario eliminado.', variant: 'success' })
     deleted.value = true

@@ -1,4 +1,4 @@
-<script setup>
+<script lang="ts" setup>
 const props = defineProps({ data: Object })
 
 import { ref } from 'vue'

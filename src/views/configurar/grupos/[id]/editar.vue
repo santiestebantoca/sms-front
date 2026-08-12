@@ -1,4 +1,4 @@
-<script setup>
+<script lang="ts" setup>
 const props = defineProps({ grupoId: Number, back: Function })
 
 import { isValidationError } from '@/api/client'
@@ -6,13 +6,13 @@ import { useGrupoQuery, useGrupoUpdate } from '@/stores/grupos'
 import { ref, computed, onMounted, watchEffect } from 'vue'
 
 const model = ref(false)
-const form = ref({
+const form = ref<Record<string, any>>({
   nombre: null,
   apodo: null,
   label: null,
   descripcion: null
 })
-const errors = ref({})
+const errors = ref<Record<string, any>>({})
 const { grupo, isPending } = useGrupoQuery(props.grupoId)
 const { mutateAsync: actualizarGrupo, asyncStatus } = useGrupoUpdate()
 const loading = computed(() => asyncStatus.value === 'loading')

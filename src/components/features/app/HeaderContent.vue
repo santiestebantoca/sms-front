@@ -1,7 +1,7 @@
 <!--
   On the right side there is only the User menu, which is always visible
  -->
-<script setup>
+<script lang="ts" setup>
 const props = defineProps({
   noLeftButton: Boolean,
   title: { default: "SMS" }

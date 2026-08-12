@@ -1,17 +1,17 @@
-<script setup>
+<script lang="ts" setup>
 import { useResizeObserver, useWindowScroll } from '@vueuse/core'
 import { inject, ref, computed, onUnmounted } from 'vue'
 
 const { y } = useWindowScroll()
-const view = inject('layout:view')
-const header = inject('layout:header')
-const left = inject('layout:left')
-const right = inject('layout:right')
-const el = ref(null)
+const view = inject<import('vue').ComputedRef<string>>('layout:view', computed(() => ''))
+const header = inject<import('vue').Ref<{ height: number; left: number; right: number; stopShadowOnScroll: boolean }>>('layout:header', ref({ height: 0, left: 0, right: 0, stopShadowOnScroll: true }))
+const left = inject<import('vue').Ref<{ width: number; top: number; bottom: number }>>('layout:left', ref({ width: 0, top: 0, bottom: 0 }))
+const right = inject<import('vue').Ref<{ width: number; top: number; bottom: number }>>('layout:right', ref({ width: 0, top: 0, bottom: 0 }))
+const el = ref<HTMLElement | null>(null)
 useResizeObserver(el, entries => {
   // const entry = entries[0]
   // const { height } = entry.contentRect
-  header.value.height = el._value.offsetHeight
+  header.value.height = el.value?.offsetHeight ?? 0
 })
 onUnmounted(() => header.value.height = 0)
 //

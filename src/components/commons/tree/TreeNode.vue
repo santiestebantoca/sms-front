@@ -1,31 +1,33 @@
-<script setup>
-const props = defineProps({
-  data: Object,
-  level: { type: Number, default: 0 },
+<script lang="ts" setup>
+const props = withDefaults(defineProps<{
+  data: Record<string, any>
+  level?: number
+}>(), {
+  level: 0,
 })
 
-import { ref, inject, computed, onMounted, onUnmounted } from 'vue'
+import { ref, inject, computed, onMounted, onUnmounted, type Ref } from 'vue'
 
-const ids = inject('tree:ids')
-const list = inject('tree:list')
-const childrenNames = inject('tree:childrenNames')
-const itemIdName = inject('tree:itemIdName')
-const active = inject('tree:active')
+const ids = inject<Ref<Set<string | number>>>('tree:ids', { value: new Set() } as Ref<Set<string | number>>)
+const list = inject<Ref<boolean>>('tree:list', { value: false } as Ref<boolean>)
+const childrenNames = inject<Ref<string[]>>('tree:childrenNames', { value: [] } as Ref<string[]>)
+const itemIdName = inject<Ref<string>>('tree:itemIdName', { value: 'id' } as Ref<string>)
+const active = inject<Ref<string | number | null>>('tree:active', { value: null } as Ref<string | number | null>)
 const open = ref(false)
-const childrenName = computed(() => [...childrenNames.value, 'children'].find(name => props.data.hasOwnProperty(name)))
+const childrenName = computed(() => [...childrenNames.value, 'children'].find(name => Object.prototype.hasOwnProperty.call(props.data, name)) || 'children')
 const leaf = computed(() => !props.data[childrenName.value]?.length)
 const descendantIds = computed(() => getAllNodeIds(props.data))
-const isDescendantActive = computed(() => active.value && descendantIds.value.some(d => d === active.value))
+const isDescendantActive = computed(() => active.value !== null && descendantIds.value.some(d => d === active.value))
 
 onMounted(() => ids.value.add(props.data[itemIdName.value]))
 onUnmounted(() => ids.value.delete(props.data[itemIdName.value]))
 
-function getAllNodeIds(node) {
-  let ids = []
-  function traverse(node) {
+function getAllNodeIds(node: Record<string, any>) {
+  const ids: Array<string | number> = []
+  function traverse(node: Record<string, any>) {
     if (node[itemIdName.value] !== undefined) ids.push(node[itemIdName.value])
     if (node[childrenName.value] && node[childrenName.value].length)
-      node[childrenName.value].forEach(child => traverse(child))
+      node[childrenName.value].forEach((child: Record<string, any>) => traverse(child))
   }
   traverse(node)
   return ids.slice(1)

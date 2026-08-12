@@ -1,4 +1,4 @@
-<script setup>
+<script lang="ts" setup>
 defineProps({
   continua: Boolean,
   saveEnabled: { type: Boolean, default: false }

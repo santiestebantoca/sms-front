@@ -1,4 +1,4 @@
-<script setup>
+<script lang="ts" setup>
 const props = defineProps({ back: Function })
 
 import { isValidationError } from '@/api/client'
@@ -10,21 +10,21 @@ const model = ref(false)
 const toast = useToast()
 const { mutateAsync: crearPlantilla, asyncStatus } = usePlantillaCreate()
 const loading = computed(() => asyncStatus.value === 'loading')
-const form = ref({
+const form = ref<Record<string, any>>({
   texto: null,
 })
-const errors = ref({})
+const errors = ref<Record<string, any>>({})
 
 onMounted(() => model.value = true)
 
 const validate = () => {
   errors.value = {}
-  if (!form.value.texto) errors.texto = 'Este campo no puede estar vacío'
-  return !Object.keys(errors.value = {}).length
+  if (!form.value.texto) errors.value.texto = 'Este campo no puede estar vacío'
+  return !Object.keys(errors.value).length
 }
 const submit = async () => {
   if (!validate()) return
-  crearPlantilla(form.value)
+  (crearPlantilla as any)(form.value)
     .then(nuevaPlantilla => {
       toast.create({ body: 'Nueva plantilla creada.', variant: 'success' })
       model.value = false

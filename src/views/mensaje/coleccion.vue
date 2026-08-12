@@ -1,4 +1,4 @@
-<script setup>
+<script lang="ts" setup>
 import { useMensajesQuery, useMensajesFilter } from '@/stores/mensajes'
 import MensajeCard from '@/components/features/mensaje/coleccion/MensajeCard.vue'
 import { computed, watchEffect } from 'vue'
@@ -12,7 +12,7 @@ continua.value = true
 
 const mostrando = computed(() => {
   const m = mensajes.value.length
-  const c = conversaciones.value.length
+  const c = Object.keys(conversaciones.value || {}).length
   return `${m} mensaje${m === 1 ? '' : 's'} en ${c} conversaci${c === 1 ? 'ón' : 'ones'}`
 })
 </script>
@@ -39,7 +39,7 @@ const mostrando = computed(() => {
         <div v-text="mostrando" class="small fw-semibold text-secondary" />
       </div>
       <!-- SMS List -->
-      <div v-for="{ key, values } in conversaciones" :key="key"
+      <div v-for="(values, key) in conversaciones" :key="key"
         class="border-bottom py-3 hstack gap-3 flex-wrap align-items-start">
         <div v-for="value in values" :key="value.id">
           <MensajeCard :data="value" />

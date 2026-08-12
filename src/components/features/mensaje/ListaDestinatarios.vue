@@ -1,4 +1,4 @@
-<script setup>
+<script lang="ts" setup>
 const props = defineProps({ mensajeId: Number })
 
 import { useEnviosQuery } from '@/stores/envios'

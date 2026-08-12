@@ -1,4 +1,4 @@
-<script setup>
+<script lang="ts" setup>
 const props = defineProps({ suscriptorId: Number })
 
 import { useSuscriptorQuery } from '@/stores/suscriptores'

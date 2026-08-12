@@ -1,4 +1,4 @@
-<script setup>
+<script lang="ts" setup>
 import AppPresentation from '@/components/features/app/AppPresentation.vue'
 import AppGlobalErrors from '@/components/features/app/AppGlobalErrors.vue'
 import AppIdle from '@/components/features/app/AppIdle.vue'

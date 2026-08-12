@@ -1,4 +1,4 @@
-<script setup>
+<script lang="ts" setup>
 const props = defineProps({ usuarioId: Number })
 
 import UsuarioCard from '@/components/features/configurar/usuarios/UsuarioCard.vue'

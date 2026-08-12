@@ -1,4 +1,4 @@
-<script setup>
+<script lang="ts" setup>
 const props = defineProps({ forward: Function, back: Function })
 
 import { isValidationError } from '@/api/client'
@@ -11,7 +11,7 @@ const model = ref(false)
 const created = ref(null)
 const toast = useToast()
 const tabs = ref(0)
-const form = ref({
+const form = ref<Record<string, any>>({
   nombre: null,
   cargo: null,
   telefono: null,
@@ -20,7 +20,7 @@ const form = ref({
   activo: true,
   suplente: null,
 })
-const errors = ref({})
+const errors = ref<Record<string, any>>({})
 const { mutateAsync: crearSuscriptor, asyncStatus } = useSuscriptorCreate()
 const loading = computed(() => asyncStatus.value === 'loading')
 const { data: listaGrupos, grupos, isPending: gruposPendientes } = useGruposNotificablesQuery()
@@ -46,7 +46,7 @@ const validate = () => {
 }
 const submit = async () => {
   if (!validate()) return
-  crearSuscriptor(form.value)
+  (crearSuscriptor as any)(form.value)
     .then(nuevoSuscriptor => {
       toast.create({ body: 'Nuevo grupo creado.', variant: 'success' })
       created.value = nuevoSuscriptor.id

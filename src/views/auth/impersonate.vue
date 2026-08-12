@@ -1,4 +1,4 @@
-<script setup>
+<script lang="ts" setup>
 import UserCard from '@/components/features/auth/impersonate/UserCard.vue'
 import UsersList from '@/components/features/auth/impersonate/UsersList.vue'
 import { useAuthQuery, useImpersonateQuery } from '@/stores/auth'

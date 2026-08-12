@@ -1,4 +1,4 @@
-<script setup>
+<script lang="ts" setup>
 const props = defineProps({ suscriptorId: Number, back: Function })
 
 import { useSuscriptorDelete } from '@/stores/suscriptores'
@@ -12,7 +12,7 @@ const loading = computed(() => asyncStatus.value === 'loading')
 
 onMounted(() => model.value = true)
 
-const submit = () => eliminarSuscriptor(props.suscriptorId)
+const submit = () => (eliminarSuscriptor as any)(props.suscriptorId)
   .then(() => model.value = false)
   .catch((err) => {
     console.log(err)

@@ -1,4 +1,4 @@
-<script setup>
+<script lang="ts" setup>
 const props = defineProps({
   breakpoint: { type: String, default: 'md' },
   side: { type: String, default: 'left' },
@@ -10,14 +10,14 @@ import { ref, inject, computed, watch } from 'vue'
 
 const drawerId = ref(`drawer-${props.side}`)
 
-const view = inject('layout:view')
-const header = inject('layout:header')
-const footer = inject('layout:footer')
-const left = inject('layout:left')
-const right = inject('layout:right')
+const view = inject<import('vue').ComputedRef<string>>('layout:view', computed(() => ''))
+const header = inject<import('vue').Ref<{ height: number; left: number; right: number; stopShadowOnScroll: boolean }>>('layout:header', ref({ height: 0, left: 0, right: 0, stopShadowOnScroll: true }))
+const footer = inject<import('vue').Ref<{ height: number; left: number; right: number }>>('layout:footer', ref({ height: 0, left: 0, right: 0 }))
+const left = inject<import('vue').Ref<{ width: number; top: number; bottom: number }>>('layout:left', ref({ width: 0, top: 0, bottom: 0 }))
+const right = inject<import('vue').Ref<{ width: number; top: number; bottom: number }>>('layout:right', ref({ width: 0, top: 0, bottom: 0 }))
 
 const breakpoints = useBreakpoints(breakpointsBootstrapV5)
-const above = breakpoints.greaterOrEqual(props.breakpoint)
+const above = breakpoints.greaterOrEqual(props.breakpoint as keyof typeof breakpointsBootstrapV5)
 const drawer = ref(null)
 watch(above, val => {
   if (val) {

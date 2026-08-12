@@ -1,6 +1,6 @@
-<script setup>
+<script lang="ts" setup>
 import { useAuthQuery, useImpersonate } from '@/stores/auth'
-import { useTeleportTarget } from '@/composables/useTeleportTarget.ts'
+import { useTeleportTarget } from '@/composables/useTeleportTarget'
 import { computed, inject } from 'vue'
 
 const { authUser } = useAuthQuery()

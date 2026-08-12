@@ -1,4 +1,4 @@
-<script setup>
+<script lang="ts" setup>
 const props = defineProps({ flows: Object })
 
 import { usePlantillasQuery } from '@/stores/plantillas'

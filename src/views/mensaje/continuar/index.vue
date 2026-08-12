@@ -1,4 +1,4 @@
-<script setup>
+<script lang="ts" setup>
 const props = defineProps({ mensajePrevioId: Number, componer: Function })
 
 import ComposerTopBar from '@/components/features/mensaje/componer/ComposerTopBar.vue'
@@ -16,8 +16,8 @@ const formDefault = {
   continua: false,
   previo: null
 }
-const form = ref({ ...formDefault })
-const errors = ref({})
+const form = ref<Record<string, any>>({ ...formDefault })
+const errors = ref<Record<string, any>>({})
 const selButtons = ref({
   text: '',
   click: () => verListaDestinatarios.value = true,
@@ -56,29 +56,29 @@ const validate = () => {
   if (!form.value.texto) errors.value.texto = 'El cuerpo del mensaje no puede estar vacío'
   return !Object.keys(errors.value).length
 }
-const submit = () => {
+const submit = async () => {
   if (validate()) {
-    enviarSms(form.value)
-      .then(() => {
-        toast({ body: 'Mensaje enviado', variant: 'success', })
-        resetState()
-      })
-      .catch(err => toast({ body: 'Mensaje no enviado', variant: 'danger', }))
+    try {
+    await (enviarSms as unknown as (v: any) => Promise<any>)(form.value)
+      toast({ body: 'Mensaje enviado', variant: 'success' })
+      props.componer && props.componer()
+    } catch (err) {
+      toast({ body: 'Mensaje no enviado', variant: 'danger' })
+    }
   }
   else toast({
     body: Object.values(errors.value)[0],
     variant: 'warning',
   })
 }
-const insertarPlantilla = texto => form.value.texto = (form.value.texto ?? '') + texto
-const guardarPlantilla = texto => {
-  crearPlantilla({ texto })
-    .then(nuevaPlantilla => {
-      toast({ body: 'Nueva plantilla creada.', variant: 'success' })
-    })
-    .catch(err => {
-      toast({ body: 'No se guardó la plantilla.', variant: 'danger' })
-    })
+const insertarPlantilla = (texto: string) => form.value.texto = (form.value.texto ?? '') + texto
+const guardarPlantilla = async (texto: string) => {
+  try {
+  await (crearPlantilla as unknown as (v: any) => Promise<any>)({ texto })
+    toast({ body: 'Nueva plantilla creada.', variant: 'success' })
+  } catch (err) {
+    toast({ body: 'No se guardó la plantilla.', variant: 'danger' })
+  }
 }
 </script>
 

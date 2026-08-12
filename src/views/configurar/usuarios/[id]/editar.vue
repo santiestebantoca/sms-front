@@ -1,4 +1,4 @@
-<script setup>
+<script lang="ts" setup>
 const props = defineProps({ usuarioId: Number, back: Function })
 
 import { isValidationError } from '@/api/client'
@@ -6,13 +6,13 @@ import { useUsuarioQuery, useUsuarioUpdate } from '@/stores/usuarios'
 import { ref, computed, onMounted, watchEffect } from 'vue'
 
 const model = ref(false)
-const form = ref({
+const form = ref<Record<string, any>>({
   first_name: null,
   last_name: null,
   username: null,
   registration_key: null,
 })
-const errors = ref({})
+const errors = ref<Record<string, any>>({})
 const { usuario, isPending: usuarioPendiente } = useUsuarioQuery(props.usuarioId)
 const { mutateAsync: actualizarUsuario, asyncStatus } = useUsuarioUpdate()
 const loading = computed(() => asyncStatus.value === 'loading')
@@ -37,12 +37,13 @@ const validate = () => {
 
 const submit = async () => {
   if (!validate()) return
-  actualizarUsuario({ id: usuario.value.id, ...form.value })
-    .then(() => model.value = false)
-    .catch(err => {
-      isValidationError(err) && (errors.value = err.errors)
-      errors.value.form = 'Error al actualizar el usuario.'
-    })
+  try {
+    await actualizarUsuario({ id: usuario.value.id, ...form.value })
+    model.value = false
+  } catch (err) {
+    if (isValidationError(err)) errors.value = err.errors
+    errors.value.form = 'Error al actualizar el usuario.'
+  }
 }
 </script>
 

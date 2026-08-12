@@ -1,13 +1,13 @@
-<script setup>
+<script lang="ts" setup>
 const props = defineProps({ back: Function })
 
 import { useGruposOrigenesQuery } from '@/stores/grupos'
 import { ref, inject, onMounted } from 'vue'
 
 const model = ref(false)
-const origenes = inject('componer:origenes')
+const origenes = inject<import('vue').Ref<any[]>>('componer:origenes', ref<any[]>([]))
 const { grupos, isPending } = useGruposOrigenesQuery()
-const origenesTmp = ref([])
+const origenesTmp = ref<any[]>([])
 
 onMounted(() => model.value = true)
 

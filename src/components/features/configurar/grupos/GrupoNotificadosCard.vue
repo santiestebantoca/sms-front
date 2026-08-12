@@ -1,4 +1,4 @@
-<script setup>
+<script lang="ts" setup>
 const props = defineProps({ grupoId: Number })
 
 import { useNotificadosDelGrupoQuery } from '@/stores/notificados'
@@ -7,7 +7,7 @@ import { ref, computed, watchEffect } from 'vue'
 const { notificados, isPending, grupoId } = useNotificadosDelGrupoQuery()
 
 const active = ref(null)
-const acciones = computed(() => [
+const acciones = computed<Array<{ texto: string; to?: any; icon?: string; disabled?: boolean }>>(() => [
   {
     texto: "Seleccionar",
     to: { name: 'configurar-grupo-notificados-editar' },

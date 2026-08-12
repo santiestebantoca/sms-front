@@ -1,15 +1,15 @@
 <!-- Errores globales (de Axios) -->
-<script setup>
+<script lang="ts" setup>
 import { events } from '@/api/client'
 import { ref, onMounted, onUnmounted } from 'vue'
 
-const errorGlobal = ref({
+const errorGlobal = ref<{ model: boolean | number; variant: 'info' | 'warning' | 'danger'; message: string | null }>({
   model: false,
   variant: 'info',
   message: null,
 })
 
-const handleError = ({ message, type }) => {
+const handleError = ({ message, type }: { message: string; type: 'network' | 'server' | string }) => {
   errorGlobal.value.message = message
   errorGlobal.value.variant = type === 'network' ? 'danger' :
     type === 'server' ? 'warning' : 'info'

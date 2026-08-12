@@ -1,4 +1,4 @@
-<script setup>
+<script lang="ts" setup>
 const props = defineProps({ padreId: Number, back: Function })
 
 import { isValidationError } from '@/api/client'
@@ -6,14 +6,14 @@ import { useGrupoCreate } from '@/stores/grupos'
 import { ref, computed, onMounted } from 'vue'
 
 const model = ref(false)
-const form = ref({
+const form = ref<Record<string, any>>({
   nombre: null,
   apodo: null,
   label: null,
   descripcion: null,
   pertenece: props.padreId,
 })
-const errors = ref({})
+const errors = ref<Record<string, any>>({})
 const { mutateAsync: crearGrupo, asyncStatus } = useGrupoCreate()
 const loading = computed(() => asyncStatus.value === 'loading')
 
@@ -26,7 +26,7 @@ const validate = () => {
 }
 const submit = () => {
   if (!validate()) return
-  crearGrupo(form.value)
+  (crearGrupo as any)(form.value)
     .then(() => model.value = false)
     .catch(err => {
       isValidationError(err) && (errors.value = err.errors)

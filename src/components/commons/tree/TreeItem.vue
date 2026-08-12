@@ -1,26 +1,28 @@
-<script setup>
-const open = defineModel()
+<script lang="ts" setup>
+const open = defineModel<boolean>()
 
-const props = defineProps({
-  treeItemId: Number || String,
-  leaf: Boolean,
-  level: { type: Number, default: 0 },
-  descendantActive: Boolean,
-  open: Boolean
+const props = withDefaults(defineProps<{
+  treeItemId: string | number
+  leaf?: boolean
+  level?: number
+  descendantActive?: boolean
+  open?: boolean
+}>(), {
+  level: 0,
 })
 
-import { computed, inject } from 'vue'
+import { computed, inject, type Ref } from 'vue'
 
-const selectable = inject('tree:selectable')
-const active = inject('tree:active')
-const list = inject('tree:list')
-const isActive = computed(() => active.value && props.treeItemId === active.value)
+const selectable = inject<Ref<boolean>>('tree:selectable', { value: false } as Ref<boolean>)
+const active = inject<Ref<string | number | null>>('tree:active', { value: null } as Ref<string | number | null>)
+const list = inject<Ref<boolean>>('tree:list', { value: false } as Ref<boolean>)
+const isActive = computed(() => active.value !== null && props.treeItemId === active.value)
 const rootStyle = computed(() => ({
-  '--li-padding-left': list.value ? '8px' : `${14 * props.level + 32}px`,
+  '--li-padding-left': list.value ? '8px' : `${14 * (props.level || 0) + 32}px`,
   ...props.descendantActive && !open.value ? { '--li-bg-color': 'var(--bs-gray-100)' } : {}
 }))
 
-const onNodeClick = inject('tree:onNodeClick', () => { })
+const onNodeClick = inject<(id: string | number) => void>('tree:onNodeClick', () => { })
 const handleClick = () => {
   onNodeClick(props.treeItemId)
 }

@@ -1,4 +1,4 @@
-<script setup>
+<script lang="ts" setup>
 const props = defineProps({ grupoId: Number })
 
 import { useGrupoQuery } from '@/stores/grupos'

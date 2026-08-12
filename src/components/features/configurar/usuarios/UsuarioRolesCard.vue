@@ -1,4 +1,4 @@
-<script setup>
+<script lang="ts" setup>
 const props = defineProps({ usuarioId: Number })
 
 import { useAuthMembershipQuery } from '@/stores/auth-membership'
@@ -6,7 +6,7 @@ import { ref, watchEffect } from 'vue'
 
 const { groups, isPending, usuarioId } = useAuthMembershipQuery()
 
-const acciones = ref([
+const acciones = ref<Array<{ texto: string; icon?: string; to?: any; disabled?: boolean }>>([
   {
     texto: "Seleccionar",
     icon: "bi-check2-square",

@@ -1,16 +1,19 @@
-<script setup>
-const active = defineModel()
-const props = defineProps({
-  list: Boolean,
-  selectable: Boolean,
-  childrenNames: { type: Array, default: [] },
-  itemIdName: { type: String, default: 'id' },
+<script lang="ts" setup>
+const active = defineModel<string | number | null>()
+const props = withDefaults(defineProps<{
+  list?: boolean
+  selectable?: boolean
+  childrenNames?: string[]
+  itemIdName?: string
+}>(), {
+  childrenNames: () => [] as string[],
+  itemIdName: 'id',
 })
 
-import { provide, toRef, ref, watchEffect, onMounted, onUnmounted } from 'vue'
+import { provide, toRef, ref, watchEffect, onMounted, onUnmounted, type Ref } from 'vue'
 
-const ids = ref(new Set())
-const handleNodeClick = id => active.value = id
+const ids = ref(new Set<string | number>())
+const handleNodeClick = (id: string | number) => active.value = id
 const mounted = ref(false)
 
 provide('tree:ids', ids)
@@ -23,7 +26,7 @@ provide('tree:itemIdName', toRef(props, 'itemIdName'))
 
 watchEffect(() => {
   if (mounted.value) { // Sino hace active = null mientras se genera el Set ids
-    if (!ids.value.has(active.value)) active.value = null
+    if (!ids.value.has(active.value as string | number)) active.value = null
   }
 })
 

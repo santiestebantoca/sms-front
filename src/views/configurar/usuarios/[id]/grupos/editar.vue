@@ -1,4 +1,4 @@
-<script setup>
+<script lang="ts" setup>
 const props = defineProps({ usuarioId: Number, back: Function })
 
 import { useAuthGroupsQuery } from '@/stores/auth-groups'
@@ -6,7 +6,7 @@ import { useAuthMembershipQuery, useAuthMembershipUpdate } from '@/stores/auth-m
 import { ref, computed, watchEffect, onMounted } from 'vue'
 
 const model = ref(false)
-const form = ref({
+const form = ref<Record<string, any>>({
   group_id: []
 })
 const { groups, isPending: groupsPendientes } = useAuthGroupsQuery()

@@ -1,4 +1,4 @@
-<script setup>
+<script lang="ts" setup>
 const props = defineProps({
   view: { type: String, default: 'hhh lpr fff' },
 })

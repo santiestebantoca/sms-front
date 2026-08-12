@@ -1,4 +1,4 @@
-<script setup>
+<script lang="ts" setup>
 const props = defineProps({ next: Function })
 
 import { useLogin } from '@/stores/auth'
@@ -7,13 +7,13 @@ import { useToast } from 'bootstrap-vue-next'
 import { transition } from '@vueuse/core'
 
 const { create: showToast } = useToast()
-const errors = ref({})
-const type = ref('password')
+const errors = ref<Record<string, any>>({})
+const type = ref<'password' | 'text'>('password')
 const formDefault = {
   username: null,
   password: null,
 }
-const form = ref({ ...formDefault })
+const form = ref<Record<string, any>>({ ...formDefault })
 const alert = ref(0)
 const { mutateAsync: login, state: loginState, asyncStatus } = useLogin()
 const loading = computed(() => asyncStatus.value === 'loading')
@@ -28,7 +28,7 @@ const validate = () => {
 }
 const submit = () => {
   if (!validate()) return
-  login(form.value).then(() => props.next())
+  (login as any)(form.value).then(() => props.next())
 }
 const toggleType = () => type.value = type.value === 'password' ? 'text' : 'password'
 </script>

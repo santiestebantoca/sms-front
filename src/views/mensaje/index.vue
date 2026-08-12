@@ -1,4 +1,4 @@
-<script setup>
+<script lang="ts" setup>
 import MainLayout from '@/layouts/MainLayout.vue'
 import DrawerContent from '@/components/features/DrawerContent.vue'
 import { useNavigationMensaje } from '@/composables/useNavigation'

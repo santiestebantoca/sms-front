@@ -1,4 +1,4 @@
-<script setup>
+<script lang="ts" setup>
 // Inspired by https://drive.google.com
 // Images from https://drive-thirdparty.googleusercontent.com/32/type/[MIME Type]
 // MIME Type from https://developer.mozilla.org/en-US/docs/Web/HTTP/Basics_of_HTTP/MIME_types/Common_types
@@ -6,7 +6,7 @@ import { computed } from 'vue'
 const props = defineProps({
   filename: String
 })
-const types = {
+const types: Record<string, string> = {
   // images
   bmp: 'image',
   jpg: 'image',
@@ -36,10 +36,10 @@ const types = {
   msg: 'message',
   eml: 'message',
 }
-const ext = computed(() => props.filename.includes('.') && props.filename.split('.').pop().toLowerCase())
-const i = computed(() => {
+const ext = computed(() => (props.filename || '').includes('.') && props.filename.split('.').pop().toLowerCase())
+const i = computed<Record<string, boolean>>(() => {
   const type = types[ext.value] || 'plain'
-  const _ = {}
+  const _ : Record<string, boolean> = {}
   _[type] = true
   return _
 })

@@ -1,4 +1,4 @@
-<script setup>
+<script lang="ts" setup>
 const props = defineProps({
   variant: {
     type: String,
@@ -13,7 +13,7 @@ import { computed } from 'vue'
 const baseVariant = computed(() => props.variant.split('-').at(-1))
 const isFlat = computed(() => props.variant?.startsWith('flat-'))
 const isFlatOutline = computed(() => props.variant?.startsWith('flat-outline-'))
-const internalVariant = computed(() => isFlat.value ? `outline-${baseVariant.value}` : props.variant)
+const internalVariant = computed(() => (isFlat.value ? `outline-${baseVariant.value}` : props.variant) as any)
 const flatModifierClass = computed(() => {
   if (isFlatOutline.value) return 'btn-flat-outline'
   else if (isFlat.value) return 'btn-flat'

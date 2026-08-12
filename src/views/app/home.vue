@@ -1,4 +1,4 @@
-<script setup>
+<script lang="ts" setup>
 import { useNavigationMensaje, useNavigationConfigurar } from '@/composables/useNavigation'
 
 const { options: mOptions } = useNavigationMensaje()

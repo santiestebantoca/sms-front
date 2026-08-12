@@ -1,4 +1,4 @@
-<script setup>
+<script lang="ts" setup>
 const props = defineProps({ plantillaId: Number, back: Function })
 
 import { usePlantillaDelete } from '@/stores/plantillas'
@@ -12,7 +12,7 @@ const loading = computed(() => asyncStatus.value === 'loading')
 
 onMounted(() => model.value = true)
 
-const submit = () => eliminarPlantilla(props.plantillaId)
+const submit = () => (eliminarPlantilla as any)(props.plantillaId)
   .then(() => {
     toast.create({ body: 'Plantilla eliminada.', variant: 'success' })
     model.value = false

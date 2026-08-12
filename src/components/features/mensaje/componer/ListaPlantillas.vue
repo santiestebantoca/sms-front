@@ -1,5 +1,5 @@
-<script setup>
-const model = defineModel()
+<script lang="ts" setup>
+const model = defineModel<boolean>()
 
 import { useWidgetPlantillasQuery } from '@/stores/plantillas'
 import { ref } from 'vue'

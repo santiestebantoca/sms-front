@@ -1,4 +1,4 @@
-<script setup>
+<script lang="ts" setup>
 const props = defineProps({ grupoId: Number, back: Function })
 
 import { useGrupoDelete } from '@/stores/grupos'
@@ -12,7 +12,7 @@ const loading = computed(() => asyncStatus.value === 'loading')
 
 onMounted(() => model.value = true)
 
-const submit = () => eliminarGrupo(props.grupoId)
+const submit = () => (eliminarGrupo as any)(props.grupoId)
   .then(() => model.value = false)
   .catch((err) => {
     toast.create({ body: 'No se pudo ejecutar la acción.', variant: 'danger' })

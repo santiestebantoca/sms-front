@@ -1,4 +1,4 @@
-<script setup>
+<script lang="ts" setup>
 import { ref, onUnmounted } from 'vue'
 
 const progress = ref(0)

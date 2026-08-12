@@ -1,4 +1,4 @@
-<script setup>
+<script lang="ts" setup>
 const props = defineProps({ padreId: Number })
 
 import { useGruposDelGrupoQuery } from '@/stores/grupos'

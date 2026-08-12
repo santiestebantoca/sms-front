@@ -2,15 +2,15 @@
   v-model on inputs does not work, may be because of rangePicker
  -->
 
-<script setup>
-const start = defineModel('start')
-const end = defineModel('end')
-const error = defineModel('error')
+<script lang="ts" setup>
+const start = defineModel<Date | null>('start')
+const end = defineModel<Date | null>('end')
+const error = defineModel<string | null>('error')
 
 import { DateRangePicker } from 'vanillajs-datepicker'
-import { ref, watch, } from 'vue'
+import { ref, watch } from 'vue'
 
-const rangePicker = ref(null)
+const rangePicker = ref<DateRangePicker | null>(null)
 const options = ref({
   format: 'yyyy-mm-dd',
   language: 'es',
@@ -20,7 +20,7 @@ const vPicker = {
   mounted: el => rangePicker.value = new DateRangePicker(el, options.value)
 }
 const change = () => {
-  const dates = rangePicker.value.getDates(options.value.format)
+  const dates = rangePicker.value?.getDates(options.value.format) || []
   start.value = dates[0]
   end.value = dates[1]
 }
@@ -33,7 +33,7 @@ const setRange = val => {
   if (val === 2) args = [new Date(year, month - 1, 1), new Date(year, month, 0)]
   if (val === 3) args = [new Date(year, 0, 1), date]
   if (val === 4) args = [new Date(year - 1, 0, 1), new Date(year, 0, 0)]
-  rangePicker.value.setDates(...args)
+  rangePicker.value?.setDates(...(args as [Date, Date]))
 }
 
 watch([start, end], () => error.value = null)

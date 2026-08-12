@@ -1,4 +1,4 @@
-<script setup>
+<script lang="ts" setup>
 const props = defineProps({ grupoId: Number, back: Function, forward: Function })
 
 import { useGrupoDelete } from '@/stores/grupos'
@@ -13,7 +13,7 @@ const loading = computed(() => asyncStatus.value === 'loading')
 
 onMounted(() => model.value = true)
 
-const submit = () => eliminarGrupo(props.grupoId)
+const submit = () => (eliminarGrupo as any)(props.grupoId)
   .then(() => {
     toast.create({ body: 'Grupo eliminado.', variant: 'success' })
     deleted.value = true

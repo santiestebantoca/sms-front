@@ -1,4 +1,4 @@
-<script setup>
+<script lang="ts" setup>
 const props = defineProps({
   lines: { type: Number, default: 3 },
   lineHeight: { type: Number, default: 1.5 } // --bs-body-line-height

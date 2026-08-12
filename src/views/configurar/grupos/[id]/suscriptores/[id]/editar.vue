@@ -1,4 +1,4 @@
-<script setup>
+<script lang="ts" setup>
 const props = defineProps({ suscriptorId: Number, back: Function })
 
 import { isValidationError } from '@/api/client'
@@ -6,13 +6,13 @@ import { useSuscriptorQuery, useSuscriptorUpdate } from '@/stores/suscriptores'
 import { ref, computed, onMounted, watchEffect } from 'vue'
 
 const model = ref(false)
-const form = ref({
+const form = ref<Record<string, any>>({
   nombre: null,
   cargo: null,
   telefono: null,
   correo: null,
 })
-const errors = ref({})
+const errors = ref<Record<string, any>>({})
 const { suscriptor, isPending } = useSuscriptorQuery(props.suscriptorId)
 const { mutateAsync: actualizarSuscriptor, asyncStatus } = useSuscriptorUpdate()
 const loading = computed(() => asyncStatus.value === 'loading')
@@ -39,7 +39,7 @@ const validate = () => {
 }
 const submit = async () => {
   if (!validate()) return
-  actualizarSuscriptor({ id: suscriptor.value.id, ...form.value })
+  (actualizarSuscriptor as any)({ id: suscriptor.value.id, ...form.value })
     .then(() => model.value = false)
     .catch(err => {
       isValidationError(err) && (errors.value = err.errors)

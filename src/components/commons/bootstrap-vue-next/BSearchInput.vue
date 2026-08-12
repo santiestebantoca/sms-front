@@ -1,11 +1,11 @@
-<script setup>
-const model = defineModel()
+<script lang="ts" setup>
+const model = defineModel<string>()
 const props = defineProps({
   placeholder: { type: String, default: 'Buscar...' },
   searchIcon: Boolean,
   resetIcon: { type: Boolean, default: true },
   disabled: Boolean,
-  debounce: { type: String, default: '600' }
+  debounce: { type: [String, Number], default: '600' }
 })
 
 import { computed } from 'vue'
@@ -14,11 +14,12 @@ const rootStyle = computed(() => ({
   '--c-padding-left': props.searchIcon ? '2rem' : '0.75rem',
   '--c-padding-right': props.resetIcon ? '2rem' : '0.75rem',
 }))
+const debounceValue = computed(() => Number(props.debounce))
 </script>
 
 <template>
   <div class="search-group" :style="rootStyle">
-    <BFormInput v-model="model" :debounce="debounce" :placeholder="placeholder" :disabled="disabled" />
+    <BFormInput v-model="model" :debounce="debounceValue" :placeholder="placeholder" :disabled="disabled" />
     <UIcon v-if="searchIcon" name="bi-search" />
     <BButton v-if="model" variant="flat-dark" class="btn-sm" @click="model = ''">
       <UIcon name="bi-x-lg" font-size="12px" />
