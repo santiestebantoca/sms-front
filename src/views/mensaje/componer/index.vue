@@ -4,6 +4,7 @@ import ListaPlantillas from '@/components/features/mensaje/componer/ListaPlantil
 import SeleccionarDesdeOrigenes from '@/components/features/mensaje/componer/seleccionar-desde-origenes/SeleccionarDesdeOrigenes.vue'
 import { usePlantillaCreate } from '@/stores/plantillas'
 import { useMensajeSend } from '@/stores/mensajes'
+import type { MensajePayload } from '@/types/models'
 import { useToast } from 'bootstrap-vue-next'
 import { ref, watch, computed, provide, watchEffect } from 'vue'
 
@@ -12,7 +13,7 @@ const formDefault = {
   texto: null,
   continua: true
 }
-const form = ref<Record<string, any>>({ ...formDefault })
+const form = ref<MensajePayload>({ ...formDefault })
 const errors = ref<Record<string, any>>({})
 const tipoSelButtons = computed(() => [
   {
@@ -48,7 +49,7 @@ const validate = () => {
 const submit = async () => {
   if (validate()) {
     try {
-    await (enviarSms as unknown as (v: any) => Promise<any>)(form.value)
+    await enviarSms(form.value)
       toast({ body: 'Mensaje enviado', variant: 'success' })
       resetState()
     } catch (err) {
@@ -67,7 +68,7 @@ const resetState = () => {
 const insertarPlantilla = (texto: string) => form.value.texto = (form.value.texto ?? '') + texto
 const guardarPlantilla = async (texto: string) => {
   try {
-  await (crearPlantilla as unknown as (v: any) => Promise<any>)({ texto })
+  await crearPlantilla({ texto })
     toast({ body: 'Nueva plantilla creada.', variant: 'success' })
   } catch (err) {
     toast({ body: 'No se guardó la plantilla.', variant: 'danger' })

@@ -1,12 +1,13 @@
 import { useMutation, useQueryCache } from '@pinia/colada'
 import { queryKeys } from '@/lib/query-keys'
 import { usuariosApi as api } from '@/api/usuarios'
+import type { UsuarioCreate } from '@/types/models'
 
 export function useUsuarioCreate() {
   const queryCache = useQueryCache()
 
-  return useMutation<any, Record<string, any>>({
-    mutation: (newData: Record<string, any>) => api.create(newData),
+  return useMutation<any, UsuarioCreate>({
+    mutation: (newData) => api.create(newData),
 
     onMutate: () => {
       queryCache.cancelQueries({ key: queryKeys.usuarios.listas() })

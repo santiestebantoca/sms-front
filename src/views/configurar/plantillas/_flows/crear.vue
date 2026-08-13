@@ -3,6 +3,7 @@ const props = defineProps({ back: Function })
 
 import { isValidationError } from '@/api/client'
 import { usePlantillaCreate } from '@/stores/plantillas'
+import type { PlantillaPayload } from '@/types/models'
 import { useToast } from 'bootstrap-vue-next'
 import { ref, computed, onMounted } from 'vue'
 
@@ -10,7 +11,7 @@ const model = ref(false)
 const toast = useToast()
 const { mutateAsync: crearPlantilla, asyncStatus } = usePlantillaCreate()
 const loading = computed(() => asyncStatus.value === 'loading')
-const form = ref<Record<string, any>>({
+const form = ref<PlantillaPayload>({
   texto: null,
 })
 const errors = ref<Record<string, any>>({})
@@ -24,7 +25,7 @@ const validate = () => {
 }
 const submit = async () => {
   if (!validate()) return
-  (crearPlantilla as any)(form.value)
+  crearPlantilla(form.value)
     .then(nuevaPlantilla => {
       toast.create({ body: 'Nueva plantilla creada.', variant: 'success' })
       model.value = false

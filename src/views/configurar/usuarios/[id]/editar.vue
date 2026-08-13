@@ -3,10 +3,12 @@ const props = defineProps({ usuarioId: Number, back: Function })
 
 import { isValidationError } from '@/api/client'
 import { useUsuarioQuery, useUsuarioUpdate } from '@/stores/usuarios'
+import type { UsuarioUpdate } from '@/types/models'
 import { ref, computed, onMounted, watchEffect } from 'vue'
 
 const model = ref(false)
-const form = ref<Record<string, any>>({
+const form = ref<UsuarioUpdate>({
+  id: null,
   first_name: null,
   last_name: null,
   username: null,
@@ -38,7 +40,8 @@ const validate = () => {
 const submit = async () => {
   if (!validate()) return
   try {
-    await actualizarUsuario({ id: usuario.value.id, ...form.value })
+    const payload: UsuarioUpdate = { id: usuario.value.id, ...form.value }
+    await actualizarUsuario(payload)
     model.value = false
   } catch (err) {
     if (isValidationError(err)) errors.value = err.errors

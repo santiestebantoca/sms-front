@@ -3,13 +3,14 @@ const props = defineProps({ forward: Function, back: Function })
 
 import { isValidationError } from '@/api/client'
 import { useUsuarioCreate } from '@/stores/usuarios'
+import type { UsuarioCreate } from '@/types/models'
 import { useToast } from 'bootstrap-vue-next'
 import { ref, computed, onMounted } from 'vue'
 
 const model = ref(false)
 const created = ref(null)
 const toast = useToast()
-const form = ref<Record<string, any>>({
+const form = ref<UsuarioCreate>({
   first_name: null,
   last_name: null,
   username: null
@@ -30,7 +31,7 @@ const validate = () => {
 const submit = async () => {
   if (!validate()) return
   try {
-    const nuevoUsuario = await (crearUsuario as unknown as (v: any) => Promise<any>)(form.value)
+    const nuevoUsuario = await crearUsuario(form.value)
     toast.create({ body: 'Nuevo usuario creado.', variant: 'success' })
     created.value = nuevoUsuario?.id
     model.value = false

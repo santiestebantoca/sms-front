@@ -6,6 +6,7 @@ import ListaDestinatarios from '@/components/features/mensaje/ListaDestinatarios
 import ListaPlantillas from '@/components/features/mensaje/componer/ListaPlantillas.vue'
 import { usePlantillaCreate } from '@/stores/plantillas'
 import { useMensajeSend, useMensajeQuery } from '@/stores/mensajes'
+import type { MensajePayload } from '@/types/models'
 import { useEnviosQuery } from '@/stores/envios'
 import { useToast } from 'bootstrap-vue-next'
 import { ref, watch, computed, watchEffect } from 'vue'
@@ -16,7 +17,7 @@ const formDefault = {
   continua: false,
   previo: null
 }
-const form = ref<Record<string, any>>({ ...formDefault })
+const form = ref<MensajePayload>({ ...formDefault })
 const errors = ref<Record<string, any>>({})
 const selButtons = ref({
   text: '',
@@ -59,7 +60,7 @@ const validate = () => {
 const submit = async () => {
   if (validate()) {
     try {
-    await (enviarSms as unknown as (v: any) => Promise<any>)(form.value)
+    await enviarSms(form.value)
       toast({ body: 'Mensaje enviado', variant: 'success' })
       props.componer && props.componer()
     } catch (err) {
@@ -74,7 +75,7 @@ const submit = async () => {
 const insertarPlantilla = (texto: string) => form.value.texto = (form.value.texto ?? '') + texto
 const guardarPlantilla = async (texto: string) => {
   try {
-  await (crearPlantilla as unknown as (v: any) => Promise<any>)({ texto })
+  await crearPlantilla({ texto })
     toast({ body: 'Nueva plantilla creada.', variant: 'success' })
   } catch (err) {
     toast({ body: 'No se guardó la plantilla.', variant: 'danger' })

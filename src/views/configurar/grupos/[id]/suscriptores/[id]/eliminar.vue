@@ -12,7 +12,7 @@ const loading = computed(() => asyncStatus.value === 'loading')
 
 onMounted(() => model.value = true)
 
-const submit = () => (eliminarSuscriptor as any)(props.suscriptorId)
+const submit = () => eliminarSuscriptor(props.suscriptorId)
   .then(() => model.value = false)
   .catch((err) => {
     console.log(err)

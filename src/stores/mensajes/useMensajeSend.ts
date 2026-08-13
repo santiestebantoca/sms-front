@@ -1,12 +1,13 @@
 import { useMutation, useQueryCache } from '@pinia/colada'
 import { queryKeys } from '@/lib/query-keys'
 import { mensajesApi as api } from '@/api/mensajes'
+import type { MensajePayload } from '@/types/models'
 
 export function useMensajeSend() {
   const queryCache = useQueryCache()
 
-  return useMutation<any, Record<string, any>>({
-    mutation: (newData: Record<string, any>) => api.send(newData),
+  return useMutation<any, MensajePayload>({
+    mutation: (newData) => api.send(newData),
 
     onMutate: () => {
       queryCache.cancelQueries({ key: queryKeys.notificaciones.listas() })

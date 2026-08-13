@@ -4,6 +4,7 @@ const props = defineProps({ forward: Function, back: Function })
 import { isValidationError } from '@/api/client'
 import { useSuscriptoresQuery, useSuscriptorCreate } from '@/stores/suscriptores'
 import { useGruposNotificablesQuery } from '@/stores/grupos'
+import type { SuscriptorCreate } from '@/types/models'
 import { useToast } from 'bootstrap-vue-next'
 import { ref, computed, onMounted } from 'vue'
 
@@ -11,7 +12,7 @@ const model = ref(false)
 const created = ref(null)
 const toast = useToast()
 const tabs = ref(0)
-const form = ref<Record<string, any>>({
+const form = ref<SuscriptorCreate>({
   nombre: null,
   cargo: null,
   telefono: null,
@@ -46,7 +47,7 @@ const validate = () => {
 }
 const submit = async () => {
   if (!validate()) return
-  (crearSuscriptor as any)(form.value)
+  crearSuscriptor(form.value)
     .then(nuevoSuscriptor => {
       toast.create({ body: 'Nuevo grupo creado.', variant: 'success' })
       created.value = nuevoSuscriptor.id

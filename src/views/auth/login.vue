@@ -2,6 +2,7 @@
 const props = defineProps({ next: Function })
 
 import { useLogin } from '@/stores/auth'
+import type { LoginCredentials } from '@/types/models'
 import { ref, computed, watch, watchEffect } from 'vue'
 import { useToast } from 'bootstrap-vue-next'
 import { transition } from '@vueuse/core'
@@ -13,7 +14,7 @@ const formDefault = {
   username: null,
   password: null,
 }
-const form = ref<Record<string, any>>({ ...formDefault })
+const form = ref<LoginCredentials>({ ...formDefault })
 const alert = ref(0)
 const { mutateAsync: login, state: loginState, asyncStatus } = useLogin()
 const loading = computed(() => asyncStatus.value === 'loading')
@@ -28,7 +29,7 @@ const validate = () => {
 }
 const submit = () => {
   if (!validate()) return
-  (login as any)(form.value).then(() => props.next())
+  login(form.value).then(() => props.next())
 }
 const toggleType = () => type.value = type.value === 'password' ? 'text' : 'password'
 </script>

@@ -13,7 +13,7 @@ const loading = computed(() => asyncStatus.value === 'loading')
 
 onMounted(() => model.value = true)
 
-const submit = () => (eliminarUsuario as any)(props.usuarioId)
+const submit = () => eliminarUsuario(props.usuarioId)
   .then(() => {
     toast.create({ body: 'Usuario eliminado.', variant: 'success' })
     deleted.value = true

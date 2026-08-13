@@ -5,7 +5,7 @@ import { plantillasApi as api } from '@/api/plantillas'
 export function usePlantillaDelete() {
   const queryCache = useQueryCache()
 
-  return useMutation<any, any>({
+  return useMutation<any, number | string>({
     mutation: (deletedId) => api.delete(deletedId),
 
     onMutate: () => {

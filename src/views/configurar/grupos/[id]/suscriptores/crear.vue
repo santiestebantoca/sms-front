@@ -3,10 +3,11 @@ const props = defineProps({ grupoId: Number, back: Function })
 
 import { isValidationError } from '@/api/client'
 import { useSuscriptorCreate } from '@/stores/suscriptores'
+import type { SuscriptorCreate } from '@/types/models'
 import { ref, computed, onMounted } from 'vue'
 
 const model = ref(false)
-const form = ref<Record<string, any>>({
+const form = ref<SuscriptorCreate>({
   nombre: null,
   cargo: null,
   telefono: null,
@@ -31,7 +32,7 @@ const validate = () => {
 }
 const submit = () => {
   if (!validate()) return
-  (crearSuscriptor as any)(form.value)
+  crearSuscriptor(form.value)
     .then(() => model.value = false)
     .catch(err => {
       isValidationError(err) && (errors.value = err.errors)

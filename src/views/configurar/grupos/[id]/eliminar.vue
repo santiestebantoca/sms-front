@@ -13,7 +13,7 @@ const loading = computed(() => asyncStatus.value === 'loading')
 
 onMounted(() => model.value = true)
 
-const submit = () => (eliminarGrupo as any)(props.grupoId)
+const submit = () => eliminarGrupo(props.grupoId)
   .then(() => {
     toast.create({ body: 'Grupo eliminado.', variant: 'success' })
     deleted.value = true

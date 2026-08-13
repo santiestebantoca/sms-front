@@ -12,7 +12,7 @@ const loading = computed(() => asyncStatus.value === 'loading')
 
 onMounted(() => model.value = true)
 
-const submit = () => (eliminarPlantilla as any)(props.plantillaId)
+const submit = () => eliminarPlantilla(props.plantillaId)
   .then(() => {
     toast.create({ body: 'Plantilla eliminada.', variant: 'success' })
     model.value = false

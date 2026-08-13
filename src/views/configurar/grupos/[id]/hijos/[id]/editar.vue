@@ -3,14 +3,16 @@ const props = defineProps({ grupoId: Number, back: Function })
 
 import { isValidationError } from '@/api/client'
 import { useGrupoQuery, useGrupoUpdate } from '@/stores/grupos'
+import type { GrupoCreate, GrupoUpdate } from '@/types/models'
 import { ref, computed, onMounted, watchEffect } from 'vue'
 
 const model = ref(false)
-const form = ref<Record<string, any>>({
+const form = ref<GrupoCreate>({
   nombre: null,
   apodo: null,
   label: null,
-  descripcion: null
+  descripcion: null,
+  pertenece: null,
 })
 const errors = ref<Record<string, any>>({})
 const { grupo, isPending } = useGrupoQuery(props.grupoId)
@@ -35,7 +37,8 @@ const validate = () => {
 }
 const submit = async () => {
   if (!validate()) return
-  actualizarGrupo({ id: grupo.value.id, ...form.value })
+  const payload: GrupoUpdate = { id: grupo.value.id, ...form.value }
+  actualizarGrupo(payload)
     .then(() => model.value = false)
     .catch(err => {
       isValidationError(err) && (errors.value = err.errors)

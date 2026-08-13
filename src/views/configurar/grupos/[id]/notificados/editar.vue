@@ -19,7 +19,7 @@ watchEffect(() => {
 })
 onMounted(() => model.value = true)
 
-const submit = () => (actualizarNotificados as any)({ id: props.grupoId, ...form.value })
+const submit = () => actualizarNotificados({ id: props.grupoId, ...form.value })
   .then(() => model.value = false)
 </script>
 

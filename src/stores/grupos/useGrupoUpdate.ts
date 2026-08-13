@@ -1,12 +1,13 @@
 import { useMutation, useQueryCache } from '@pinia/colada'
 import { queryKeys } from '@/lib/query-keys'
 import { gruposApi as api } from '@/api/grupos'
+import type { GrupoUpdate } from '@/types/models'
 
 export function useGrupoUpdate() {
   const queryCache = useQueryCache()
 
-  return useMutation<any, { id: number | string } & Record<string, any>>({
-    mutation: ({ id, ...updatedData }: { id: number | string } & Record<string, any>) => api.update(id, updatedData),
+  return useMutation<any, GrupoUpdate>({
+    mutation: ({ id, ...updatedData }) => api.update(id, updatedData),
 
     onMutate: () => {
       queryCache.cancelQueries({ key: queryKeys.grupos.listas() })

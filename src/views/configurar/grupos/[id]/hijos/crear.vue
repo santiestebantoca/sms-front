@@ -3,10 +3,11 @@ const props = defineProps({ padreId: Number, back: Function })
 
 import { isValidationError } from '@/api/client'
 import { useGrupoCreate } from '@/stores/grupos'
+import type { GrupoCreate } from '@/types/models'
 import { ref, computed, onMounted } from 'vue'
 
 const model = ref(false)
-const form = ref<Record<string, any>>({
+const form = ref<GrupoCreate>({
   nombre: null,
   apodo: null,
   label: null,
@@ -26,7 +27,7 @@ const validate = () => {
 }
 const submit = () => {
   if (!validate()) return
-  (crearGrupo as any)(form.value)
+  crearGrupo(form.value)
     .then(() => model.value = false)
     .catch(err => {
       isValidationError(err) && (errors.value = err.errors)

@@ -3,10 +3,11 @@ const props = defineProps({ plantillaId: Number, back: Function })
 
 import { isValidationError } from '@/api/client'
 import { usePlantillasQuery, usePlantillaUpdate } from '@/stores/plantillas'
+import type { PlantillaPayload, PlantillaUpdate } from '@/types/models'
 import { ref, computed, onMounted, watchEffect } from 'vue'
 
 const model = ref(false)
-const form = ref<Record<string, any>>({
+const form = ref<PlantillaPayload>({
   texto: null,
 })
 const errors = ref<Record<string, any>>({})
@@ -29,7 +30,8 @@ const validate = () => {
 }
 const submit = async () => {
   if (!validate()) return
-  (actualizarPlantilla as any)({ id: plantilla.value.id, ...form.value })
+  const payload: PlantillaUpdate = { id: plantilla.value.id, ...form.value }
+  actualizarPlantilla(payload)
     .then(() => model.value = false)
     .catch(err => {
       isValidationError(err) && (errors.value = err.errors)

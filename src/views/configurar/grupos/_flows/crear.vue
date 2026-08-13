@@ -3,13 +3,14 @@ const props = defineProps({ forward: Function, back: Function })
 
 import { isValidationError } from '@/api/client'
 import { useGrupoCreate } from '@/stores/grupos'
+import type { GrupoCreate } from '@/types/models'
 import { useToast } from 'bootstrap-vue-next'
 import { ref, computed, onMounted } from 'vue'
 
 const model = ref(false)
 const created = ref(null)
 const toast = useToast()
-const form = ref<Record<string, any>>({
+const form = ref<GrupoCreate>({
   nombre: null,
   apodo: null,
   label: null,
@@ -29,7 +30,7 @@ const validate = () => {
 const submit = async () => {
   if (!validate()) return
   try {
-    const nuevoGrupo = await (crearGrupo as unknown as (v: any) => Promise<any>)(form.value)
+    const nuevoGrupo = await crearGrupo(form.value)
     toast.create({ body: 'Nuevo grupo creado.', variant: 'success' })
     created.value = nuevoGrupo?.id
     model.value = false

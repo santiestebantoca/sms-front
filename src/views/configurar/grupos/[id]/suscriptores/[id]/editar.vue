@@ -3,10 +3,11 @@ const props = defineProps({ suscriptorId: Number, back: Function })
 
 import { isValidationError } from '@/api/client'
 import { useSuscriptorQuery, useSuscriptorUpdate } from '@/stores/suscriptores'
+import type { SuscriptorCreate, SuscriptorUpdate } from '@/types/models'
 import { ref, computed, onMounted, watchEffect } from 'vue'
 
 const model = ref(false)
-const form = ref<Record<string, any>>({
+const form = ref<SuscriptorCreate>({
   nombre: null,
   cargo: null,
   telefono: null,
@@ -39,7 +40,8 @@ const validate = () => {
 }
 const submit = async () => {
   if (!validate()) return
-  (actualizarSuscriptor as any)({ id: suscriptor.value.id, ...form.value })
+  const payload: SuscriptorUpdate = { id: suscriptor.value.id, ...form.value }
+  actualizarSuscriptor(payload)
     .then(() => model.value = false)
     .catch(err => {
       isValidationError(err) && (errors.value = err.errors)

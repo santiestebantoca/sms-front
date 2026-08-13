@@ -5,7 +5,7 @@ import { suscriptoresApi as api } from '@/api/suscriptores'
 export function useSuscriptorDelete() {
   const queryCache = useQueryCache()
 
-  return useMutation<any, any>({
+  return useMutation<any, number | string>({
     mutation: (deletedId) => api.delete(deletedId),
 
     onMutate: () => {

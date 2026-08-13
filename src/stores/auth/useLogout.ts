@@ -6,7 +6,7 @@ import { queryKeys } from '@/lib/query-keys'
 export function useLogout() {
   const queryCache = useQueryCache()
 
-  return useMutation<any, any>({
+  return useMutation<any, void>({
     mutation: api.logout,
 
     onSuccess: (data, variables, context) => {
