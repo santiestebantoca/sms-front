@@ -1,6 +1,7 @@
 import pluginVue from 'eslint-plugin-vue'
 import tsPlugin from '@typescript-eslint/eslint-plugin'
 import tsParser from '@typescript-eslint/parser'
+import { fileURLToPath } from 'node:url'
 
 export default [
   {
@@ -15,7 +16,7 @@ export default [
         ecmaVersion: 'latest',
         sourceType: 'module',
         project: ['./tsconfig.json'],
-        tsconfigRootDir: new URL('.', import.meta.url).pathname,
+        tsconfigRootDir: fileURLToPath(new URL('.', import.meta.url)),
         extraFileExtensions: ['.vue'],
       },
     },
