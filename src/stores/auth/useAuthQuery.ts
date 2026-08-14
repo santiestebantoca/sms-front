@@ -1,5 +1,5 @@
 // stores/authImpersonate.js
-import { defineQuery, useQuery } from '@pinia/colada'
+import { useQuery } from '@pinia/colada'
 import { authApi as api } from '@/api/auth'
 import { queryKeys } from '@/lib/query-keys'
 
