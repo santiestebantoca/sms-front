@@ -34,6 +34,7 @@ export default defineConfig({
     }
   },
   optimizeDeps: {
-    disabled: true,
+    noDiscovery: true,
+    include: undefined
   },
 })
