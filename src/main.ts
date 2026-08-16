@@ -4,21 +4,16 @@ import { createPinia } from 'pinia'
 import { PiniaColada } from '@pinia/colada'
 import { PiniaColadaAutoRefetch } from '@pinia/colada-plugin-auto-refetch'
 import piniaPluginPersistedstate from 'pinia-plugin-persistedstate'
-import { plugin as VueTippy } from 'vue-tippy' // Nota: importación nombrada 'plugin'
-import 'tippy.js/dist/tippy.css'      // Estilos base
-import 'tippy.js/themes/light.css'    // Tema claro (opcional)
+import { plugin as VueTippy } from 'vue-tippy'
+import 'tippy.js/dist/tippy.css'
+import 'tippy.js/themes/light.css' // Tema claro (opcional)
 import App from './App.vue'
 import { router } from './router'
 import { events, initAxiosInterceptors } from '@/api/client'
-
 import 'bootstrap/dist/css/bootstrap.css'
 import 'bootstrap-vue-next/dist/bootstrap-vue-next.css'
 
-// import mitt from 'mitt'
-// export const emitter = mitt()
-
 const app = createApp(App)
-
 const pinia = createPinia()
 
 pinia.use(piniaPluginPersistedstate)
