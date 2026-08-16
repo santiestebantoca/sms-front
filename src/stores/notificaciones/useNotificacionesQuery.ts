@@ -1,7 +1,6 @@
-import { useQuery, defineQuery } from '@pinia/colada'
+import { useQuery } from '@pinia/colada'
 import { notificacionesApi as api } from '@/api/notificaciones'
 import { queryKeys } from '@/lib/query-keys'
-import { ref } from 'vue'
 
 export const useNotificacionesQuery = () => {
   const { data, isPending, refresh } = useQuery({
