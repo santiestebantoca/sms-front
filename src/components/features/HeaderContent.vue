@@ -1,6 +1,3 @@
-<!--
-  On the right side there is only the User menu, which is always visible
- -->
 <script lang="ts" setup>
 const props = defineProps({
   noLeftButton: Boolean,
@@ -8,7 +5,7 @@ const props = defineProps({
 })
 
 import { useNavigationHeader } from '@/composables/useNavigation'
-import UserWidget from '@/components/features/app/UserDropdown.vue'
+import UserMenu from '@/components/features/UserMenuDropdown.vue'
 
 const { options } = useNavigationHeader()
 </script>
@@ -28,7 +25,7 @@ const { options } = useNavigationHeader()
       </BButton>
     </template>
     <span class="ms-auto" />
-    <UserWidget />
+    <UserMenu />
   </BNavbar>
 </template>
 
@@ -37,5 +34,9 @@ const { options } = useNavigationHeader()
   position: relative;
   top: -1px;
   color: var(--bs-secondary);
+}
+
+:deep(.btn) {
+  height: 38px;
 }
 </style>

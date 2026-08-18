@@ -1,29 +1,19 @@
 <script lang="ts" setup>
-import { useAuthQuery } from '@/stores/auth'
-import { BButton, BModal } from 'bootstrap-vue-next'
-import { ref, computed } from 'vue'
+import useAuthUserMenu from '@/composables/useAuthUserMenu'
+import { ref } from 'vue'
 
-const { authUser } = useAuthQuery()
-const actions = computed(() => {
-  return [
-    { title: 'Cerrar sesión', path: { name: 'auth-logout' }, icon: 'box-arrow-right' },
-    ...authUser.value?.can_impersonate || authUser.value?.is_impersonating
-      ? [{ title: 'Personificar', path: { name: 'auth-impersonate' }, icon: 'people' }]
-      : []
-  ]
-})
-const impersonatingAlert = computed(() => authUser.value.is_impersonating)
-const dialog = ref(null)
+const { authUser, isImpersonating, actions } = useAuthUserMenu()
+const model = ref(false)
 </script>
 
 <template>
-  <BButton @click="dialog = !dialog" class="btn-header" variant="flat">
+  <BButton @click="model = !model" class="btn-header" variant="flat" v-tippy="'Abrir'>
     <img src="@/assets/images/user.png" width="22" height="22" class="me-2">
     <span class="text-truncate pe-2" v-text="authUser.name" />
     <UIcon name="bi-box-arrow-up-right" class="ms-auto" />
   </BButton>
-  <BModal v-model="dialog" title="Usuario">
-    <p v-if="impersonatingAlert" class="text-center text-danger fw-bold">
+  <BModal v-model="model" title="Usuario">
+    <p v-if="isImpersonating" class="text-center text-danger fw-bold">
       Personificado
     </p>
     <p class="">

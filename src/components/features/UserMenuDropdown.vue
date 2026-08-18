@@ -3,7 +3,7 @@ import useAuthUserMenu from '@/composables/useAuthUserMenu'
 import { ref } from 'vue'
 
 const { authUser, isImpersonating, actions } = useAuthUserMenu()
-
+const model = ref(false)
 const html = ref(`<div class="fw-bold text-start">Cuenta</div><div class="text-truncate text-start text-light">${authUser.value.name}</div>`)
 const tippy = ref({
   content: html.value,
@@ -12,11 +12,12 @@ const tippy = ref({
 </script>
 
 <template>
-  <BDropdown v-if="authUser" variant="link" no-caret strategy="fixed" v-tippy="tippy" @show="tippy.content = ''"
-    @hide="tippy.content = html">
-    <template #button-content>
-      <img src="@/assets/images/user2.png" width="22" height="22" tippy="`Abrir menú del usuario (${authUser.name})`">
-    </template>
+  <BButton @click="model = true" :active="model" variant="flat-secondary" class="d-flex align-items-center"
+    v-tippy="tippy">
+    <img src="@/assets/images/user.png" width="22" height="22">
+  </BButton>
+  <BDropdown v-if="authUser" v-model="model" no-caret strategy="fixed" @show="tippy.content = ''"
+    @hide="tippy.content = html" class="dropdown-toggle-invisible">
     <div class="min-w-340">
       <p v-if="isImpersonating" class="text-center text-danger fw-bold pe-3">
         Personificado

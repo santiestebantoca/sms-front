@@ -5,13 +5,12 @@ import AppFooter from '@/components/layout/Footer.vue'
 import AppPageContainer from '@/components/layout/PageContainer.vue'
 import AppPage from '@/components/layout/Page.vue'
 import AppDrawer from '@/components/layout/Drawer.vue'
-import HeaderContent from '@/components/features/app/HeaderContent.vue'
 </script>
 
 <template>
   <app-layout view="hhh lPr fff">
     <app-header class="bg-white">
-      <HeaderContent />
+      <slot name="header-content" />
     </app-header>
     <app-footer>
       <div id="app-footer-content" />
@@ -21,7 +20,7 @@ import HeaderContent from '@/components/features/app/HeaderContent.vue'
     </app-drawer>
     <app-page-container>
       <app-page>
-        <router-view />
+        <slot name="page-content" />
       </app-page>
     </app-page-container>
   </app-layout>

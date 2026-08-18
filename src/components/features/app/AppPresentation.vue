@@ -1,65 +1,43 @@
 <script lang="ts" setup>
 import { ref, onMounted } from 'vue'
 
-const presentation = ref((performance.getEntriesByType('navigation') as PerformanceNavigationTiming[])
+const navigation = ref((performance.getEntriesByType('navigation') as PerformanceNavigationTiming[])
   .some(d => d.type === 'navigate'))
-onMounted(() => setTimeout(() => presentation.value = false, 2000))
+onMounted(() => setTimeout(() => navigation.value = false, 3000))
 </script>
 
 <template>
-  <div v-if="presentation" class="presentation vh-100 d-flex align-items-center justify-content-center">
-    <div class="title-stack position-relative mx-auto">
-      <h4 class="fw-semibold title">SMS</h4>
-    </div>
+  <div v-if="navigation" class="vh-100 d-flex align-items-center">
+    <h3 class="mx-auto shimmer-text">SMS</h3>
   </div>
   <slot v-else></slot>
 </template>
 
-
 <style scoped>
-.presentation {
-  background: linear-gradient(180deg, #f9fcff 0%, #ffffff 100%);
+.shimmer-text {
+  font-size: 1.8em;
+  font-weight: 600;
+  background: linear-gradient(90deg,
+      #1a2a4a 0%,
+      #1a2a4a 30%,
+      #4a7ab5 50%,
+      #1a2a4a 70%,
+      #1a2a4a 100%);
+  background-size: 200% 100%;
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  animation: shimmer 2.5s ease-in-out infinite;
+  letter-spacing: 4px;
 }
 
-.title-stack {
-  width: max-content;
-}
-
-.title {
-  color: var(--bs-brand);
-  animation:
-    title-in 0.6s ease-out forwards,
-    title-out 1.4s 0.9s ease-out forwards;
-  letter-spacing: 1.2px;
-}
-
-@keyframes title-in {
-  from {
-    opacity: 0;
-    transform: scale(0.85);
+@keyframes shimmer {
+  0% {
+    background-position: -200% 0;
   }
 
-  to {
-    opacity: 1;
-    transform: scale(1);
-  }
-}
-
-@keyframes title-out {
-  from {
-    opacity: 1;
-  }
-
-  to {
-    opacity: 0;
-  }
-}
-
-@media (prefers-reduced-motion: reduce) {
-
-  .title {
-    animation: none;
-    opacity: 1;
+  100% {
+    background-position: 200% 0;
   }
 }
 </style>

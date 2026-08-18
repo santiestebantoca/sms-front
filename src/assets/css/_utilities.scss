@@ -133,3 +133,11 @@
 .text-gray-600 {
   color: var(--bs-gray-600) !important;
 }
+
+/* BootstrapVueNext */
+.dropdown-toggle-invisible .dropdown-toggle {
+  padding: 0;
+  width: 0;
+  border: none;
+  outline: none;
+}
