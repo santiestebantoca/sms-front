@@ -12,9 +12,8 @@ const tippy = ref({
 </script>
 
 <template>
-  <BButton @click="model = true" :active="model" variant="flat-secondary" class="d-flex align-items-center"
-    v-tippy="tippy">
-    <img src="@/assets/images/user.png" width="22" height="22">
+  <BButton @click="model = true" :active="model" variant="flat-secondary" v-tippy="tippy">
+    <img src="@/assets/images/user.png" width="23" class="mb-1">
   </BButton>
   <BDropdown v-if="authUser" v-model="model" no-caret strategy="fixed" @show="tippy.content = ''"
     @hide="tippy.content = html" class="dropdown-toggle-invisible">
