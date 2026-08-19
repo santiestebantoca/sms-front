@@ -24,10 +24,10 @@ const placement = computed(() => props.side === 'left' ? 'start' : 'end')
 watch(above, above => {
   if (above) { // Posiciona el drawer segun view y actualiza variables de layout
     if ((props.side === 'left') && ['l', 'L'].includes(view.value[4])) {
-      rootClass.value = ['d-fixed', 'start-0']
+      rootClass.value = ['position-fixed', 'start-0']
       left.value.width = offcanvas.value?.offsetWidth
     } else if ((props.side === 'right') && (['r', 'R'].includes(view.value[6]))) {
-      rootClass.value = ['d-fixed', 'end-0']
+      rootClass.value = ['position-fixed', 'end-0']
       right.value.width = offcanvas.value?.offsetWidth
     } else {
       rootClass.value = ['d-none']
