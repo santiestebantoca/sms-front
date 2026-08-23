@@ -5,7 +5,7 @@ const props = defineProps({
   title: String
 })
 
-import { breakpointsBootstrapV5, useBreakpoints } from "@vueuse/core"
+import { breakpointsBootstrapV5, useBreakpoints, useResizeObserver } from "@vueuse/core"
 import { ref, inject, computed, watch } from 'vue'
 
 const drawerId = ref(`drawer-${props.side}`)
@@ -17,41 +17,51 @@ const right = inject<import('vue').Ref<{ width: number; top: number; bottom: num
 const breakpoints = useBreakpoints(breakpointsBootstrapV5)
 const above = breakpoints.greaterOrEqual(props.breakpoint as keyof typeof breakpointsBootstrapV5)
 const offcanvas = ref(null)
+const offcanvasWrapper = ref(null)
 const model = ref(undefined)
 const rootClass = ref([])
 const placement = computed(() => props.side === 'left' ? 'start' : 'end')
-
-watch(above, above => {
-  if (above) { // Posiciona el drawer segun view y actualiza variables de layout
-    if ((props.side === 'left') && ['l', 'L'].includes(view.value[4])) {
-      rootClass.value = ['position-fixed', 'start-0']
-      left.value.width = offcanvas.value?.offsetWidth
-    } else if ((props.side === 'right') && (['r', 'R'].includes(view.value[6]))) {
-      rootClass.value = ['position-fixed', 'end-0']
-      right.value.width = offcanvas.value?.offsetWidth
-    } else {
-      rootClass.value = ['d-none']
-      if (props.side === 'left') left.value.width = 0
-      else if (props.side === 'right') right.value.width = 0
-    }
-    offcanvas.value?.hide() // Asegura que no esté visible cuando, estando abierto, se amplía y se reduce el viewport
-  } else { // Deja el control al offcanvas
-    rootClass.value = []
-    if (props.side === 'left') left.value.width = 0
-    else if (props.side === 'right') right.value.width = 0
-  }
-}, { immediate: true })
-// CSS
 const rootStyle = computed(() => ({
   '--left-side-top': ['l', 'L'].includes(view.value[0]) ? 0 : `${header.value.height}px`,
   '--left-side-bottom': ['l', 'L'].includes(view.value[8]) ? 0 : `${footer.value.height}px`,
   '--right-side-top': ['r', 'R'].includes(view.value[2]) ? 0 : `${header.value.height}px`,
   '--right-side-bottom': ['r', 'R'].includes(view.value[10]) ? 0 : `${footer.value.height}px`
 }))
+
+useResizeObserver(offcanvasWrapper, (entries) => {
+  const entry = entries[0]
+  const currentWidth = entry.contentRect.width
+
+  if ((currentWidth > 0) && above.value) {
+    if ((props.side === 'left') && ['l', 'L'].includes(view.value[4])) {
+      left.value.width = currentWidth
+    } else if ((props.side === 'right') && (['r', 'R'].includes(view.value[6]))) {
+      right.value.width = currentWidth
+    }
+  }
+})
+watch(above, above => {
+  if (above) {
+    if ((props.side === 'left') && ['l', 'L'].includes(view.value[4])) {
+      rootClass.value = ['drawer-left', 'position-fixed', 'start-0']
+    } else if ((props.side === 'right') && (['r', 'R'].includes(view.value[6]))) {
+      rootClass.value = ['drawer-right', 'position-fixed', 'end-0']
+    } else {
+      rootClass.value = ['d-none']
+      if (props.side === 'left') left.value.width = 0
+      else if (props.side === 'right') right.value.width = 0
+    }
+    offcanvas.value?.hide()
+  } else {
+    rootClass.value = []
+    if (props.side === 'left') left.value.width = 0
+    else if (props.side === 'right') right.value.width = 0
+  }
+}, { immediate: true })
 </script>
 
 <template>
-  <div :style="rootStyle" class="root" :class="rootClass">
+  <div :style="rootStyle" :class="rootClass" ref="offcanvasWrapper">
     <BOffcanvas :id="drawerId" :placement="placement" :responsive="breakpoint" :title="props.title" v-model="model"
       ref="offcanvas" style="--bs-offcanvas-width: fit-content">
       <template #header>
@@ -63,8 +73,13 @@ const rootStyle = computed(() => ({
 </template>
 
 <style scoped>
-.root {
+.drawer-left {
   top: var(--left-side-top);
   bottom: var(--left-side-bottom);
+}
+
+.drawer-right {
+  top: var(--right-side-top);
+  bottom: var(--right-side-bottom);
 }
 </style>
