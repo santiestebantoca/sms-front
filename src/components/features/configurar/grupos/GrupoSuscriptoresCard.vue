@@ -11,14 +11,14 @@ const acciones = computed(() => [
   {
     texto: "Nuevo",
     to: { name: 'configurar-grupo-suscriptores-crear' },
-    icon: "bi-plus-lg"
+    icon: "lucide-plus"
   },
   {
     texto: "Editar",
     to: active.value
       ? { name: 'configurar-grupo-suscriptor-editar', params: { suscriptorId: active.value } }
       : undefined,
-    icon: "bi-pencil",
+    icon: "lucide-pen-line",
     disabled: !active.value
   },
   {
@@ -26,7 +26,7 @@ const acciones = computed(() => [
     to: active.value
       ? { name: 'configurar-grupo-suscriptor-eliminar', params: { suscriptorId: active.value } }
       : undefined,
-    icon: "bi-trash",
+    icon: "lucide-trash",
     disabled: !active.value
   },
 ])
@@ -53,7 +53,7 @@ watchEffect(() => grupoId.value = props.grupoId)
         <TreeNode v-for="data in suscriptores" :data="data" :key="data.id">
           <template #default="{ data }">
             <div class="hstack gap-2">
-              <UIcon name="bi-person" class="text-teal" />
+              <ILucideUser class="text-teal" />
               {{ data.nombre }}
               <span v-text="data.telefono" class="text-pink" />
               <span v-if="data.correo" v-text="`<${data.correo}>`" class="text-secondary" />

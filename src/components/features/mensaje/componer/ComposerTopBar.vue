@@ -12,7 +12,7 @@ const emit = defineEmits(['submit', 'update:continua', 'toggle-plantillas', 'sav
     <div class="composer-topbar__main">
       <BButton v-tippy="'Enviar mensaje'" variant="flat-outline-primary" class="py-3 px-4 composer-topbar__send"
         @click="emit('submit')">
-        <UIcon name="bi-send" class="fs-5" />
+        <ILucideSend class="fs-5" />
       </BButton>
       <label class="ps-4 composer-topbar__para">Para</label>
       <div class="flex-fill">
@@ -30,11 +30,11 @@ const emit = defineEmits(['submit', 'update:continua', 'toggle-plantillas', 'sav
       <!-- Plantillas -->
       <div class="mx-auto">
         <BButton variant="flat-dark" class="py-1" @click="emit('toggle-plantillas')" v-tippy="'Ver plantillas'">
-          <UIcon name="bi-card-text" /> Plantillas
+          <ILucideText /> Plantillas
         </BButton>
         <BButton variant="flat-dark" class="py-1" :disabled="!saveEnabled" @click="emit('save-plantilla')"
           v-tippy="'Guardar texto en plantillas'">
-          <UIcon name="bi-floppy" />
+          <ILucideSave />
         </BButton>
       </div>
     </div>

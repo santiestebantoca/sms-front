@@ -22,7 +22,7 @@ const active = computed({
       <div class="hstack sticky-top p-1 ps-3">
         <span class="small fw-semibold me-auto">SUSCRIPTORES</span>
         <BButton @click="flows.crear.go" variant="primary" v-tippy="'Crear suscriptor'" class="btn-sm h-32 w-33">
-          <UIcon name="bi-plus-lg" />
+          <ILucidePlus class="center" />
         </BButton>
       </div>
       <div v-if="isPending" class="mt-5 text-center">
@@ -32,7 +32,7 @@ const active = computed({
         <RootTree v-model="active" selectable list>
           <TreeNode v-for="item in suscriptores" :data="item" :key="item.id">
             <template #default="{ data }">
-              <UIcon name="bi-person" class="flex-shrink-0 text-success-400" />
+              <ILucideUser class="flex-shrink-0 text-success-400" />
               <span v-text="data.nombre" class="text-truncate" />
               <BBadge v-if="!data.activo" variant="danger">Inactivo</BBadge>
             </template>

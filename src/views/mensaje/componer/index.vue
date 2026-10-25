@@ -49,7 +49,7 @@ const validate = () => {
 const submit = async () => {
   if (validate()) {
     try {
-    await enviarSms(form.value)
+      await enviarSms(form.value)
       toast({ body: 'Mensaje enviado', variant: 'success' })
       resetState()
     } catch (err) {
@@ -68,7 +68,7 @@ const resetState = () => {
 const insertarPlantilla = (texto: string) => form.value.texto = (form.value.texto ?? '') + texto
 const guardarPlantilla = async (texto: string) => {
   try {
-  await crearPlantilla({ texto })
+    await crearPlantilla({ texto })
     toast({ body: 'Nueva plantilla creada.', variant: 'success' })
   } catch (err) {
     toast({ body: 'No se guardó la plantilla.', variant: 'danger' })
@@ -91,7 +91,7 @@ const guardarPlantilla = async (texto: string) => {
             </BButton>
           </template>
           <BButton variant="flat-outline-dark" class="btn-sm ms-auto" @click="resetState" v-tippy="'Descartar mensaje'">
-            <UIcon name="bi-trash" class="text-danger" />
+            <ILucideTrash class="text-danger" />
             Descartar
           </BButton>
         </template>

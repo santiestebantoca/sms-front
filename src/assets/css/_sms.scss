@@ -1,0 +1,29 @@
+.sms-tree {
+
+  // .dropdown-item,
+  .list-group-item {
+    --item-bg-color: transparent;
+    background-color: var(--item-bg-color) !important;
+    border-radius: .375rem !important;
+
+    &:hover {
+      --item-bg-color: var(--bs-gray-100);
+    }
+
+    &.active {
+      --item-bg-color: var(--bs-info-50) !important;
+    }
+
+    &.track {
+      --item-bg-color: var(--bs-gray-100) !important;
+    }
+  }
+}
+
+// .highlight-active.router-link-active,
+// .highlight-active>.router-link-active,
+// .highlight-exact-active.router-link-exact-active,
+// .highlight-exact-active>.router-link-exact-active {
+//   font-weight: 600;
+//   background-color: #d3e3fd !important;
+// }

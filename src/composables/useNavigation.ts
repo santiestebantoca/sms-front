@@ -1,11 +1,20 @@
 import { useAuthQuery } from '@/stores/auth'
 import { useNotificacionesQuery } from '@/stores/notificaciones'
-import { computed, onUnmounted, watch } from 'vue'
+import { computed } from 'vue'
 
 export function useNavigationHeader() {
   const options = computed(() => [
-    { to: '/sms', label: 'Mensaje', id: 'nav-options-header-sms' },
-    { to: '/configurar', icon: 'bi-gear', tooltip: 'Configurar', id: 'nav-options-header-configurar' }
+    {
+      to: '/sms',
+      label: 'Mensaje',
+      id: 'nav-options-header-sms'
+    },
+    {
+      to: '/configurar',
+      icon: 'lucide-settings',
+      tooltip: 'Configurar',
+      id: 'nav-options-header-configurar'
+    }
   ])
 
   return { options }
@@ -16,14 +25,14 @@ export function useNavigationMensaje() {
   const options = computed(() => [
     {
       to: { name: 'sms-componer' },
-      icon: 'bi-envelope-plus',
+      icon: 'lucide-mail-plus',
       label: 'Componer',
       name: 'componer',
       id: 'nav-options-componer-sms-componer'
     },
     {
       to: { name: 'sms-coleccion' },
-      icon: 'bi-collection',
+      icon: 'lucide-mails',
       label: 'Colección',
       name: 'coleccion',
       id: 'nav-options-componer-sms-coleccion',
@@ -39,28 +48,28 @@ export function useNavigationConfigurar() {
   const options = computed(() => [
     {
       to: { name: 'configurar-grupos' },
-      icon: 'bi-subtract',
+      icon: 'lucide-squares-unite',
       label: 'Grupos',
       name: 'grupos',
       id: 'nav-options-configurar-grupos'
     },
     {
       to: { name: 'configurar-suscriptores' },
-      icon: 'bi-people-fill',
+      icon: 'lucide-users',
       label: 'Suscriptores',
       name: 'suscriptores',
       id: 'nav-options-configurar-suscriptores'
     },
     {
       to: { name: 'configurar-plantillas' },
-      icon: 'bi-card-text',
+      icon: 'lucide-text',
       label: 'Plantillas',
       name: 'plantillas',
       id: 'nav-options-configurar-plantillas'
     },
     ...authUser.value?.admin ? [{
       to: { name: 'configurar-usuarios' },
-      icon: 'bi-person-workspace',
+      icon: 'lucide-user-shield',
       label: 'Usuarios',
       name: 'users',
       id: 'nav-options-configurar-usuarios'

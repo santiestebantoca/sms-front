@@ -26,7 +26,7 @@ const destinatarios = computed(() => props.notificados?.flatMap(obj => obj.suscr
     </RootTree>
     <template #footer>
       <BButton variant="primary" @click="show = false">
-        <UIcon name="bi-check2" /> Listo
+        <ILucideSquareCheckBig /> Listo
       </BButton>
     </template>
   </BModal>

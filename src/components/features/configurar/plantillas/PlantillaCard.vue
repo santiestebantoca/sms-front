@@ -7,12 +7,12 @@ const acciones = ref([
   {
     texto: "Editar",
     to: { name: 'configurar-plantilla-editar', params: { plantillaId: props.data.id } },
-    icon: "bi-pencil"
+    icon: "lucide-pen-line"
   },
   {
     texto: "Eliminar",
     to: { name: 'configurar-plantilla-eliminar', params: { plantillaId: props.data.id } },
-    icon: "bi-trash"
+    icon: "lucide-trash"
   },
 ])
 </script>

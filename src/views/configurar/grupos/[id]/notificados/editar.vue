@@ -32,14 +32,14 @@ const submit = () => actualizarNotificados({ id: props.grupoId, ...form.value })
       <TreeNode v-for="data in grupos" :data="data" :key="data.id">
         <template #default="{ data }">
           <input type="checkbox" v-model="form.grupo_b" :value="data.id" />
-          <UIcon name="bi-subtract" class="text-yellow flex-shrink-0" />
+          <ILucideSquaresUnite class="text-yellow flex-shrink-0" />
           <span v-text="data.nombre" class="text-truncate" />
         </template>
       </TreeNode>
     </RootTree>
     <template #footer>
       <BButton variant="primary" @click="submit" :loading="loading">
-        <UIcon name="bi-check2" /> Listo
+        <ILucideSquareCheckBig /> Listo
       </BButton>
     </template>
   </BModal>

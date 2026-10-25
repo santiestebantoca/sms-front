@@ -38,7 +38,7 @@ const submit = () => actualizarMembership({ id: props.usuarioId, ...form.value }
     </RootTree>
     <template #footer>
       <BButton variant="primary" @click="submit" :loading="loading">
-        <UIcon name="bi-check2" /> Listo
+        <ILucideSquareCheckBig /> Listo
       </BButton>
     </template>
   </BModal>

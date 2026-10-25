@@ -6,20 +6,24 @@ const props = defineProps({
 
 import { useNavigationHeader } from '@/composables/useNavigation'
 import UserMenu from '@/components/features/UserMenuDropdown.vue'
+import { inject } from 'vue'
 
 const { options } = useNavigationHeader()
+const mobile = inject('app:mobile')
 </script>
 
 <template>
-  <BNavbar class="border-bottom">
-    <template v-if="!noLeftButton">
-      <BButton variant="flat" v-tippy="'Abrir menú de la aplicación'" v-b-toggle.drawer-left class="d-lg-none">
-        <UIcon name="bi-list" />
+  <BNavbar class="border-bottom px-md-3">
+    <template v-if="!noLeftButton && mobile">
+      <BButton variant="flat wh-34 ms-n1 me-1" v-tippy="'Abrir menú de la aplicación'" v-b-toggle.drawer-left>
+        <ILucideMenu class="center" />
       </BButton>
     </template>
-    <BNavbarBrand to="/home">{{ title }}</BNavbarBrand>
+    <BNavbarBrand to="/home" class="brand" :class="{ 'fs-6 fw-semibold': mobile }">
+      {{ title }}
+    </BNavbarBrand>
     <template v-for="{ label, tooltip, icon, to, id } in options">
-      <BButton :to="to" variant="flat-primary" :id="id" v-tippy="tooltip">
+      <BButton :to="to" variant="link" :id="id" v-tippy="tooltip">
         <UIcon :name="icon" />
         {{ label }}
       </BButton>
@@ -30,13 +34,8 @@ const { options } = useNavigationHeader()
 </template>
 
 <style scoped>
-.navbar-brand {
+.brand {
   position: relative;
   top: -1px;
-  color: var(--bs-secondary);
-}
-
-:deep(.btn) {
-  height: 38px;
 }
 </style>

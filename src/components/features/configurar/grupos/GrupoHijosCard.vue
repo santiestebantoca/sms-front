@@ -10,14 +10,14 @@ const acciones = computed(() => [
   {
     texto: "Nuevo",
     to: { name: 'configurar-grupo-hijos-crear' },
-    icon: "bi-plus-lg"
+    icon: "lucide-plus"
   },
   {
     texto: "Editar",
     to: active.value
       ? { name: 'configurar-grupo-hijo-editar', params: { hijoId: active.value } }
       : undefined,
-    icon: "bi-pencil",
+    icon: "lucide-pen-line",
     disabled: !active.value
   },
   {
@@ -25,7 +25,7 @@ const acciones = computed(() => [
     to: active.value
       ? { name: 'configurar-grupo-hijo-eliminar', params: { hijoId: active.value } }
       : undefined,
-    icon: "bi-trash",
+    icon: "lucide-trash",
     disabled: !active.value
   },
 ])
@@ -51,7 +51,7 @@ watchEffect(() => padreId.value = props.padreId)
       <RootTree v-else list selectable v-model="active">
         <TreeNode v-for="data in grupos" :data="data" :key="data.id">
           <template #default="{ data }">
-            <UIcon name="bi-subtract" class="text-yellow flex-shrink-0" />
+            <ILucideSquaresUnite class="text-yellow flex-shrink-0" />
             <span v-text="data.nombre" class="text-truncate" />
           </template>
         </TreeNode>

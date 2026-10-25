@@ -15,8 +15,8 @@ const { options } = useNavigationMensaje()
     <template #page-content>
       <router-view />
     </template>
-    <template #drawer-content="{ down, closeDrawer }">
-      <DrawerContent :down="down" :closeDrawer="closeDrawer" :options="options" />
+    <template #drawer-content>
+      <DrawerContent :options="options" />
     </template>
   </MainLayout>
 </template>

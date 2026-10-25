@@ -35,7 +35,7 @@ const noContinuar = () => actualizarMensaje({ id: props.data.id, continua: false
         <template #target>
           <div class="card-text flex-fill">
             <span class="text-gray-600">
-              <UIcon name="bi-chat-left" class="text-gray-500" />
+              <ILucideMessageSquare class="text-gray-500" />
               <span v-text="date" class="mx-2" />
             </span>
             <span v-text="data.texto" />
@@ -43,15 +43,15 @@ const noContinuar = () => actualizarMensaje({ id: props.data.id, continua: false
         </template>
         <!-- BPopover content -->
         <div class="text-secondary mb-3">
-          <UIcon name="bi-chat-left" class="text-gray-500" />
+          <ILucideMessageSquare class="text-gray-500" />
           <span v-text="date" class="mx-2" />
-          <UIcon name="bi-dash" class="text-gray-500" />
+          <ILucideMinus class="text-gray-500" />
           <span v-text="data.de.split(' ')[0]" class="mx-1" />
         </div>
         <div v-text="data.texto" class="mb-3" />
         <BButton @click="copy(source)" variant="flat-outline-success" class="btn-sm">
-          <UIcon v-if="copied" name="bi-check2" />
-          <UIcon v-else name="bi-copy" />
+          <ILucideSquareCheckBig v-if="copied" />
+          <ILucideCopy v-else />
           {{ copied ? 'Copiado' : 'Copiar texto' }}
         </BButton>
       </BPopover>
@@ -59,27 +59,27 @@ const noContinuar = () => actualizarMensaje({ id: props.data.id, continua: false
     <template #footer>
       <BDropdown variant="link" no-caret v-tippy="tippy" @show="tippy.content = ''" @hide="tippy.content = tippyText">
         <template #button-content>
-          <UIcon name="bi-three-dots" />
+          <ILucideEllipsis />
         </template>
         <template #tooltip-content>
           <span class="text-nowrap">Ver opciones</span>
         </template>
         <BDropdownItem v-if="data.continua" @click="noContinuar">
-          <UIcon name="bi-stop-circle" class="me-2" />
+          <ILucideCircleStop class="me-2" />
           No continuar
         </BDropdownItem>
         <BDropdownItem v-if="isSupported" @click="copy(source)">
-          <UIcon name="bi-copy" class="me-2" />
+          <ILucideCopy class="me-2" />
           Copiar texto
         </BDropdownItem>
         <BDropdownItem @click="showDestinatarios = true">
-          <UIcon name="bi-people" class="me-2" />
+          <ILucideUsers class="me-2" />
           Ver notificados
         </BDropdownItem>
       </BDropdown>
       <BButton v-if="data.continua" :to="to" v-tippy="'Continuar conversación'" variant="flat-outline-dark"
         class="btn-sm ms-auto">
-        <UIcon name="bi-arrow-right" />
+        <ILucideArrowRight />
       </BButton>
     </template>
   </BCard>

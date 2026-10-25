@@ -34,7 +34,7 @@ const mostrando = computed(() => {
       <div class="filter-section">
         <BSearchInput searchIcon v-model="search" class="max-w-400" />
         <BButton class="me-auto" variant="flat-dark" @click="refresh">
-          <UIcon name="bi-arrow-clockwise" /> Actualizar
+          <ILucideRefreshCw /> Actualizar
         </BButton>
         <div v-text="mostrando" class="small fw-semibold text-secondary" />
       </div>

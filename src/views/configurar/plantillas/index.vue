@@ -15,7 +15,7 @@ const { plantillas, search } = usePlantillasQuery()
         <div class="hstack py-1">
           <span class="small fw-semibold me-auto">PLANTILLAS</span>
           <BButton @click="flows.crear.go" variant="primary" v-tippy="'Crear plantilla'" class="btn-sm h-32">
-            <UIcon name="bi-plus-lg" /> Agregar
+            <ILucidePlus /> Agregar
           </BButton>
         </div>
         <div class="py-1">

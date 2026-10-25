@@ -6,29 +6,21 @@ import { ref, watchEffect } from 'vue'
 
 const { usuario, isPending, usuarioId } = useUsuarioQuery()
 
-const meta = ref(false)
 const acciones = ref([
   {
     texto: "Editar",
-    icon: "bi-pencil",
+    icon: "lucide-pen-line",
     action: {
       to: { name: 'configurar-usuario-editar' }
     },
   },
   {
     texto: "Eliminar",
-    icon: "bi-trash",
+    icon: "lucide-trash",
     action: {
       to: { name: 'configurar-usuario-eliminar' }
     },
-  },
-  {
-    icon: "bi-info-circle",
-    tippy: 'Información del registro',
-    action: {
-      onClick: () => meta.value = true
-    }
-  },
+  }
 ])
 
 watchEffect(() => usuarioId.value = props.usuarioId)
@@ -59,7 +51,7 @@ watchEffect(() => usuarioId.value = props.usuarioId)
         <div class="value capitalize" v-text="usuario.registration_key || 'Activo'" />
       </div>
     </div>
-    <BModal v-model="meta" title="Información del registro" no-footer>
+    <!-- <BModal v-model="meta" title="Información del registro" no-footer>
       <div class="label-value">
         <label>Creado en</label>
         <div class="value" v-text="usuario.created_on || '-'" />
@@ -76,6 +68,6 @@ watchEffect(() => usuarioId.value = props.usuarioId)
         <label>Modificado por</label>
         <div class="value" v-text="usuario.modified_by || '-'" />
       </div>
-    </BModal>
+    </BModal> -->
   </template>
 </template>

@@ -4,7 +4,7 @@ import {
   useImpersonate
 } from '@/stores/auth'
 import { BAccordion } from 'bootstrap-vue-next'
-import { ref, computed, inject } from 'vue'
+import { inject } from 'vue'
 
 const { users } = useImpersonateQuery()
 const { mutateAsync: impersonate, asyncStatus: status } = useImpersonate()
@@ -17,8 +17,8 @@ const mobile = inject('app:mobile')
       <div v-if="actual">(Actual)</div>
       <span v-if="username" class="text-muted small" v-text="username" />
       </p>
-      <BButton @click="impersonate(id)" :disabled="actual">
-        <UIcon name="bi-arrow-return-right" />
+      <BButton @click="impersonate(id)" :disabled="actual" variant="success">
+        <ILucideCornerDownRight />
         <span v-if="!mobile" class="ms-2">Personificar</span>
       </BButton>
     </BAccordionItem>
@@ -29,6 +29,10 @@ const mobile = inject('app:mobile')
 .root {
   --bs-accordion-active-bg: transparent;
   --bs-accordion-btn-focus-box-shadow: none;
+
+  :deep(.accordion-body) {
+    padding-top: 12px;
+  }
 
   :deep(.accordion-button:not(.collapsed)) {
     box-shadow: none;

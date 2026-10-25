@@ -17,7 +17,7 @@ const props = defineProps<{
         <template #default="{ data }">
           <template v-if="!data.grupo">
             <input type="checkbox" v-model="notificadosIds" :value="data.id" />
-            <UIcon name="bi-subtract" class="text-yellow flex-shrink-0" />
+            <ILucideSquaresUnite class="text-yellow flex-shrink-0" />
             <span v-text="data.apodo || data.nombre" class="text-truncate" />
           </template>
           <template v-else>
@@ -30,7 +30,7 @@ const props = defineProps<{
     </RootTree>
     <template #footer>
       <BButton variant="primary" @click="show = false">
-        <UIcon name="bi-check2" /> Listo
+        <ILucideSquareCheckBig /> Listo
       </BButton>
     </template>
   </BModal>

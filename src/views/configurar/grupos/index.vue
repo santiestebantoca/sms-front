@@ -7,34 +7,35 @@ const props = defineProps({
 
 import { useGruposQuery } from '@/stores/grupos'
 import CrearGrupo from '@/views/configurar/grupos/_flows/crear.vue'
-import { computed } from 'vue'
+import { ref, watchEffect } from 'vue'
 
 const { grupos, isPending } = useGruposQuery()
-const active = computed({
-  get: () => props.grupoId,
-  set: (value) => props.setGrupoId(value)
-})
+const active = ref(props.grupoId)
+watchEffect(() => active.value = props.grupoId)
 </script>
 
 <template>
   <div class="root">
     <div class="border-end overflow-auto">
-      <div class="hstack sticky-top p-1 ps-3">
-        <span class="small fw-semibold me-auto">GRUPOS</span>
-        <BButton @click="flows.crear.go" variant="primary" v-tippy="'Crear grupo'" class="btn-sm h-32 w-33">
-          <UIcon name="bi-plus-lg" />
+      <div class="title">
+        GRUPOS
+        <BButton @click="flows.crear.go" variant="emphasis wh-34" v-tippy="'Crear grupo'">
+          <ILucidePlus class="center" />
         </BButton>
       </div>
       <div v-if="isPending" class="mt-5 text-center">
         <BSpinner />
       </div>
       <div v-else class="px-1 py-3">
-        <RootTree v-model="active" selectable>
+        <RootTree v-model="active" class="sms-tree">
           <TreeNode v-for="item in grupos" :data="item" :key="item.id">
-            <template #default="{ data }">
-              <UIcon name="bi-subtract" class="flex-shrink-0"
-                :class="data.label === 'origen' ? 'text-success-400' : 'text-yellow'" />
-              <span v-text="data.nombre" class="text-truncate" />
+            <template #default="{ data, toggle, open, ident, isActive, isDescendantActive }">
+              <BListGroupItem type="button" @click="setGrupoId(data.id)" class="text-truncate"
+                :class="{ active: isActive, track: isDescendantActive && !open }" :style="{ paddingLeft: ident }">
+                <TreeItemToggle v-if="data.children.length" :open="open" @click.stop="toggle" />
+                <ILucideSquaresUnite :class="data.label === 'origen' ? 'text-success-400' : 'text-yellow'" />
+                {{ data.nombre }}
+              </BListGroupItem>
             </template>
           </TreeNode>
         </RootTree>
@@ -54,12 +55,17 @@ const active = computed({
 .root {
   height: 100%;
   display: grid;
-  grid-template-columns: 1fr 3fr;
+  grid-template-columns: minmax(320px, 1fr) 4fr;
   overflow: hidden;
 
-  .sticky-top {
-    background-color: white;
-    box-shadow: 0px 8px 10px 1px white;
+  .title {
+    padding: 12px 16px;
+    font-weight: 600;
+
+    .btn {
+      float: right;
+      margin: -5px -8px;
+    }
   }
 }
 </style>

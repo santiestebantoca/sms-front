@@ -31,15 +31,15 @@ const items = computed(() => [
         <div class="bg-light hstack justify-content-center">
           <BButton variant="flat" @click="impersonate">
             Usuario anterior
-            <UIcon name="bi-arrow-return-left" />
+            <ILucideCornerDownLeft />
           </BButton>
         </div>
       </Teleport>
     </template>
 <template v-else> -->
     <div class="mt-4">
-      <BButton @click="impersonate(0)">
-        <UIcon name="bi-arrow-return-left" />
+      <BButton @click="impersonate(0)" variant="success">
+        <ILucideCornerDownLeft />
         <span class="ms-2">Usuario anterior</span>
       </BButton>
     </div>

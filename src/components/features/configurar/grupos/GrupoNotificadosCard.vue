@@ -11,7 +11,7 @@ const acciones = computed<Array<{ texto: string; to?: any; icon?: string; disabl
   {
     texto: "Seleccionar",
     to: { name: 'configurar-grupo-notificados-editar' },
-    icon: "bi-check2-square"
+    icon: "lucide-square-check-big"
   },
 ])
 
@@ -36,7 +36,7 @@ watchEffect(() => grupoId.value = props.grupoId)
       <RootTree v-else list selectable v-model="active">
         <TreeNode v-for="data in notificados" :data="data" :key="data.id">
           <template #default="{ data }">
-            <UIcon name="bi-subtract" class="text-yellow flex-shrink-0" />
+            <ILucideSquaresUnite class="text-yellow flex-shrink-0" />
             <span v-text="data.nombre" class="text-truncate" />
           </template>
         </TreeNode>

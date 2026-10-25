@@ -5,7 +5,7 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
-    "dev_corp": "vite --host 192.168.11.231 --mode corp",
+    "dev_corp": "vite --host 172.17.48.90 --mode corp",
     "dev_corp_kk": "vite --host 192.168.33.13 --mode corp.kk",
     "build": "vite build",
     "build_sms": "vite build --base=/sms/static/",

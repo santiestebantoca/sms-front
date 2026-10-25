@@ -6,7 +6,7 @@ import HeaderContent from '@/components/features/HeaderContent.vue'
 <template>
   <MainLayout>
     <template #header-content>
-      <HeaderContent />
+      <HeaderContent noLeftButton />
     </template>
     <template #page-content>
       <router-view />

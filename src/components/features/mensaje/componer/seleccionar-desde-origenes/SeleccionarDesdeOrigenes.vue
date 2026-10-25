@@ -70,12 +70,13 @@ const quitarOrigen = grupoId => {
 
 <template>
   <div class="hstack flex-wrap overflow-hidden">
-    <UIcon name="bi-subtract" class="flex-shrink-0 me-2 text-yellow" />
+    <ILucideSquaresUnite class="flex-shrink-0 me-2 text-yellow" />
     <BButton v-for="origen, index in origenesButtons" :key="index" :variant="origen.variant" class="btn-sm fs-6"
       @click="origen.do" v-tippy="origen.tippy">
       {{ origen.text }}
     </BButton>
-    <UIcon name="bi-chevron-right" class="flex-shrink-0 mx-1" font-size="12" />
+    <ILucideChevronRight class="flex-shrink-0 mx-1" font-size="12" />
+    <ILucideSquaresUnite class="flex-shrink-0 mx-1" font-size="12" />
     <template v-if="cargandoNotificados">
       <span class="btn-label">...</span>
     </template>

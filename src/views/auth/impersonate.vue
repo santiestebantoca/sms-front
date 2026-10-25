@@ -14,7 +14,7 @@ const canSearch = computed(() => authUser.value?.can_impersonate)
     <div class="card border-0 pt-md-4">
       <div class="header">
         <BButton to="/home" class="a" variant="flat-secondary">
-          <UIcon name="bi-arrow-left" />
+          <ILucideArrowLeft />
         </BButton>
         <h5 class="mb-0 b">Personificar</h5>
         <BSearchInput v-if="canSearch" v-model="search" placeholder="Buscar usuario" class="c" />

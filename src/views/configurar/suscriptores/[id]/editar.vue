@@ -97,10 +97,10 @@ const submit = async () => {
             <label class="form-label">Grupo</label>
             <div class="form-control hstack gap-2 pe-2 h-38" @click="tabs = 1" type="button">
               <template v-if="grupoSeleccionado">
-                <UIcon name="bi-subtract" class="text-yellow flex-shrink-0" />
+                <ILucideSquaresUnite class="text-yellow flex-shrink-0" />
                 <span v-text="grupoSeleccionado" class="text-truncate" />
               </template>
-              <UIcon name="bi-chevron-right" class="ms-auto" />
+              <ILucideChevronRight class="ms-auto" />
             </div>
           </div>
           <div class="mb-3">
@@ -116,7 +116,7 @@ const submit = async () => {
           <RootTree v-else :childrenNames="['hijos']" v-model="form.grupo" selectable>
             <TreeNode v-for="data in grupos" :data="data" :key="data.id">
               <template #default="{ data }">
-                <UIcon name="bi-subtract" class="text-yellow flex-shrink-0" />
+                <ILucideSquaresUnite class="text-yellow flex-shrink-0" />
                 <span v-text="data.nombre" class="text-truncate" />
               </template>
             </TreeNode>
@@ -129,7 +129,7 @@ const submit = async () => {
         Aceptar
       </BButton>
       <BButton v-else variant="primary" @click="tabs = 0">
-        <UIcon name="bi-check2" />
+        <ILucideSquareCheckBig />
         Listo
       </BButton>
     </template>

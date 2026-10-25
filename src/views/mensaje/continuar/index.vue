@@ -60,7 +60,7 @@ const validate = () => {
 const submit = async () => {
   if (validate()) {
     try {
-    await enviarSms(form.value)
+      await enviarSms(form.value)
       toast({ body: 'Mensaje enviado', variant: 'success' })
       props.componer && props.componer()
     } catch (err) {
@@ -75,7 +75,7 @@ const submit = async () => {
 const insertarPlantilla = (texto: string) => form.value.texto = (form.value.texto ?? '') + texto
 const guardarPlantilla = async (texto: string) => {
   try {
-  await crearPlantilla({ texto })
+    await crearPlantilla({ texto })
     toast({ body: 'Nueva plantilla creada.', variant: 'success' })
   } catch (err) {
     toast({ body: 'No se guardó la plantilla.', variant: 'danger' })
@@ -96,14 +96,14 @@ const guardarPlantilla = async (texto: string) => {
             Destinatarios de la conversación
           </BButton>
           <BButton variant="flat-outline-dark" class="btn-sm ms-auto" @click="componer" v-tippy="'Descartar mensaje'">
-            <UIcon name="bi-trash" class="text-danger" />
+            <ILucideTrash class="text-danger" />
             Descartar
           </BButton>
         </template>
         <template #selection>
           <!-- Barra de resultados de selección -->
           <div class="hstack flex-wrap overflow-hidden resultados">
-            <UIcon name="bi-people-fill" class="flex-shrink-0 text-secondary me-2" />
+            <ILucideUsers class="flex-shrink-0 text-secondary me-2" />
             <span v-if="cargandoMensajePrevio || cargandoDestinatarios">
               ...
             </span>

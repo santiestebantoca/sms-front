@@ -23,23 +23,23 @@ const close = () => model.value = false
       <div class="hstack h-40">
         <span class="small fw-semibold">PLANTILLAS</span>
         <BButton variant="flat-dark" class="ms-auto btn-sm shift-x" @click="close">
-          <UIcon name="bi-x-lg" />
+          <ILucideX />
         </BButton>
       </div>
       <div>
         <BSearchInput v-model="search" />
         <div class="text-end mt-2 small">
           <router-link :to="{ name: 'configurar-plantillas' }" class="text-decoration-none">
-            <UIcon name="bi-gear" font-size="12px" />
+            <ILucideSettings font-size="12px" />
             <span class="gear-label"> Configurar plantillas</span>
           </router-link>
         </div>
       </div>
     </div>
     <!-- List -->
-    <div v-if="search.length < 2" class="text-secondary text-center mt-5">
+    <div v-if="search?.length < 2" class="text-secondary text-center mt-5">
       <p>
-        <UIcon name="bi-search" />
+        <ILucideSearch />
       </p>
       Escribe al menos 2 caracteres para comenzar a buscar
     </div>

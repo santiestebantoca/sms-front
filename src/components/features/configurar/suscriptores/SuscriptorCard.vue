@@ -6,29 +6,21 @@ import { ref, watchEffect } from 'vue'
 
 const { suscriptor, isPending, suscriptorId } = useSuscriptorQuery()
 
-const meta = ref(false)
 const acciones = ref([
   {
     texto: "Editar",
-    icon: "bi-pencil",
+    icon: "lucide-pen-line",
     action: {
       to: { name: 'configurar-suscriptor-editar' }
     },
   },
   {
     texto: "Eliminar",
-    icon: "bi-trash",
+    icon: "lucide-trash",
     action: {
       to: { name: 'configurar-suscriptor-eliminar' }
     },
-  },
-  {
-    icon: "bi-info-circle",
-    tippy: 'Información del registro',
-    action: {
-      onClick: () => meta.value = true
-    }
-  },
+  }
 ])
 
 watchEffect(() => suscriptorId.value = props.suscriptorId)
@@ -65,7 +57,7 @@ watchEffect(() => suscriptorId.value = props.suscriptorId)
       <div class="label-value">
         <label>Grupo</label>
         <div v-if="suscriptor.grupo" class="hstack h-32">
-          <UIcon name="bi-subtract me-2" class="text-yellow flex-shrink-0" />
+          <ILucideSquaresUnite class="text-yellow flex-shrink-0" />
           <span v-text="suscriptor.grupo" class="text-truncate" />
         </div>
         <div v-else>-</div>
@@ -77,13 +69,13 @@ watchEffect(() => suscriptorId.value = props.suscriptorId)
       <div class="label-value">
         <label>Suplente</label>
         <div v-if="suscriptor.suplente" class="hstack h-32">
-          <UIcon class="bi-person text-secondary me-2" />
+          <ILucideUser class="text-secondary me-2" />
           <span v-text="suscriptor.suplente" />
         </div>
         <div v-else>-</div>
       </div>
     </div>
-    <BModal v-model="meta" title="Información del registro" no-footer>
+    <!-- <BModal v-model="meta" title="Información del registro" no-footer>
       <div class="label-value">
         <label>Creado en</label>
         <div class="value" v-text="suscriptor.created_on || '-'" />
@@ -100,6 +92,6 @@ watchEffect(() => suscriptorId.value = props.suscriptorId)
         <label>Modificado por</label>
         <div class="value" v-text="suscriptor.modified_by || '-'" />
       </div>
-    </BModal>
+    </BModal> -->
   </template>
 </template>

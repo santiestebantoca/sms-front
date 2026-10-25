@@ -9,12 +9,12 @@ const acciones = ref([
   {
     texto: "Editar",
     to: { name: 'configurar-grupo-editar' },
-    icon: "bi-pencil"
+    icon: "lucide-pen-line"
   },
   {
     texto: "Eliminar",
     to: { name: 'configurar-grupo-eliminar' },
-    icon: "bi-trash"
+    icon: "lucide-trash"
   },
 ])
 

@@ -26,15 +26,14 @@ const submit = async () => {
       <TreeNode v-for="data in grupos" :data="data" :key="data.id">
         <template #default="{ data }">
           <input v-if="data.label == 'origen'" type="checkbox" v-model="origenesTmp" :value="data" />
-          <UIcon name="bi-subtract" class="flex-shrink-0"
-            :class="data.label === 'origen' ? 'text-teal' : 'text-yellow'" />
+          <ILucideSquaresUnite class="flex-shrink-0" :class="data.label === 'origen' ? 'text-teal' : 'text-yellow'" />
           <span v-text="data.nombre" class="text-truncate" />
         </template>
       </TreeNode>
     </RootTree>
     <template #footer>
       <BButton variant="primary" @click="submit" :disabled="!origenesTmp.length">
-        <UIcon name="bi-check2" /> Listo
+        <ILucideSquareCheckBig /> Listo
       </BButton>
     </template>
   </BModal>

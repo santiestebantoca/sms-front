@@ -21,7 +21,7 @@ const { destinatarios, isLoading, mensajeId } = useEnviosQuery()
       </TreeNode>
     </RootTree>
     <div v-else class="text-center py-4">
-      <UIcon name="bi-exclamation-triangle-fill" class="me-3 mb-1 fs-5 text-warning" />
+      <ILucideTriangleAlert class="me-3 mb-1 fs-5 text-warning" />
       No se encontraron destinatarios.
     </div>
   </BModal>

@@ -15,8 +15,8 @@ import AppDrawer from '@/components/layout/Drawer.vue'
     <app-footer>
       <div id="app-footer-content" />
     </app-footer>
-    <app-drawer breakpoint="lg" class="border-end" title="SMS" v-slot="{ down, closeDrawer }">
-      <slot name="drawer-content" :down="down" :closeDrawer="closeDrawer" />
+    <app-drawer breakpoint="lg" class="border-end" title="SMS">
+      <slot name="drawer-content" />
     </app-drawer>
     <app-page-container>
       <app-page>
