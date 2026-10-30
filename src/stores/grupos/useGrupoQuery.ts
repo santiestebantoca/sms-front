@@ -1,21 +1,20 @@
 import { useQuery } from '@pinia/colada'
 import { gruposApi as api } from '@/api/grupos'
 import { queryKeys } from '@/lib/query-keys'
-import { ref, computed } from 'vue'
+import { toValue, Ref } from 'vue'
 
-export function useGrupoQuery(id?: number | string) {
-  const grupoId = ref(id)
-
-  const { data, isPending } = useQuery({
-    key: () => queryKeys.grupos.detalle(grupoId.value),
-    query: () => api.getById(grupoId.value),
-    enabled: () => !!grupoId.value,
-    staleTime: Infinity
+export function useGrupoQuery(grupoId?: number | string | Ref) {
+  const { data, isPending, isLoading } = useQuery({
+    key: () => queryKeys.grupos.detalle(toValue(grupoId)),
+    query: () => api.getById(toValue(grupoId)),
+    enabled: () => !!toValue(grupoId),
+    staleTime: Infinity,
+    placeholderData: (previousData) => previousData,
   })
 
   return {
     grupo: data,
     isPending,
-    grupoId
+    isLoading,
   }
 }

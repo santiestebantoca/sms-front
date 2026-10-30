@@ -1,63 +1,48 @@
 <script lang="ts" setup>
-const props = defineProps({ flows: Object })
+const props = defineProps({
+  showLista: Boolean,
+  plantillaId: Number,
+  setPlantillaId: Function,
+  linkCrear: Object,
+})
 
-import { usePlantillasQuery } from '@/stores/plantillas'
 import PlantillaCard from '@/components/features/configurar/plantillas/PlantillaCard.vue'
-import CrearPlantilla from '@/views/configurar/plantillas/_flows/crear.vue'
+import { usePlantillasQuery } from '@/stores/plantillas'
+import { ref, watchEffect } from 'vue'
 
 const { plantillas, search } = usePlantillasQuery()
+const active = ref(props.plantillaId)
+watchEffect(() => active.value = props.plantillaId)
 </script>
 
 <template>
-  <div class="root">
-    <div class="listado ps-3 pe-1">
-      <div class="sticky-top">
-        <div class="hstack py-1">
-          <span class="small fw-semibold me-auto">PLANTILLAS</span>
-          <BButton @click="flows.crear.go" variant="primary" v-tippy="'Crear plantilla'" class="btn-sm h-32">
-            <ILucidePlus /> Agregar
-          </BButton>
-        </div>
-        <div class="py-1">
-          <BSearchInput searchIcon v-model="search" class="max-w-400" />
-        </div>
+  <div class="container ms-0 ps-4 pb-4">
+    <div class="max-w-700">
+      <div class="title">
+        PLANTILLAS
+        <BButton :to="linkCrear" variant="emphasis h-34 py-1" v-tippy="'Crear plantilla'">
+          <ILucidePlus /> Agregar
+        </BButton>
+      </div>
+      <div class="py-1">
+        <BSearchInput searchIcon v-model="search" class="max-w-400" />
       </div>
       <div class="py-4">
         <PlantillaCard v-for="data in plantillas" :key="data.id" :data="data" />
         <router-view />
       </div>
     </div>
-    <CrearPlantilla v-if="flows.crear.active" :back="flows.crear.back" />
   </div>
 </template>
 
-<style scoped>
-.root {
-  height: 100%;
-  display: grid;
-  grid-template-columns: 1fr;
-  overflow: auto;
-}
+<style scoped lang="scss">
+.title {
+  padding: 12px 0;
+  font-weight: 600;
 
-.listado {
-  max-width: 700px;
-}
-
-.sticky-top {
-  background: white;
-}
-
-.sticky-top::after {
-  content: '';
-  position: absolute;
-  bottom: -30px;
-  left: 0;
-  width: 100%;
-  height: 30px;
-  pointer-events: none;
-  /* Para que no bloquee clics */
-  background: linear-gradient(to bottom,
-      rgba(255, 255, 255, 1) 0%,
-      rgba(255, 255, 255, 0) 100%);
+  .btn {
+    float: right;
+    margin: -5px 0;
+  }
 }
 </style>

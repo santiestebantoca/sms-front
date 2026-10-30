@@ -3,11 +3,12 @@ const props = defineProps({ grupoId: Number, back: Function })
 
 import { isValidationError } from '@/api/client'
 import { useGrupoQuery, useGrupoUpdate } from '@/stores/grupos'
-import type { GrupoCreate, GrupoUpdate } from '@/types/models'
+import type { GrupoUpdate } from '@/types/models'
 import { ref, computed, onMounted, watchEffect } from 'vue'
 
 const model = ref(false)
-const form = ref<GrupoCreate>({
+const form = ref<GrupoUpdate>({
+  id: props.grupoId,
   nombre: null,
   apodo: null,
   label: null,
@@ -15,10 +16,18 @@ const form = ref<GrupoCreate>({
   pertenece: null,
 })
 const errors = ref<Record<string, any>>({})
+const errorState = computed(() => ({
+  nombre: {
+    state: errors.value.nombre ? false : null,
+    invalidFeedback: errors.value.nombre,
+    onInput: () => errors.value.nombre = null
+  },
+}))
 const { grupo, isPending } = useGrupoQuery(props.grupoId)
 const { mutateAsync: actualizarGrupo, asyncStatus } = useGrupoUpdate()
 const loading = computed(() => asyncStatus.value === 'loading')
 
+onMounted(() => model.value = true)
 watchEffect(() => {
   if (grupo.value) {
     form.value.nombre = grupo.value.nombre
@@ -28,7 +37,6 @@ watchEffect(() => {
     form.value.pertenece = grupo.value.pertenece
   }
 })
-onMounted(() => model.value = true)
 
 const validate = () => {
   errors.value = {}
@@ -37,8 +45,7 @@ const validate = () => {
 }
 const submit = async () => {
   if (!validate()) return
-  const payload: GrupoUpdate = { id: grupo.value.id, ...form.value }
-  actualizarGrupo(payload)
+  actualizarGrupo(form.value)
     .then(() => model.value = false)
     .catch(err => {
       isValidationError(err) && (errors.value = err.errors)
@@ -49,32 +56,26 @@ const submit = async () => {
 
 <template>
   <BModal v-model="model" title="Editar grupo" @hidden="back">
-    <form @submit.prevent="submit">
-      <div class="mb-3">
-        <label class="form-label">Nombre</label>
-        <input class="form-control" v-model.trim="form.nombre" @input="errors.nombre = null" />
-        <div class="small text-danger" v-text="errors.nombre" />
-      </div>
-      <div class="mb-3">
-        <label class="form-label">Alias</label>
-        <input class="form-control" v-model.trim="form.apodo" @input="errors.apodo = null" />
-        <div class="small text-danger" v-text="errors.apodo" />
-      </div>
-      <div class="mb-3">
-        <label class="form-label">Etiquetas</label>
-        <input class="form-control" v-model.trim="form.label" />
-      </div>
-      <div class="mb-3">
-        <label class="form-label">Descripción</label>
-        <textarea class="form-control" v-model.trim="form.descripcion" />
-      </div>
-    </form>
+    <BForm id="form-hijo-editar" @submit.prevent="submit" density="3">
+      <BFormGroup label="Nombre" v-bind="errorState.nombre">
+        <BFormInput v-model="form.nombre" trim />
+      </BFormGroup>
+      <BFormGroup label="Alias">
+        <BFormInput v-model="form.apodo" trim />
+      </BFormGroup>
+      <BFormGroup label="Etiquetas">
+        <BFormInput v-model="form.label" trim />
+      </BFormGroup>
+      <BFormGroup label="Descripción">
+        <BFormTextarea v-model="form.descripcion" no-resize />
+      </BFormGroup>
+    </BForm>
     <template #footer>
-      <BButton variant="secondary" @click="model = false" :disabled="loading">
-        Cancelar
-      </BButton>
-      <BButton @click="submit" :loading="loading" loading-fill class="w-90">
+      <BButton type="submit" form="form-hijo-editar" variant="primary w-90" :loading="loading" loading-fill>
         Guardar
+      </BButton>
+      <BButton variant="emphasis w-90" @click="model = false">
+        Cancelar
       </BButton>
     </template>
   </BModal>

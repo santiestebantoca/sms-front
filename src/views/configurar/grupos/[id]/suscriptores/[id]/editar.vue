@@ -3,17 +3,35 @@ const props = defineProps({ suscriptorId: Number, back: Function })
 
 import { isValidationError } from '@/api/client'
 import { useSuscriptorQuery, useSuscriptorUpdate } from '@/stores/suscriptores'
-import type { SuscriptorCreate, SuscriptorUpdate } from '@/types/models'
+import type { SuscriptorUpdate } from '@/types/models'
 import { ref, computed, onMounted, watchEffect } from 'vue'
 
 const model = ref(false)
-const form = ref<SuscriptorCreate>({
+const form = ref<SuscriptorUpdate>({
+  id: props.suscriptorId,
   nombre: null,
   cargo: null,
   telefono: null,
   correo: null,
 })
 const errors = ref<Record<string, any>>({})
+const errorState = computed(() => ({
+  nombre: {
+    state: errors.value.nombre ? false : null,
+    invalidFeedback: errors.value.nombre,
+    onInput: () => errors.value.nombre = null
+  },
+  telefono: {
+    state: errors.value.telefono ? false : null,
+    invalidFeedback: errors.value.telefono,
+    onInput: () => errors.value.telefono = null
+  },
+  correo: {
+    state: errors.value.correo ? false : null,
+    invalidFeedback: errors.value.correo,
+    onInput: () => errors.value.correo = null
+  },
+}))
 const { suscriptor, isPending } = useSuscriptorQuery(props.suscriptorId)
 const { mutateAsync: actualizarSuscriptor, asyncStatus } = useSuscriptorUpdate()
 const loading = computed(() => asyncStatus.value === 'loading')
@@ -40,8 +58,7 @@ const validate = () => {
 }
 const submit = async () => {
   if (!validate()) return
-  const payload: SuscriptorUpdate = { id: suscriptor.value.id, ...form.value }
-  actualizarSuscriptor(payload)
+  actualizarSuscriptor(form.value)
     .then(() => model.value = false)
     .catch(err => {
       isValidationError(err) && (errors.value = err.errors)
@@ -52,30 +69,26 @@ const submit = async () => {
 
 <template>
   <BModal v-model="model" title="Editar suscriptor" @hidden="back">
-    <form @submit.prevent="submit">
-      <div class="mb-3">
-        <label class="form-label">Nombre</label>
-        <input class="form-control" v-model.trim="form.nombre" @input="errors.nombre = null" />
-        <div class="small text-danger" v-text="errors.nombre" />
-      </div>
-      <div class="mb-3">
-        <label class="form-label">Cargo</label>
-        <input class="form-control" v-model.trim="form.cargo" />
-      </div>
-      <div class="mb-3">
-        <label class="form-label">Teléfono</label>
-        <input class="form-control" v-model.trim="form.telefono" @input="errors.telefono = null" />
-        <div class="small text-danger" v-text="errors.telefono" />
-      </div>
-      <div class="mb-3">
-        <label class="form-label">Correo</label>
-        <input class="form-control" v-model.trim="form.correo" @input="errors.correo = null" />
-        <div class="small text-danger" v-text="errors.correo" />
-      </div>
-    </form>
+    <BForm id="form-suscriptor-editar" @submit.prevent="submit" density="3">
+      <BFormGroup label="Nombre" v-bind="errorState.nombre">
+        <BFormInput v-model="form.nombre" trim />
+      </BFormGroup>
+      <BFormGroup label="Cargo">
+        <BFormInput v-model="form.cargo" trim />
+      </BFormGroup>
+      <BFormGroup label="Teléfono" v-bind="errorState.telefono">
+        <BFormInput v-model="form.telefono" trim />
+      </BFormGroup>
+      <BFormGroup label="Correo" v-bind="errorState.correo">
+        <BFormInput v-model="form.correo" trim />
+      </BFormGroup>
+    </BForm>
     <template #footer>
-      <BButton variant="primary" @click="submit">
-        Aceptar
+      <BButton type="submit" form="form-suscriptor-editar" variant="primary w-90" :loading="loading" loading-fill>
+        Guardar
+      </BButton>
+      <BButton variant="emphasis w-90" @click="back">
+        Cancelar
       </BButton>
     </template>
   </BModal>

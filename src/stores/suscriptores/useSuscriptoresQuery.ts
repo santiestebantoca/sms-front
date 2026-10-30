@@ -1,7 +1,7 @@
 import { useQuery } from '@pinia/colada'
 import { queryKeys } from '@/lib/query-keys'
 import { suscriptoresApi as api } from '@/api/suscriptores'
-import { ref } from 'vue'
+import { Ref, toValue } from 'vue'
 
 export function useSuscriptoresQuery() {
   const { data, isPending } = useQuery({
@@ -15,18 +15,17 @@ export function useSuscriptoresQuery() {
   }
 }
 
-export function useSuscriptoresDelGrupoQuery(id?: number | string) {
-  const grupoId = ref(id)
+export function useSuscriptoresDelGrupoQuery(grupoId?: number | string | Ref) {
 
-  const { data, isPending } = useQuery({
-    key: () => queryKeys.suscriptores.lista({ grupo: grupoId.value }),
-    query: () => api.getAll({ grupo: grupoId.value }),
+  const { data, isPending, isLoading } = useQuery({
+    key: () => queryKeys.suscriptores.lista({ grupo: toValue(grupoId) }),
+    query: () => api.getAll({ grupo: toValue(grupoId) }),
     staleTime: Infinity
   })
 
   return {
     suscriptores: data,
     isPending,
-    grupoId
+    isLoading
   }
 }

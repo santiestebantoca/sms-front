@@ -1,66 +1,46 @@
 <script lang="ts" setup>
-const props = defineProps({ grupoId: Number })
-
 import { useSuscriptoresDelGrupoQuery } from '@/stores/suscriptores'
-import { ref, computed, watchEffect } from 'vue'
+import { computed, inject, Ref } from 'vue'
 
-const { suscriptores, isPending, grupoId } = useSuscriptoresDelGrupoQuery()
+const grupo = inject<Ref<any>>('grupo:grupo')
+const grupoId = computed(() => grupo.value?.id)
+const { suscriptores, isLoading } = useSuscriptoresDelGrupoQuery(grupoId)
 
-const active = ref(null)
-const acciones = computed(() => [
-  {
-    texto: "Nuevo",
-    to: { name: 'configurar-grupo-suscriptores-crear' },
-    icon: "lucide-plus"
-  },
-  {
-    texto: "Editar",
-    to: active.value
-      ? { name: 'configurar-grupo-suscriptor-editar', params: { suscriptorId: active.value } }
-      : undefined,
-    icon: "lucide-pen-line",
-    disabled: !active.value
-  },
-  {
-    texto: "Eliminar",
-    to: active.value
-      ? { name: 'configurar-grupo-suscriptor-eliminar', params: { suscriptorId: active.value } }
-      : undefined,
-    icon: "lucide-trash",
-    disabled: !active.value
-  },
-])
-
-watchEffect(() => grupoId.value = props.grupoId)
+const linkEditar = (suscriptorId) => ({ name: 'configurar-grupo-suscriptor-editar', params: { suscriptorId } })
+const linkEliminar = (suscriptorId) => ({ name: 'configurar-grupo-suscriptor-eliminar', params: { suscriptorId } })
 </script>
 
 <template>
-  <div v-if="isPending" class="text-center p-5">
-    <BSpinner />
-  </div>
-  <template v-else>
-    <div class="mt-2 hstack gap-2 justify-content-end">
-      <BButton v-for="accion in acciones" variant="flat-outline-dark" :to="accion.to" :disabled="accion.disabled"
-        class="btn-sm">
-        <UIcon :name="accion.icon" /> {{ accion.texto }}
+  <BOverlay :show="isLoading" variant="transparent" class="h-50">
+    <div class="hstack gap-2 justify-content-end py-2">
+      <BButton variant="flat" :to="{ name: 'configurar-grupo-suscriptores-crear' }">
+        <ILucidePlus /> Nuevo
       </BButton>
     </div>
-    <div class="px-3 py-2">
-      <div v-if="!suscriptores.length" class="mt-2">
+    <div v-if="suscriptores" class="vstack gap-4">
+      <div v-if="!suscriptores.length" class="mt-2 px-3">
         No hay suscriptores aquí.
       </div>
-      <RootTree v-else list selectable v-model="active">
+      <RootTree v-else class="sms-tree">
         <TreeNode v-for="data in suscriptores" :data="data" :key="data.id">
           <template #default="{ data }">
-            <div class="hstack gap-2">
+            <BListGroupItem class="hstack h-40">
               <ILucideUser class="text-teal" />
-              {{ data.nombre }}
-              <span v-text="data.telefono" class="text-pink" />
-              <span v-if="data.correo" v-text="`<${data.correo}>`" class="text-secondary" />
-            </div>
+              <span class="text-truncate">{{ data.nombre }}</span>
+              <span class="text-pink mx-3">{{ data.telefono }}</span>
+              <span v-if="data.correo" class="text-secondary">{{ `<${data.correo}>` }}</span>
+              <span class="d-hover ms-auto me-n2">
+                <BButton variant="flat" class="wh-30 me-2" :to="linkEditar(data.id)">
+                  <ILucidePencilLine class="center" />
+                </BButton>
+                <BButton variant="flat" class="wh-30" :to="linkEliminar(data.id)">
+                  <ILucideTrash class="center" />
+                </BButton>
+              </span>
+            </BListGroupItem>
           </template>
         </TreeNode>
       </RootTree>
     </div>
-  </template>
+  </BOverlay>
 </template>

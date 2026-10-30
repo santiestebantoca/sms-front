@@ -1,12 +1,12 @@
 <script lang="ts" setup>
 const props = defineProps({
+  showLista: Boolean,
   grupoId: Number,
   setGrupoId: Function,
-  flows: Object
+  linkCrear: Object,
 })
 
 import { useGruposQuery } from '@/stores/grupos'
-import CrearGrupo from '@/views/configurar/grupos/_flows/crear.vue'
 import { ref, watchEffect } from 'vue'
 
 const { grupos, isPending } = useGruposQuery()
@@ -19,7 +19,7 @@ watchEffect(() => active.value = props.grupoId)
     <div class="border-end overflow-auto">
       <div class="title">
         GRUPOS
-        <BButton @click="flows.crear.go" variant="emphasis wh-34" v-tippy="'Crear grupo'">
+        <BButton :to="linkCrear" variant="emphasis wh-34" v-tippy="'Crear grupo'">
           <ILucidePlus class="center" />
         </BButton>
       </div>
@@ -41,13 +41,12 @@ watchEffect(() => active.value = props.grupoId)
         </RootTree>
       </div>
     </div>
-    <div class="overflow-auto px-3 pt-1 pb-4">
-      <div v-if="!grupoId" class="mt-5 text-center">
+    <div class="container ms-0 max-w-700">
+      <div v-if="showLista" class="mt-5 text-center">
         Seleccione un grupo para mostrarlo aquí.
       </div>
-      <router-view v-else />
+      <router-view />
     </div>
-    <CrearGrupo v-if="flows.crear.active" :back="flows.crear.back" :forward="flows.crear.forward" />
   </div>
 </template>
 

@@ -12,7 +12,7 @@ const { destinatarios, isLoading, mensajeId } = useEnviosQuery()
     <div v-if="isLoading" class="text-center py-4">
       <BSpinner />
     </div>
-    <RootTree v-else-if="destinatarios?.length" list no-hover>
+    <RootTree v-else-if="destinatarios?.length">
       <TreeNode v-for="data in destinatarios" :data="data" :key="data.id">
         <template #default="{ data }">
           <span v-text="data.nombre" />

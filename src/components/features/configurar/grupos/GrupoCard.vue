@@ -1,10 +1,8 @@
 <script lang="ts" setup>
-const props = defineProps({ grupoId: Number })
+import { formatTime } from '@/composables/useDates'
+import { ref, inject, Ref } from 'vue'
 
-import { useGrupoQuery } from '@/stores/grupos'
-import { ref, watchEffect } from 'vue'
-
-const { grupo, isPending, grupoId } = useGrupoQuery()
+const grupo = inject<Ref<any>>('grupo:grupo')
 const acciones = ref([
   {
     texto: "Editar",
@@ -17,37 +15,49 @@ const acciones = ref([
     icon: "lucide-trash"
   },
 ])
-
-watchEffect(() => grupoId.value = props.grupoId)
 </script>
 
 <template>
-  <div v-if="isPending" class="text-center p-5">
-    <BSpinner />
-  </div>
-  <template v-else>
-    <div class="mt-2 hstack gap-2 justify-content-end">
-      <BButton v-for="accion in acciones" variant="flat-outline-dark" :to="accion.to" class="btn-sm">
+  <div>
+    <div class="hstack gap-2 justify-content-end py-2">
+      <BButton v-for="accion in acciones" :to="accion.to" variant="flat">
         <UIcon :name="accion.icon" /> {{ accion.texto }}
       </BButton>
     </div>
-    <div class="px-3 py-2">
-      <div class="label-value">
-        <label>Nombre</label>
-        <div class="value" v-text="grupo.nombre" />
+    <div class="vstack gap-4 px-3">
+      <div class="w-100">
+        <label class="form-label">Nombre</label>
+        <div>
+          {{ grupo.nombre }}
+        </div>
       </div>
-      <div class="label-value">
-        <label>Alias</label>
-        <div class="value" v-text="grupo.apodo || '-'" />
+      <div class="w-100">
+        <label class="form-label">Alias</label>
+        <div>
+          {{ grupo.apodo || '-' }}
+        </div>
       </div>
-      <div class="label-value">
-        <label>Etiquetas</label>
-        <div class="value" v-text="grupo.label || '-'" />
+      <div class="w-100">
+        <label class="form-label">Etiquetas</label>
+        <div>
+          {{ grupo.label || '-' }}
+        </div>
       </div>
-      <div class="label-value">
-        <label>Descripción</label>
-        <div v-text="grupo.descripcion || '-'" />
+      <div class="w-100">
+        <label class="form-label">Descripción</label>
+        <div>
+          {{ grupo.descripcion || '-' }}
+        </div>
       </div>
+      <template v-if="grupo.modified_by">
+        <div class="pt-3 border-top">
+          <label class="form-label">Modificado</label>
+          <div>
+            {{ grupo.modified_by }},
+            {{ formatTime(grupo.modified_on) }}
+          </div>
+        </div>
+      </template>
     </div>
-  </template>
+  </div>
 </template>

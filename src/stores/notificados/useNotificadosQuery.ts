@@ -1,37 +1,35 @@
 import { useQuery } from '@pinia/colada'
 import { queryKeys } from '@/lib/query-keys'
 import { notificadosApi as api } from '@/api/notificados'
-import { ref } from 'vue'
+import { ref, Ref, toValue } from 'vue'
 
-export function useNotificadosDeLosGruposQuery() {
-  const gruposIds = ref([])
+export function useNotificadosDeLosGruposQuery(gruposIds?: number[] | string[] | Ref) {
 
-  const { data, isLoading } = useQuery({
-    key: () => queryKeys.notificados.lista({ origen: gruposIds.value }),
-    query: () => api.getAll({ origen: gruposIds.value }),
-    enabled: () => gruposIds.value.length > 0
+  const { data, isPending, isLoading } = useQuery({
+    key: () => queryKeys.notificados.lista({ origen: toValue(gruposIds) }),
+    query: () => api.getAll({ origen: toValue(gruposIds) }),
+    enabled: () => toValue(gruposIds)?.length > 0
   })
 
   return {
     notificados: data,
     isLoading,
-    gruposIds
+    isPending
   }
 }
 
-export function useNotificadosDelGrupoQuery(id?: number | string) {
-  const grupoId = ref(id)
+export function useNotificadosDelGrupoQuery(grupoId?: number | string | Ref) {
 
-  const { data, isPending } = useQuery({
-    key: () => queryKeys.notificados.lista({ origen: grupoId.value }),
-    query: () => api.getAll({ origen: grupoId.value }),
-    enabled: () => Boolean(grupoId.value),
+  const { data, isLoading, isPending } = useQuery({
+    key: () => queryKeys.notificados.lista({ origen: toValue(grupoId) }),
+    query: () => api.getAll({ origen: toValue(grupoId) }),
+    enabled: () => Boolean(toValue(grupoId)),
     staleTime: Infinity
   })
 
   return {
     notificados: data,
+    isLoading,
     isPending,
-    grupoId
   }
 }

@@ -1,61 +1,44 @@
 <script lang="ts" setup>
-const props = defineProps({ padreId: Number })
-
 import { useGruposDelGrupoQuery } from '@/stores/grupos'
-import { ref, computed, watchEffect } from 'vue'
+import { computed, inject, Ref } from 'vue'
 
-const { grupos, isPending, padreId } = useGruposDelGrupoQuery()
-const active = ref(null)
-const acciones = computed(() => [
-  {
-    texto: "Nuevo",
-    to: { name: 'configurar-grupo-hijos-crear' },
-    icon: "lucide-plus"
-  },
-  {
-    texto: "Editar",
-    to: active.value
-      ? { name: 'configurar-grupo-hijo-editar', params: { hijoId: active.value } }
-      : undefined,
-    icon: "lucide-pen-line",
-    disabled: !active.value
-  },
-  {
-    texto: "Eliminar",
-    to: active.value
-      ? { name: 'configurar-grupo-hijo-eliminar', params: { hijoId: active.value } }
-      : undefined,
-    icon: "lucide-trash",
-    disabled: !active.value
-  },
-])
+const grupo = inject<Ref<any>>('grupo:grupo')
+const grupoId = computed(() => grupo.value?.id)
+const { grupos, isLoading } = useGruposDelGrupoQuery(grupoId)
 
-watchEffect(() => padreId.value = props.padreId)
+const linkEditar = (hijoId) => ({ name: 'configurar-grupo-hijo-editar', params: { hijoId } })
+const linkEliminar = (hijoId) => ({ name: 'configurar-grupo-hijo-eliminar', params: { hijoId } })
 </script>
 
 <template>
-  <div v-if="isPending" class="text-center p-5">
-    <BSpinner />
-  </div>
-  <template v-else>
-    <div class="mt-2 hstack gap-2 justify-content-end">
-      <BButton v-for="accion in acciones" variant="flat-outline-dark" :to="accion.to" :disabled="accion.disabled"
-        class="btn-sm">
-        <UIcon :name="accion.icon" /> {{ accion.texto }}
+  <BOverlay :show="isLoading" variant="transparent" class="h-50">
+    <div class="hstack gap-2 justify-content-end py-2">
+      <BButton variant="flat" :to="{ name: 'configurar-grupo-hijos-crear' }">
+        <ILucidePlus /> Nuevo
       </BButton>
     </div>
-    <div class="px-3 py-2">
-      <div v-if="!grupos.length" class="mt-2">
+    <div v-if="grupos" class="vstack gap-4">
+      <div v-if="!grupos.length" class="mt-2 px-3">
         No hay grupos aquí.
       </div>
-      <RootTree v-else list selectable v-model="active">
+      <RootTree v-else class="sms-tree">
         <TreeNode v-for="data in grupos" :data="data" :key="data.id">
           <template #default="{ data }">
-            <ILucideSquaresUnite class="text-yellow flex-shrink-0" />
-            <span v-text="data.nombre" class="text-truncate" />
+            <BListGroupItem class="hstack h-40">
+              <ILucideSquaresUnite class="text-yellow" />
+              <span class="text-truncate">{{ data.nombre }}</span>
+              <span class="d-hover ms-auto me-n2">
+                <BButton variant="flat" class="wh-30 me-2" :to="linkEditar(data.id)">
+                  <ILucidePencilLine class="center" />
+                </BButton>
+                <BButton variant="flat" class="wh-30" :to="linkEliminar(data.id)">
+                  <ILucideTrash class="center" />
+                </BButton>
+              </span>
+            </BListGroupItem>
           </template>
         </TreeNode>
       </RootTree>
     </div>
-  </template>
+  </BOverlay>
 </template>

@@ -3,10 +3,12 @@ const props = defineProps({ grupoId: Number, back: Function })
 
 import { useGruposNotificablesQuery } from '@/stores/grupos'
 import { useNotificadosDelGrupoQuery, useNotificadosUpdate } from '@/stores/notificados'
+import { NotificadosUpdate } from '@/types/models';
 import { ref, computed, watchEffect, onMounted } from 'vue'
 
 const model = ref(false)
-const form = ref<Record<string, any>>({
+const form = ref<NotificadosUpdate>({
+  id: props.grupoId,
   grupo_b: []
 })
 const { grupos, isPending: notificablesPendientes } = useGruposNotificablesQuery()
@@ -19,7 +21,7 @@ watchEffect(() => {
 })
 onMounted(() => model.value = true)
 
-const submit = () => actualizarNotificados({ id: props.grupoId, ...form.value })
+const submit = () => actualizarNotificados(form.value)
   .then(() => model.value = false)
 </script>
 
@@ -28,12 +30,15 @@ const submit = () => actualizarNotificados({ id: props.grupoId, ...form.value })
     <div v-if="notificablesPendientes || notificadosPendientes" class="p-5 text-center">
       <BSpinner />
     </div>
-    <RootTree v-else :childrenNames="['hijos']">
+    <RootTree v-else class="sms-tree">
       <TreeNode v-for="data in grupos" :data="data" :key="data.id">
-        <template #default="{ data }">
-          <input type="checkbox" v-model="form.grupo_b" :value="data.id" />
-          <ILucideSquaresUnite class="text-yellow flex-shrink-0" />
-          <span v-text="data.nombre" class="text-truncate" />
+        <template #default="{ data, open, toggle, ident }">
+          <BListGroupItem class="hstack" :style="{ paddingLeft: ident }">
+            <TreeItemToggle v-if="data.children.length" :open="open" @click.stop="toggle" />
+            <BFormCheckbox v-model="form.grupo_b" :value="data.id" class="me-2" />
+            <ILucideSquaresUnite class="text-yellow" />
+            {{ data.nombre }}
+          </BListGroupItem>
         </template>
       </TreeNode>
     </RootTree>

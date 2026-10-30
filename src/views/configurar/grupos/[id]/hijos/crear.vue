@@ -15,6 +15,13 @@ const form = ref<GrupoCreate>({
   pertenece: props.padreId,
 })
 const errors = ref<Record<string, any>>({})
+const errorState = computed(() => ({
+  nombre: {
+    state: errors.value.nombre ? false : null,
+    invalidFeedback: errors.value.nombre,
+    onInput: () => errors.value.nombre = null
+  },
+}))
 const { mutateAsync: crearGrupo, asyncStatus } = useGrupoCreate()
 const loading = computed(() => asyncStatus.value === 'loading')
 
@@ -38,32 +45,26 @@ const submit = () => {
 
 <template>
   <BModal v-model="model" title="Nuevo grupo" @hidden="back">
-    <form @submit.prevent="submit">
-      <div class="mb-3">
-        <label class="form-label">Nombre</label>
-        <input class="form-control" v-model.trim="form.nombre" @input="errors.nombre = null" />
-        <div class="small text-danger" v-text="errors.nombre" />
-      </div>
-      <div class="mb-3">
-        <label class="form-label">Alias</label>
-        <input class="form-control" v-model.trim="form.apodo" @input="errors.apodo = null" />
-        <div class="small text-danger" v-text="errors.apodo" />
-      </div>
-      <div class="mb-3">
-        <label class="form-label">Etiquetas</label>
-        <input class="form-control" v-model.trim="form.label" />
-      </div>
-      <div class="mb-3">
-        <label class="form-label">Descripción</label>
-        <textarea class="form-control" v-model.trim="form.descripcion" />
-      </div>
-    </form>
+    <BForm id="form-hijo-crear" @submit.prevent="submit">
+      <BFormGroup label="Nombre" v-bind="errorState.nombre">
+        <BFormInput v-model="form.nombre" trim />
+      </BFormGroup>
+      <BFormGroup label="Alias">
+        <BFormInput v-model="form.apodo" trim />
+      </BFormGroup>
+      <BFormGroup label="Etiquetas">
+        <BFormInput v-model="form.label" trim />
+      </BFormGroup>
+      <BFormGroup label="Descripción">
+        <BFormTextarea v-model="form.descripcion" no-resize />
+      </BFormGroup>
+    </BForm>
     <template #footer>
-      <BButton variant="secondary" @click="model = false" :disabled="loading">
-        Cancelar
-      </BButton>
-      <BButton @click="submit" :loading="loading" loading-fill class="w-90">
+      <BButton type="submit" form="form-hijo-crear" variant="primary w-90" :loading="loading" loading-fill>
         Crear
+      </BButton>
+      <BButton variant="emphasis w-90" @click="back">
+        Cancelar
       </BButton>
     </template>
   </BModal>

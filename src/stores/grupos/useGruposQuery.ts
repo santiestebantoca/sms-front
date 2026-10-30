@@ -2,7 +2,7 @@ import { useQuery } from '@pinia/colada'
 import { flatToTree } from '@/utils'
 import { queryKeys } from '@/lib/query-keys'
 import { gruposApi as api } from '@/api/grupos'
-import { ref, computed } from 'vue'
+import { toValue, computed, Ref } from 'vue'
 
 export function useGruposQuery() {
   const { data, isPending } = useQuery({
@@ -21,19 +21,18 @@ export function useGruposQuery() {
   }
 }
 
-export function useGruposDelGrupoQuery(id?: number | string) {
-  const padreId = ref(id)
+export function useGruposDelGrupoQuery(padreId?: number | string | Ref) {
 
-  const { data, isPending } = useQuery({
-    key: () => queryKeys.grupos.lista({ pertenece: padreId.value }),
-    query: () => api.getAll({ pertenece: padreId.value }),
+  const { data, isPending, isLoading } = useQuery({
+    key: () => queryKeys.grupos.lista({ pertenece: toValue(padreId) }),
+    query: () => api.getAll({ pertenece: toValue(padreId) }),
     staleTime: Infinity
   })
 
   return {
     grupos: data,
     isPending,
-    padreId
+    isLoading
   }
 }
 
@@ -41,6 +40,7 @@ export function useGruposNotificablesQuery() {
   const { data, isPending } = useQuery({
     key: queryKeys.grupos.lista({ label: 'grupo,centro' }),
     query: () => api.getAll({ label: 'grupo,centro' }),
+    staleTime: Infinity
   })
 
   const tree = computed(() => {

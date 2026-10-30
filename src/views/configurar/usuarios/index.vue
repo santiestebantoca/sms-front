@@ -1,27 +1,25 @@
 <script lang="ts" setup>
 const props = defineProps({
+  showLista: Boolean,
   usuarioId: Number,
   setUsuarioId: Function,
-  flows: Object
+  linkCrear: Object,
 })
 
 import { useUsuariosQuery } from '@/stores/usuarios'
-import CrearUsuario from '@/views/configurar/usuarios/_flows/crear.vue'
-import { computed } from 'vue'
+import { ref, watchEffect } from 'vue'
 
 const { usuarios, isPending } = useUsuariosQuery()
-const active = computed({
-  get: () => props.usuarioId,
-  set: (value) => props.setUsuarioId(value)
-})
+const active = ref(props.usuarioId)
+watchEffect(() => active.value = props.usuarioId)
 </script>
 
 <template>
   <div class="root">
     <div class="border-end overflow-auto">
-      <div class="hstack sticky-top p-1 ps-3">
-        <span class="small fw-semibold me-auto">USUARIOS</span>
-        <BButton @click="flows.crear.go" variant="primary" v-tippy="'Crear usuario'" class="btn-sm h-32 w-33">
+      <div class="title">
+        USUARIOS
+        <BButton :to="linkCrear" variant="emphasis wh-34" v-tippy="'Crear usuario'">
           <ILucidePlus class="center" />
         </BButton>
       </div>
@@ -29,24 +27,26 @@ const active = computed({
         <BSpinner />
       </div>
       <div v-else class="px-1 py-3">
-        <RootTree v-model="active" selectable list>
+        <RootTree v-model="active" class="sms-tree">
           <TreeNode v-for="item in usuarios" :data="item" :key="item.id">
-            <template #default="{ data }">
-              <ILucideUser class="flex-shrink-0 text-success-400" />
-              <span v-text="data.name" class="text-truncate" />
-              <BBadge v-if="data.registration_key === 'blocked'" variant="danger">Inactivo</BBadge>
+            <template #default="{ data, isActive }">
+              <BListGroupItem type="button" @click="setUsuarioId(data.id)" class="text-truncate"
+                :class="{ active: isActive }">
+                <ILucideUser class="flex-shrink-0 text-success-400" />
+                {{ data.name }}
+                <BBadge v-if="data.registration_key === 'blocked'" variant="danger">Bloqueado</BBadge>
+              </BListGroupItem>
             </template>
           </TreeNode>
         </RootTree>
       </div>
     </div>
-    <div class="overflow-auto px-3 pt-1 pb-4">
-      <div v-if="!usuarioId" class="mt-5 text-center">
+    <div class="container ms-0 pt-1 pb-4">
+      <div v-if="showLista" class="mt-5 text-center">
         Seleccione un usuario para mostrarlo aquí.
       </div>
       <router-view v-else />
     </div>
-    <CrearUsuario v-if="flows.crear.active" :back="flows.crear.back" :forward="flows.crear.forward" />
   </div>
 </template>
 
@@ -54,12 +54,17 @@ const active = computed({
 .root {
   height: 100%;
   display: grid;
-  grid-template-columns: 1fr 3fr;
+  grid-template-columns: minmax(320px, 1fr) 4fr;
   overflow: hidden;
 
-  .sticky-top {
-    background-color: white;
-    box-shadow: 0px 8px 10px 1px white;
+  .title {
+    padding: 12px 16px;
+    font-weight: 600;
+
+    .btn {
+      float: right;
+      margin: -5px -8px;
+    }
   }
 }
 </style>

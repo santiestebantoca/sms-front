@@ -59,25 +59,29 @@ const routesConfigurar = [
         path: 'grupos',
         name: 'configurar-grupos',
         component: () => import('@/views/configurar/grupos/index.vue'),
-        props: route => ({
-          grupoId: route.params.grupoId ? parseInt(route.params.grupoId) : null,
-          setGrupoId: (grupoId) => grupoId && router.push({
+        props: (route) => ({
+          showLista: route.name === 'configurar-grupos',
+          grupoId: parseInt(route.params.grupoId),
+          linkCrear: {
+            name: 'configurar-grupos-crear',
+            query: { back: route.params.grupoId }
+          },
+          setGrupoId: (grupoId) => router.push({
             name: 'configurar-grupo',
             params: { grupoId }
           }),
-          flows: {
-            crear: {
-              active: route.query.crear === 'true',
-              go: () => router.replace({ query: { crear: 'true' } }),
-              back: () => router.replace({ query: { crear: undefined } }),
-              forward: (grupoId) => router.push({
-                name: 'configurar-grupo',
-                params: { grupoId }
-              })
-            }
-          }
         }),
         children: [
+          {
+            path: 'crear',
+            name: 'configurar-grupos-crear',
+            component: () => import('@/views/configurar/grupos/crear.vue'),
+            props: (route) => ({
+              back: () => router.push(route.query.back
+                ? { name: 'configurar-grupo', params: { grupoId: route.query.back } }
+                : { name: 'configurar-grupos' })
+            })
+          },
           {
             path: ':grupoId',
             name: 'configurar-grupo',
@@ -177,24 +181,28 @@ const routesConfigurar = [
         name: 'configurar-suscriptores',
         component: () => import('@/views/configurar/suscriptores/index.vue'),
         props: route => ({
-          suscriptorId: route.params.suscriptorId ? parseInt(route.params.suscriptorId) : null,
-          setSuscriptorId: (suscriptorId) => suscriptorId && router.push({
+          showLista: route.name === 'configurar-suscriptores',
+          suscriptorId: parseInt(route.params.suscriptorId),
+          linkCrear: {
+            name: 'configurar-suscriptores-crear',
+            query: { back: route.params.suscriptorId }
+          },
+          setSuscriptorId: (suscriptorId) => router.push({
             name: 'configurar-suscriptor',
             params: { suscriptorId }
-          }),
-          flows: {
-            crear: {
-              active: route.query.crear === 'true',
-              go: () => router.replace({ query: { crear: 'true' } }),
-              back: () => router.replace({ query: { crear: undefined } }),
-              forward: (suscriptorId) => router.push({
-                name: 'configurar-suscriptor',
-                params: { suscriptorId }
-              })
-            }
-          }
+          })
         }),
         children: [
+          {
+            path: 'crear',
+            name: 'configurar-suscriptores-crear',
+            component: () => import('@/views/configurar/suscriptores/crear.vue'),
+            props: (route) => ({
+              back: () => router.push(route.query.back
+                ? { name: 'configurar-suscriptor', params: { suscriptorId: route.query.back } }
+                : { name: 'configurar-suscriptores' })
+            })
+          },
           {
             path: ':suscriptorId',
             name: 'configurar-suscriptor',
@@ -231,24 +239,28 @@ const routesConfigurar = [
         name: 'configurar-usuarios',
         component: () => import('@/views/configurar/usuarios/index.vue'),
         props: route => ({
-          usuarioId: route.params.usuarioId ? parseInt(route.params.usuarioId) : null,
-          setUsuarioId: (usuarioId) => usuarioId && router.push({
+          showLista: route.name === 'configurar-usuarios',
+          usuarioId: parseInt(route.params.usuarioId),
+          linkCrear: {
+            name: 'configurar-usuarios-crear',
+            query: { back: route.params.usuarioId }
+          },
+          setUsuarioId: (usuarioId) => router.push({
             name: 'configurar-usuario',
             params: { usuarioId }
           }),
-          flows: {
-            crear: {
-              active: route.query.crear === 'true',
-              go: () => router.replace({ query: { crear: 'true' } }),
-              back: () => router.replace({ query: { crear: undefined } }),
-              forward: (usuarioId) => router.push({
-                name: 'configurar-usuario',
-                params: { usuarioId }
-              })
-            }
-          }
         }),
         children: [
+          {
+            path: 'crear',
+            name: 'configurar-usuarios-crear',
+            component: () => import('@/views/configurar/usuarios/crear.vue'),
+            props: (route) => ({
+              back: () => router.push(route.query.back
+                ? { name: 'configurar-usuario', params: { usuarioId: route.query.back } }
+                : { name: 'configurar-usuarios' })
+            })
+          },
           {
             path: ':usuarioId',
             name: 'configurar-usuario',
@@ -293,16 +305,24 @@ const routesConfigurar = [
         path: 'plantillas',
         name: 'configurar-plantillas',
         component: () => import('@/views/configurar/plantillas/index.vue'),
-        props: route => ({
-          flows: {
-            crear: {
-              active: route.query.crear === 'true',
-              go: () => router.replace({ query: { crear: 'true' } }),
-              back: () => router.replace({ query: { crear: undefined } })
-            }
-          }
+        props: (route) => ({
+          showLista: route.name === 'configurar-plantillas',
+          plantillaId: parseInt(route.params.plantillaId),
+          linkCrear: { name: 'configurar-plantillas-crear' },
+          setPlantillaId: (plantillaId) => router.push({
+            name: 'configurar-plantilla',
+            params: { plantillaId }
+          }),
         }),
         children: [
+          {
+            path: 'crear',
+            name: 'configurar-plantillas-crear',
+            component: () => import('@/views/configurar/usuarios/crear.vue'),
+            props: () => ({
+              back: () => router.push({ name: 'configurar-plantillas' })
+            })
+          },
           {
             path: ':plantillaId',
             name: 'configurar-plantilla',
