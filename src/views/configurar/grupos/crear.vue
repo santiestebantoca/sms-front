@@ -1,5 +1,6 @@
 <script lang="ts" setup>
 const props = defineProps({
+  forward: Function,
   back: Function
 })
 
@@ -35,9 +36,9 @@ const validate = () => {
 const submit = () => {
   if (!validate()) return
   crearGrupo(form.value)
-    .then(() => {
+    .then((nuevoGrupo) => {
       toast.create({ body: 'Nuevo grupo creado.', variant: 'success' })
-      props.back()
+      props.forward(nuevoGrupo.id) // props.back()
     })
     .catch(err => {
       if (isValidationError(err)) errors.value = err.errors

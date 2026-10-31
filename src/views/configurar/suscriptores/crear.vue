@@ -1,17 +1,18 @@
 <script lang="ts" setup>
-const props = defineProps({ forward: Function, back: Function })
+const props = defineProps({
+  forward: Function,
+  back: Function
+})
 
 import { isValidationError } from '@/api/client'
 import { useSuscriptoresQuery, useSuscriptorCreate } from '@/stores/suscriptores'
 import { useGruposNotificablesQuery } from '@/stores/grupos'
 import type { SuscriptorCreate } from '@/types/models'
 import { useToast } from 'bootstrap-vue-next'
-import { ref, computed, onMounted } from 'vue'
+import { ref, computed } from 'vue'
 
-const model = ref(false)
-const created = ref(null)
 const toast = useToast()
-const tabs = ref(0)
+const model = ref(false)
 const form = ref<SuscriptorCreate>({
   nombre: null,
   cargo: null,
@@ -22,18 +23,38 @@ const form = ref<SuscriptorCreate>({
   suplente: null,
 })
 const errors = ref<Record<string, any>>({})
+const errorState = computed(() => ({
+  nombre: {
+    state: errors.value.nombre ? false : null,
+    invalidFeedback: errors.value.nombre,
+    onInput: () => errors.value.nombre = null
+  },
+  telefono: {
+    state: errors.value.telefono ? false : null,
+    invalidFeedback: errors.value.telefono,
+    onInput: () => errors.value.telefono = null
+  },
+  correo: {
+    state: errors.value.correo ? false : null,
+    invalidFeedback: errors.value.correo,
+    onInput: () => errors.value.correo = null
+  },
+  grupo: {
+    state: errors.value.grupo ? false : null,
+    invalidFeedback: errors.value.grupo,
+    onInput: () => errors.value.grupo = null
+  },
+}))
 const { mutateAsync: crearSuscriptor, asyncStatus } = useSuscriptorCreate()
 const loading = computed(() => asyncStatus.value === 'loading')
 const { data: listaGrupos, grupos, isPending: gruposPendientes } = useGruposNotificablesQuery()
-const grupoSeleccionado = computed(() => {
+const nombreGrupo = computed(() => {
   if (listaGrupos.value) {
     const grupo = listaGrupos.value.find(d => d.id === form.value.grupo)
-    if (grupo) return grupo.apodo || grupo.nombre
+    if (grupo) return grupo.nombre
   }
 })
 const { suscriptores, isPending: suscriptoresPendiente } = useSuscriptoresQuery()
-
-onMounted(() => model.value = true)
 
 const validate = () => {
   const telefono = /^(\+53|53)?\d{8}$/
@@ -49,80 +70,78 @@ const submit = async () => {
   if (!validate()) return
   crearSuscriptor(form.value)
     .then(nuevoSuscriptor => {
-      toast.create({ body: 'Nuevo grupo creado.', variant: 'success' })
-      created.value = nuevoSuscriptor.id
-      model.value = false
+      toast.create({ body: 'Nuevo suscriptor creado.', variant: 'success' })
+      props.forward(nuevoSuscriptor.id) // props.back()
     })
     .catch(err => {
-      isValidationError(err) && (errors.value = err.errors)
+      if (isValidationError(err)) errors.value = err.errors
       errors.value.form = 'Error al crear el suscriptor.'
     })
-}
-const hidden = () => {
-  if (created.value) props.forward(created.value)
-  else props.back()
 }
 </script>
 
 <template>
-  <BModal v-model="model" title="Crear suscriptor" @hidden="hidden">
-    <form @submit.prevent="submit">
-      <BTabs v-model:index="tabs">
-        <BTab>
-          <div class="mb-3">
-            <label class="form-label">Nombre</label>
-            <input class="form-control" v-model.trim="form.nombre" @input="errors.nombre = null" />
-            <div class="small text-danger" v-text="errors.nombre" />
-          </div>
-          <div class="mb-3">
-            <BFormCheckbox v-model="form.activo"> &nbsp;Activo</BFormCheckbox>
-          </div>
-          <div class="mb-3">
-            <label class="form-label">Cargo</label>
-            <input class="form-control" v-model.trim="form.cargo" />
-          </div>
-          <div class="mb-3">
-            <label class="form-label">Teléfono</label>
-            <input class="form-control" v-model.trim="form.telefono" @input="errors.telefono = null" />
-            <div class="small text-danger" v-text="errors.telefono" />
-          </div>
-          <div class="mb-3">
-            <label class="form-label">Correo</label>
-            <input class="form-control" v-model.trim="form.correo" @input="errors.correo = null" />
-            <div class="small text-danger" v-text="errors.correo" />
-          </div>
-          <div class="mb-3">
+  <div class="max-w-500 p-3">
+    <h5 class="mb-5"> Nuevo suscriptor </h5>
+
+    <BForm @submit.prevent="submit" density="3">
+      <!-- <BTabs v-model:index="tabs"> -->
+      <!-- <BTab density="3"> -->
+      <BFormGroup label="Nombre" v-bind="errorState.nombre">
+        <BFormInput v-model="form.nombre" trim />
+      </BFormGroup>
+      <!-- <BFormGroup class="p-2">
+        <BFormCheckbox v-model="form.activo" class="mb-0">
+          Activo
+        </BFormCheckbox>
+      </BFormGroup> -->
+      <BFormGroup label="Cargo">
+        <BFormInput v-model="form.cargo" trim />
+      </BFormGroup>
+      <BFormGroup label="Teléfono" v-bind="errorState.telefono">
+        <BFormInput v-model="form.telefono" trim />
+      </BFormGroup>
+      <BFormGroup label="Correo" v-bind="errorState.correo">
+        <BFormInput v-model="form.correo" trim />
+      </BFormGroup>
+      <BFormGroup label="Grupo" v-bind="errorState.grupo" @click="model = true">
+        <BFormInput v-model="nombreGrupo" trim readonly class="cursor-pointer" />
+      </BFormGroup>
+      <BModal v-model="model">
+        seleccionar
+      </BModal>
+      <!-- <div class="mb-3">
             <label class="form-label">Grupo</label>
             <div class="form-control hstack gap-2 pe-2 h-38" @click="tabs = 1" type="button">
               <template v-if="grupoSeleccionado">
                 <ILucideSquaresUnite class="text-yellow flex-shrink-0" />
                 <span v-text="grupoSeleccionado" class="text-truncate" />
               </template>
-              <ILucideChevronRight class="ms-auto" />
-            </div>
-          </div>
-          <div class="mb-3">
-            <label class="form-label">Suplente</label>
-            <BFormSelect v-model="form.suplente" :options="suscriptores" textField="nombre" valueField="id" />
-          </div>
-        </BTab>
-        <BTab>
-          <label class="form-label">Grupo</label>
-          <div v-if="gruposPendientes" class="p-5 text-center">
-            <BSpinner />
-          </div>
-          <RootTree v-else :childrenNames="['hijos']" v-model="form.grupo" selectable>
-            <TreeNode v-for="data in grupos" :data="data" :key="data.id">
-              <template #default="{ data }">
-                <ILucideSquaresUnite class="text-yellow flex-shrink-0" />
-                <span v-text="data.nombre" class="text-truncate" />
-              </template>
-            </TreeNode>
-          </RootTree>
-        </BTab>
-      </BTabs>
-    </form>
-    <template #footer>
+<ILucideChevronRight class="ms-auto" />
+</div>
+</div>
+<div class="mb-3">
+  <label class="form-label">Suplente</label>
+  <BFormSelect v-model="form.suplente" :options="suscriptores" textField="nombre" valueField="id" />
+</div> -->
+      <!-- </BTab>
+      <BTab> -->
+      <!-- <label class="form-label">Grupo</label>
+        <div v-if="gruposPendientes" class="p-5 text-center">
+          <BSpinner />
+        </div>
+        <RootTree v-else :childrenNames="['hijos']" v-model="form.grupo" selectable>
+          <TreeNode v-for="data in grupos" :data="data" :key="data.id">
+            <template #default="{ data }">
+              <ILucideSquaresUnite class="text-yellow flex-shrink-0" />
+              <span v-text="data.nombre" class="text-truncate" />
+            </template>
+          </TreeNode>
+        </RootTree> -->
+      <!-- </BTab>
+      </BTabs> -->
+    </BForm>
+    <!-- <template #footer>
       <BButton v-if="tabs === 0" @click="submit" variant="primary">
         Aceptar
       </BButton>
@@ -130,18 +149,6 @@ const hidden = () => {
         <ILucideSquareCheckBig />
         Listo
       </BButton>
-    </template>
-  </BModal>
+    </template> -->
+  </div>
 </template>
-
-<style scoped>
-.form-label {
-  color: var(--bs-teal);
-  font-weight: 600;
-  font-size: .875em;
-}
-
-:deep(.nav-tabs) {
-  display: none;
-}
-</style>

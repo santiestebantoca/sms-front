@@ -85,6 +85,7 @@ declare module 'vue' {
     ILucideSearch: typeof import('~icons/lucide/search')['default']
     ILucideSend: typeof import('~icons/lucide/send')['default']
     ILucideSettings: typeof import('~icons/lucide/settings')['default']
+    ILucideSquareArrowOutUpRight: typeof import('~icons/lucide/square-arrow-out-up-right')['default']
     ILucideSquareCheckBig: typeof import('~icons/lucide/square-check-big')['default']
     ILucideSquaresUnite: typeof import('~icons/lucide/squares-unite')['default']
     ILucideText: typeof import('~icons/lucide/text')['default']

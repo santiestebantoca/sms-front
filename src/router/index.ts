@@ -77,6 +77,10 @@ const routesConfigurar = [
             name: 'configurar-grupos-crear',
             component: () => import('@/views/configurar/grupos/crear.vue'),
             props: (route) => ({
+              forward: (grupoId) => router.push({
+                name: 'configurar-grupo',
+                params: { grupoId }
+              }),
               back: () => router.push(route.query.back
                 ? { name: 'configurar-grupo', params: { grupoId: route.query.back } }
                 : { name: 'configurar-grupos' })
@@ -198,6 +202,10 @@ const routesConfigurar = [
             name: 'configurar-suscriptores-crear',
             component: () => import('@/views/configurar/suscriptores/crear.vue'),
             props: (route) => ({
+              forward: (suscriptorId) => router.push({
+                name: 'configurar-suscriptor',
+                params: { suscriptorId }
+              }),
               back: () => router.push(route.query.back
                 ? { name: 'configurar-suscriptor', params: { suscriptorId: route.query.back } }
                 : { name: 'configurar-suscriptores' })
@@ -256,6 +264,10 @@ const routesConfigurar = [
             name: 'configurar-usuarios-crear',
             component: () => import('@/views/configurar/usuarios/crear.vue'),
             props: (route) => ({
+              forward: (usuarioId) => router.push({
+                name: 'configurar-usuario',
+                params: { usuarioId }
+              }),
               back: () => router.push(route.query.back
                 ? { name: 'configurar-usuario', params: { usuarioId: route.query.back } }
                 : { name: 'configurar-usuarios' })
