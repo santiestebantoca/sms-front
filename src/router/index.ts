@@ -306,7 +306,7 @@ const routesConfigurar = [
         name: 'configurar-plantillas',
         component: () => import('@/views/configurar/plantillas/index.vue'),
         props: (route) => ({
-          showLista: route.name === 'configurar-plantillas',
+          showLista: route.name !== 'configurar-plantillas-crear',
           plantillaId: parseInt(route.params.plantillaId),
           linkCrear: { name: 'configurar-plantillas-crear' },
           setPlantillaId: (plantillaId) => router.push({
@@ -318,7 +318,7 @@ const routesConfigurar = [
           {
             path: 'crear',
             name: 'configurar-plantillas-crear',
-            component: () => import('@/views/configurar/usuarios/crear.vue'),
+            component: () => import('@/views/configurar/plantillas/crear.vue'),
             props: () => ({
               back: () => router.push({ name: 'configurar-plantillas' })
             })

@@ -24,9 +24,9 @@ const acciones = ref([
       <span class="text-secondary text-opacity-50 fst-italic">
         — {{ data.modified_by }}
       </span>
-      <div class="ms-auto">
-        <BButton v-for="{ texto, to, icon } in acciones" :to="to" variant="flat-secondary" class="btn-sm">
-          <UIcon :name="icon" />
+      <div class="ms-auto opacity-hover">
+        <BButton v-for="{ texto, to, icon } in acciones" :to="to" variant="flat wh-30 ms-1">
+          <UIcon :name="icon" class="center" />
         </BButton>
       </div>
     </div>
@@ -42,6 +42,7 @@ const acciones = ref([
   --bs-border-color: var(--bs-gray-400);
   border: solid 1px var(--bs-border-color);
   transition: all .6s;
+  --opacity-hover-opacity: 0.4;
 
   &::after {
     position: absolute;
@@ -56,8 +57,14 @@ const acciones = ref([
     transition: all .6s;
   }
 
+  .opacity-hover {
+    transition: all .6s;
+    opacity: var(--opacity-hover-opacity);
+  }
+
   &:hover {
     --bs-border-color: var(--bs-gray-500);
+    --opacity-hover-opacity: 1;
   }
 }
 </style>

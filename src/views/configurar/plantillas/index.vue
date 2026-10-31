@@ -17,10 +17,10 @@ watchEffect(() => active.value = props.plantillaId)
 
 <template>
   <div class="container ms-0 ps-4 pb-4">
-    <div class="max-w-700">
+    <div v-if="showLista" class="max-w-700">
       <div class="title">
         PLANTILLAS
-        <BButton :to="linkCrear" variant="emphasis h-34 py-1" v-tippy="'Crear plantilla'">
+        <BButton :to="linkCrear" variant="emphasis h-36 py-1" v-tippy="'Crear plantilla'">
           <ILucidePlus /> Agregar
         </BButton>
       </div>
@@ -29,9 +29,9 @@ watchEffect(() => active.value = props.plantillaId)
       </div>
       <div class="py-4">
         <PlantillaCard v-for="data in plantillas" :key="data.id" :data="data" />
-        <router-view />
       </div>
     </div>
+    <router-view />
   </div>
 </template>
 

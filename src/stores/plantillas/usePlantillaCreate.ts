@@ -1,12 +1,12 @@
 import { useMutation, useQueryCache } from '@pinia/colada'
 import { queryKeys } from '@/lib/query-keys'
 import { plantillasApi as api } from '@/api/plantillas'
-import type { PlantillaPayload } from '@/types/models'
+import type { PlantillaCreate } from '@/types/models'
 
 export function usePlantillaCreate() {
   const queryCache = useQueryCache()
 
-  return useMutation<any, PlantillaPayload>({
+  return useMutation<any, PlantillaCreate>({
     mutation: (newData) => api.create(newData),
 
     onMutate: () => {

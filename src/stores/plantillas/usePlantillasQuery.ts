@@ -1,7 +1,7 @@
-import { useQuery, defineQuery } from '@pinia/colada'
+import { useQuery } from '@pinia/colada'
 import { plantillasApi as api } from '@/api/plantillas'
 import { queryKeys } from '@/lib/query-keys'
-import { ref, computed } from 'vue'
+import { ref } from 'vue'
 
 export const usePlantillasQuery = () => {
   const search = ref('')

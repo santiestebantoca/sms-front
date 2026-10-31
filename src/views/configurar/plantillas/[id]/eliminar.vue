@@ -1,5 +1,8 @@
 <script lang="ts" setup>
-const props = defineProps({ plantillaId: Number, back: Function })
+const props = defineProps({
+  plantillaId: Number,
+  back: Function
+})
 
 import { usePlantillaDelete } from '@/stores/plantillas'
 import { useToast } from 'bootstrap-vue-next'
@@ -27,11 +30,14 @@ const submit = () => eliminarPlantilla(props.plantillaId)
     <p>
       Se eliminará la plantilla permanentemente.
     </p>
+    <p class="text-danger fw-semibold">
+      Esta acción no se puede deshacer.
+    </p>
     <template #footer>
-      <BButton variant="secondary" @click="model = false">
+      <BButton variant="emphasis" @click="model = false">
         Cancelar
       </BButton>
-      <BButton variant="danger" @click="submit" :loading="loading" loading-fill class="w-90">
+      <BButton variant="danger w-90" @click="submit" :loading="loading" loading-fill>
         Eliminar
       </BButton>
     </template>

@@ -43,8 +43,11 @@ const submit = () => actualizarNotificados(form.value)
       </TreeNode>
     </RootTree>
     <template #footer>
-      <BButton variant="primary" @click="submit" :loading="loading">
-        <ILucideSquareCheckBig /> Listo
+      <BButton @click="submit" variant="primary w-90" :loading="loading" loading-fill>
+        Guardar
+      </BButton>
+      <BButton variant="emphasis w-90" @click="model = false">
+        Cancelar
       </BButton>
     </template>
   </BModal>

@@ -1,5 +1,8 @@
 <script lang="ts" setup>
-const props = defineProps({ grupoId: Number, back: Function })
+const props = defineProps({
+  grupoId: Number,
+  back: Function
+})
 
 import { isValidationError } from '@/api/client'
 import { useGrupoUpdate } from '@/stores/grupos'

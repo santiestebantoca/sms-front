@@ -1,63 +1,64 @@
 <script lang="ts" setup>
-const props = defineProps({ back: Function })
+const props = defineProps({
+  back: Function
+})
 
 import { isValidationError } from '@/api/client'
 import { usePlantillaCreate } from '@/stores/plantillas'
-import type { PlantillaPayload } from '@/types/models'
+import type { PlantillaCreate } from '@/types/models'
 import { useToast } from 'bootstrap-vue-next'
-import { ref, computed, onMounted } from 'vue'
+import { ref, computed } from 'vue'
 
-const model = ref(false)
 const toast = useToast()
-const { mutateAsync: crearPlantilla, asyncStatus } = usePlantillaCreate()
-const loading = computed(() => asyncStatus.value === 'loading')
-const form = ref<PlantillaPayload>({
+const form = ref<PlantillaCreate>({
   texto: null,
 })
 const errors = ref<Record<string, any>>({})
-
-onMounted(() => model.value = true)
+const errorState = computed(() => ({
+  texto: {
+    state: errors.value.texto ? false : null,
+    invalidFeedback: errors.value.texto,
+    onInput: () => errors.value.texto = null
+  },
+}))
+const { mutateAsync: crearPlantilla, asyncStatus } = usePlantillaCreate()
+const loading = computed(() => asyncStatus.value === 'loading')
 
 const validate = () => {
   errors.value = {}
-  if (!form.value.texto) errors.value.texto = 'Este campo no puede estar vacío'
+  if (!form.value.texto) errors.value.texto = 'Este campo no puede estar vacío.'
   return !Object.keys(errors.value).length
 }
 const submit = async () => {
   if (!validate()) return
   crearPlantilla(form.value)
-    .then(nuevaPlantilla => {
+    .then(() => {
       toast.create({ body: 'Nueva plantilla creada.', variant: 'success' })
-      model.value = false
+      props.back()
     })
     .catch(err => {
-      isValidationError(err) && (errors.value = err.errors)
+      if (isValidationError(err)) errors.value = err.errors
       errors.value.form = 'Error al crear la plantilla.'
     })
 }
 </script>
 
 <template>
-  <BModal v-model="model" title="Crear plantilla" @hidden="back">
-    <form @submit.prevent="submit">
-      <div class="mb-3">
-        <label class="form-label">Texto</label>
-        <textarea rows="8" class="form-control" v-model.trim="form.texto" @input="errors.texto = null" />
-        <div class="small text-danger" v-text="errors.texto" />
-      </div>
-    </form>
-    <template #footer>
-      <BButton @click="submit" :loading="loading" loading-fill class="w-90">
-        Crear
-      </BButton>
-    </template>
-  </BModal>
-</template>
+  <div class="max-w-700 py-3">
+    <h5 class="mb-5"> Nueva plantilla </h5>
 
-<style scoped>
-.form-label {
-  color: var(--bs-teal);
-  font-weight: 600;
-  font-size: .875em;
-}
-</style>
+    <BForm @submit.prevent="submit" density="3">
+      <BFormGroup label="Texto" v-bind="errorState.texto">
+        <BFormTextarea v-model="form.texto" no-resize rows="6" />
+      </BFormGroup>
+      <BFormButtons class="py-4">
+        <BButton type="submit" variant="primary w-90" :loading="loading" loading-fill>
+          Crear
+        </BButton>
+        <BButton variant="emphasis w-90" @click="back">
+          Cancelar
+        </BButton>
+      </BFormButtons>
+    </BForm>
+  </div>
+</template>

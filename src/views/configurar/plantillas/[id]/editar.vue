@@ -1,18 +1,28 @@
 <script lang="ts" setup>
-const props = defineProps({ plantillaId: Number, back: Function })
+const props = defineProps({
+  plantillaId: Number,
+  back: Function
+})
 
 import { isValidationError } from '@/api/client'
-import { usePlantillasQuery, usePlantillaUpdate } from '@/stores/plantillas'
-import type { PlantillaPayload, PlantillaUpdate } from '@/types/models'
+import { usePlantillaQuery, usePlantillaUpdate } from '@/stores/plantillas'
+import type { PlantillaUpdate } from '@/types/models'
 import { ref, computed, onMounted, watchEffect } from 'vue'
 
 const model = ref(false)
-const form = ref<PlantillaPayload>({
+const form = ref<PlantillaUpdate>({
+  id: props.plantillaId,
   texto: null,
 })
 const errors = ref<Record<string, any>>({})
-const { plantillas, isLoading } = usePlantillasQuery()
-const plantilla = computed(() => plantillas.value?.find(d => d.id === props.plantillaId))
+const errorState = computed(() => ({
+  texto: {
+    state: errors.value.texto ? false : null,
+    invalidFeedback: errors.value.texto,
+    onInput: () => errors.value.texto = null
+  },
+}))
+const { plantilla, isLoading } = usePlantillaQuery(props.plantillaId)
 const { mutateAsync: actualizarPlantilla, asyncStatus } = usePlantillaUpdate()
 const loading = computed(() => asyncStatus.value === 'loading')
 
@@ -25,16 +35,15 @@ onMounted(() => model.value = true)
 
 const validate = () => {
   errors.value = {}
-  if (!form.value.texto) errors.value.texto = 'Este campo no puede estar vacío'
+  if (!form.value.texto) errors.value.texto = 'Este campo no puede estar vacío.'
   return !Object.keys(errors.value).length
 }
 const submit = async () => {
   if (!validate()) return
-  const payload: PlantillaUpdate = { id: plantilla.value.id, ...form.value }
-  actualizarPlantilla(payload)
+  actualizarPlantilla(form.value)
     .then(() => model.value = false)
     .catch(err => {
-      isValidationError(err) && (errors.value = err.errors)
+      if (isValidationError(err)) errors.value = err.errors
       errors.value.form = 'Error al actualizar el grupo.'
     })
 }
@@ -42,28 +51,18 @@ const submit = async () => {
 
 <template>
   <BModal v-model="model" title="Editar plantilla" @hidden="back">
-    <form @submit.prevent="submit">
-      <div class="mb-3">
-        <label class="form-label">Texto</label>
-        <textarea rows="8" class="form-control" v-model.trim="form.texto" @input="errors.texto = null" />
-        <div class="small text-danger" v-text="errors.texto" />
-      </div>
-    </form>
+    <BForm id="form-plantilla-editar" @submit.prevent="submit" density="3">
+      <BFormGroup label="Texto" v-bind="errorState.texto">
+        <BFormTextarea v-model="form.texto" no-resize rows="6" />
+      </BFormGroup>
+    </BForm>
     <template #footer>
-      <BButton variant="secondary" @click="model = false" :disabled="loading">
-        Cancelar
-      </BButton>
-      <BButton @click="submit" :loading="loading" loading-fill class="w-90">
+      <BButton type="submit" form="form-plantilla-editar" variant="primary w-90" :loading="loading" loading-fill>
         Guardar
+      </BButton>
+      <BButton variant="emphasis w-90" @click="model = false">
+        Cancelar
       </BButton>
     </template>
   </BModal>
 </template>
-
-<style scoped>
-.form-label {
-  color: var(--bs-teal);
-  font-weight: 600;
-  font-size: .875em;
-}
-</style>

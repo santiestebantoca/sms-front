@@ -1,5 +1,7 @@
 <script lang="ts" setup>
-const props = defineProps({ forward: Function, back: Function })
+const props = defineProps({
+  back: Function
+})
 
 import { isValidationError } from '@/api/client'
 import { useGrupoCreate } from '@/stores/grupos'

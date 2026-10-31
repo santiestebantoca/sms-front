@@ -23,9 +23,11 @@ const submit = () => eliminarSuscriptor(props.suscriptorId)
 <template>
   <BModal v-model="model" title="Eliminar suscriptor" @hidden="back">
     <p>
-      Esta acción eliminará permanentemente al suscriptor seleccionado.
+      Se eliminará el suscriptor permanentemente.
     </p>
-    <p class="text-danger fw-semibold">Esta acción no se puede deshacer.</p>
+    <p class="text-danger fw-semibold">
+      Esta acción no se puede deshacer.
+    </p>
     <template #footer>
       <BButton variant="emphasis" @click="model = false">
         Cancelar

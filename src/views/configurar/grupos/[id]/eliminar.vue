@@ -1,5 +1,9 @@
 <script lang="ts" setup>
-const props = defineProps({ grupoId: Number, back: Function, forward: Function })
+const props = defineProps({
+  grupoId: Number,
+  back: Function,
+  forward: Function
+})
 
 import { useGrupoDelete } from '@/stores/grupos'
 import { useToast } from 'bootstrap-vue-next'
@@ -31,14 +35,16 @@ const hidden = () => {
 <template>
   <BModal v-model="model" title="Eliminar grupo" @hidden="hidden">
     <p>
-      Esta acción eliminará permanentemente:
+      Se eliminarán permanentemente:
     </p>
     <ul>
-      <li>El grupo seleccionado</li>
-      <li>Grupos pertenecientes a él (grupos hijos)</li>
-      <li>Suscriptores pertenecientes a estos grupos</li>
+      <li>El grupo seleccionado,</li>
+      <li>los grupos pertenecientes a él (grupos hijos) y</li>
+      <li>los suscriptores pertenecientes a estos grupos.</li>
     </ul>
-    <p class="text-danger fw-semibold">Esta acción no se puede deshacer.</p>
+    <p class="text-danger fw-semibold">
+      Esta acción no se puede deshacer.
+    </p>
     <template #footer>
       <BButton variant="emphasis" @click="model = false">
         Cancelar

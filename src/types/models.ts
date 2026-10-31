@@ -32,11 +32,11 @@ export interface MensajePayload {
 }
 
 // Plantillas
-export interface PlantillaPayload {
+export interface PlantillaCreate {
   texto: string
 }
 
-export interface PlantillaUpdate extends PlantillaPayload {
+export interface PlantillaUpdate extends PlantillaCreate {
   id: number | string
 }
 
