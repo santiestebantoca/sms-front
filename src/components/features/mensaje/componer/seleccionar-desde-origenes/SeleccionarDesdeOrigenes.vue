@@ -11,7 +11,8 @@ const notificadosIds = ref([]) // notificados ids first but UI can changes it to
 const oldVal = ref([])
 const verListaNotificados = ref(false)
 const verListaDestinatarios = ref(false)
-const { notificados, isLoading: cargandoNotificados, gruposIds } = useNotificadosDeLosGruposQuery()
+const gruposIds = ref<Array<string | number>>([])
+const { notificados, isLoading: cargandoNotificados } = useNotificadosDeLosGruposQuery(gruposIds)
 const origenesButtons = computed(() => origenes.value.map((grupo) => ({
   text: grupo.apodo || grupo.nombre,
   do: () => quitarOrigen(grupo.id),

@@ -10,6 +10,7 @@ const acciones = ref([
   {
     texto: "Editar",
     icon: "lucide-pen-line",
+    tippy: "Editar usuario",
     action: {
       to: { name: 'configurar-usuario-editar' }
     },
@@ -17,6 +18,7 @@ const acciones = ref([
   {
     texto: "Eliminar",
     icon: "lucide-trash",
+    tippy: "Eliminar usuario",
     action: {
       to: { name: 'configurar-usuario-eliminar' }
     },

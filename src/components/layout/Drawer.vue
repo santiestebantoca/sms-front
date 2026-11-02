@@ -16,7 +16,7 @@ const left = inject<import('vue').Ref<{ width: number; top: number; bottom: numb
 const right = inject<import('vue').Ref<{ width: number; top: number; bottom: number }>>('layout:right', ref({ width: 0, top: 0, bottom: 0 }))
 const breakpoints = useBreakpoints(breakpointsBootstrapV5)
 const above = breakpoints.greaterOrEqual(props.breakpoint as keyof typeof breakpointsBootstrapV5)
-const offcanvas = useTemplateRef('offcanvas')
+const offcanvas = useTemplateRef<{ hide: () => void }>('offcanvas')
 const offcanvasWrapper = useTemplateRef('offcanvasWrapper')
 const model = ref(undefined)
 const rootClass = ref([])

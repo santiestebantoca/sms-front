@@ -19,7 +19,8 @@
     "isolatedModules": true,
     "allowJs": true,
     "types": [
-      "vite/client"
+      "vite/client",
+      "node"
     ],
     "paths": {
       "@/*": [
@@ -29,11 +30,7 @@
   },
   "include": [
     "src/**/*",
+    "components.d.ts",
     "vite.config.ts"
-  ],
-  "references": [
-    {
-      "path": "./tsconfig.node.json"
-    }
   ]
 }
