@@ -41,11 +41,13 @@ watchEffect(() => active.value = props.grupoId)
         </RootTree>
       </div>
     </div>
-    <div class="container ms-0 max-w-700">
-      <div v-if="showLista" class="mt-5 text-center">
-        Seleccione un grupo para mostrarlo aquí.
+    <div class="overflow-auto">
+      <div class="container ms-0 max-w-700">
+        <div v-if="showLista" class="mt-5 text-center">
+          Seleccione un grupo para mostrarlo aquí.
+        </div>
+        <router-view />
       </div>
-      <router-view />
     </div>
   </div>
 </template>

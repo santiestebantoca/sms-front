@@ -1,7 +1,7 @@
 import { useQuery } from '@pinia/colada'
 import { queryKeys } from '@/lib/query-keys'
 import { suscriptoresApi as api } from '@/api/suscriptores'
-import { Ref, toValue } from 'vue'
+import { Ref, toValue, computed } from 'vue'
 
 export function useSuscriptoresQuery() {
   const { data, isPending } = useQuery({
@@ -12,6 +12,7 @@ export function useSuscriptoresQuery() {
   return {
     suscriptores: data,
     isPending,
+    options: computed(() => data.value?.map(d => ({ value: d.id, text: d.nombre })))
   }
 }
 

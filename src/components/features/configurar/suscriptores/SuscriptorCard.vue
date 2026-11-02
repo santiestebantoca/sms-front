@@ -1,97 +1,81 @@
 <script lang="ts" setup>
-const props = defineProps({ suscriptorId: Number })
+import { formatTime } from '@/composables/useDates'
+import { ref, inject, Ref } from 'vue'
 
-import { useSuscriptorQuery } from '@/stores/suscriptores'
-import { ref, watchEffect } from 'vue'
-
-const { suscriptor, isPending, suscriptorId } = useSuscriptorQuery()
-
+const suscriptor = inject<Ref<any>>('suscriptor:suscriptor')
 const acciones = ref([
   {
     texto: "Editar",
     icon: "lucide-pen-line",
-    action: {
-      to: { name: 'configurar-suscriptor-editar' }
-    },
+    to: { name: 'configurar-suscriptor-editar' }
   },
   {
     texto: "Eliminar",
     icon: "lucide-trash",
-    action: {
-      to: { name: 'configurar-suscriptor-eliminar' }
-    },
+    to: { name: 'configurar-suscriptor-eliminar' }
   }
 ])
-
-watchEffect(() => suscriptorId.value = props.suscriptorId)
 </script>
 
 <template>
-  <div v-if="isPending" class="text-center p-5">
-    <BSpinner />
-  </div>
-  <template v-else>
-    <div class="mt-2 hstack gap-2 justify-content-end">
-      <BButton v-for="accion in acciones" variant="flat-outline-dark" v-bind="accion.action" v-tippy="accion.tippy"
-        class="btn-sm">
+  <div>
+    <div class="hstack gap-2 justify-content-end py-2">
+      <BButton v-for="accion in acciones" :to="accion.to" variant="flat">
         <UIcon :name="accion.icon" /> {{ accion.texto }}
       </BButton>
     </div>
-    <div class="px-3 py-2">
-      <div class="label-value">
-        <label>Nombre</label>
-        <div class="value" v-text="suscriptor.nombre" />
-      </div>
-      <div class="label-value">
-        <label>Teléfono</label>
-        <div class="value" v-text="suscriptor.telefono || '-'" />
-      </div>
-      <div class="label-value">
-        <label>Correo</label>
-        <div class="value" v-text="suscriptor.correo || '-'" />
-      </div>
-      <div class="label-value">
-        <label>Cargo</label>
-        <div class="value" v-text="suscriptor.cargo || '-'" />
-      </div>
-      <div class="label-value">
-        <label>Grupo</label>
-        <div v-if="suscriptor.grupo" class="hstack h-32">
-          <ILucideSquaresUnite class="text-yellow flex-shrink-0" />
-          <span v-text="suscriptor.grupo" class="text-truncate" />
+    <div class="vstack gap-4 px-3">
+      <div class="w-100">
+        <label class="form-label">Nombre</label>
+        <div>
+          {{ suscriptor.nombre }}
         </div>
-        <div v-else>-</div>
       </div>
-      <div class="label-value">
-        <label>Activo</label>
-        <div class="value" v-text="suscriptor.activo ? 'Sí' : 'No'" />
-      </div>
-      <div class="label-value">
-        <label>Suplente</label>
-        <div v-if="suscriptor.suplente" class="hstack h-32">
-          <ILucideUser class="text-secondary me-2" />
-          <span v-text="suscriptor.suplente" />
+      <div class="w-100">
+        <label class="form-label">Teléfono</label>
+        <div>
+          {{ suscriptor.telefono || '-' }}
         </div>
-        <div v-else>-</div>
       </div>
+      <div class="w-100">
+        <label class="form-label">Correo</label>
+        <div>
+          {{ suscriptor.correo || '-' }}
+        </div>
+      </div>
+      <div class="w-100">
+        <label class="form-label">Cargo</label>
+        <div>
+          {{ suscriptor.cargo || '-' }}
+        </div>
+      </div>
+      <div class="w-100">
+        <label class="form-label">Grupo</label>
+        <div>
+          {{ suscriptor.grupo || '-' }}
+        </div>
+      </div>
+      <div class="w-100">
+        <label class="form-label">Activo</label>
+        <div>
+          {{ suscriptor.activo ? 'Sí' : 'No' }}
+        </div>
+      </div>
+      <div class="w-100">
+        <label class="form-label">Suplente</label>
+        <div>
+          {{ suscriptor.suplente }}
+        </div>
+      </div>
+      <template v-if="suscriptor.modified_by">
+        <div class="pt-3 border-top">
+          <label class="form-label">Modificado</label>
+          <div>
+            {{ suscriptor.modified_by }},
+            {{ formatTime(suscriptor.modified_on) }}
+          </div>
+        </div>
+      </template>
     </div>
-    <!-- <BModal v-model="meta" title="Información del registro" no-footer>
-      <div class="label-value">
-        <label>Creado en</label>
-        <div class="value" v-text="suscriptor.created_on || '-'" />
-      </div>
-      <div class="label-value">
-        <label>Creado por</label>
-        <div class="value" v-text="suscriptor.created_by || '-'" />
-      </div>
-      <div class="label-value">
-        <label>Modificado en</label>
-        <div class="value" v-text="suscriptor.modified_on || '-'" />
-      </div>
-      <div class="label-value">
-        <label>Modificado por</label>
-        <div class="value" v-text="suscriptor.modified_by || '-'" />
-      </div>
-    </BModal> -->
-  </template>
+  </div>
 </template>

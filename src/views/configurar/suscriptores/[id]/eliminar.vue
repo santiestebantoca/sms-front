@@ -1,5 +1,9 @@
 <script lang="ts" setup>
-const props = defineProps({ suscriptorId: Number, back: Function, forward: Function })
+const props = defineProps({
+  suscriptorId: Number,
+  back: Function,
+  forward: Function
+})
 
 import { useSuscriptorDelete } from '@/stores/suscriptores'
 import { useToast } from 'bootstrap-vue-next'
@@ -31,15 +35,17 @@ const hidden = () => {
 <template>
   <BModal v-model="model" title="Eliminar suscriptor" @hidden="hidden">
     <p>
-      Esta acción eliminará permanentemente al suscriptor pero
-      mantendrá los registros históricos asociados a él.
+      Se eliminará el suscriptor permanentemente. Se mantendrán
+      los registros históricos asociados a él.
     </p>
-    <p class="text-danger fw-semibold">Esta acción no se puede deshacer.</p>
+    <p class="text-danger fw-semibold">
+      Esta acción no se puede deshacer.
+    </p>
     <template #footer>
-      <BButton variant="secondary" @click="model = false">
+      <BButton variant="emphasis" @click="model = false">
         Cancelar
       </BButton>
-      <BButton variant="danger" @click="submit" :loading="loading" loading-fill class="w-90">
+      <BButton variant="danger w-90" @click="submit" :loading="loading" loading-fill>
         Eliminar
       </BButton>
     </template>

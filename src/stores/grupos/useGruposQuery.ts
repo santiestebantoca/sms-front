@@ -52,6 +52,7 @@ export function useGruposNotificablesQuery() {
     data,
     grupos: tree,
     isPending,
+    options: computed(() => data.value?.map(d => ({ value: d.id, text: d.nombre })))
   }
 }
 

@@ -4,15 +4,17 @@ const props = defineProps({
   back: Function
 })
 
+import SeleccionarGrupo from '@/components/features/configurar/suscriptores/SeleccionarGrupo.vue'
 import { isValidationError } from '@/api/client'
-import { useSuscriptoresQuery, useSuscriptorCreate } from '@/stores/suscriptores'
-import { useGruposNotificablesQuery } from '@/stores/grupos'
+import {
+  useSuscriptoresQuery, // Para seleccionar el suplente
+  useSuscriptorCreate
+} from '@/stores/suscriptores'
 import type { SuscriptorCreate } from '@/types/models'
 import { useToast } from 'bootstrap-vue-next'
 import { ref, computed } from 'vue'
 
 const toast = useToast()
-const model = ref(false)
 const form = ref<SuscriptorCreate>({
   nombre: null,
   cargo: null,
@@ -42,28 +44,22 @@ const errorState = computed(() => ({
   grupo: {
     state: errors.value.grupo ? false : null,
     invalidFeedback: errors.value.grupo,
-    onInput: () => errors.value.grupo = null
+    onInput: () => errors.value.grupo = null // No funciona, el input se genera fuera 
   },
 }))
+const { options: suscriptores } = useSuscriptoresQuery()
 const { mutateAsync: crearSuscriptor, asyncStatus } = useSuscriptorCreate()
 const loading = computed(() => asyncStatus.value === 'loading')
-const { data: listaGrupos, grupos, isPending: gruposPendientes } = useGruposNotificablesQuery()
-const nombreGrupo = computed(() => {
-  if (listaGrupos.value) {
-    const grupo = listaGrupos.value.find(d => d.id === form.value.grupo)
-    if (grupo) return grupo.nombre
-  }
-})
-const { suscriptores, isPending: suscriptoresPendiente } = useSuscriptoresQuery()
 
 const validate = () => {
   const telefono = /^(\+53|53)?\d{8}$/
   const correo = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/
   errors.value = {}
-  if (!form.value.nombre) errors.value.nombre = 'Este campo no puede estar vacío'
-  if (!form.value.telefono) errors.value.telefono = 'Este campo no puede estar vacío'
-  else if (!telefono.test(form.value.telefono)) errors.value.telefono = 'Formato no válido'
-  if (form.value.correo && !correo.test(form.value.correo)) errors.value.correo = 'Formato no válido'
+  if (!form.value.nombre) errors.value.nombre = 'Este campo no puede estar vacío.'
+  if (!form.value.grupo) errors.value.grupo = 'Este campo no puede estar vacío.'
+  if (!form.value.telefono) errors.value.telefono = 'Este campo no puede estar vacío.'
+  else if (!telefono.test(form.value.telefono)) errors.value.telefono = 'Formato no válido.'
+  if (form.value.correo && !correo.test(form.value.correo)) errors.value.correo = 'Formato no válido.'
   return !Object.keys(errors.value).length
 }
 const submit = async () => {
@@ -85,16 +81,9 @@ const submit = async () => {
     <h5 class="mb-5"> Nuevo suscriptor </h5>
 
     <BForm @submit.prevent="submit" density="3">
-      <!-- <BTabs v-model:index="tabs"> -->
-      <!-- <BTab density="3"> -->
       <BFormGroup label="Nombre" v-bind="errorState.nombre">
         <BFormInput v-model="form.nombre" trim />
       </BFormGroup>
-      <!-- <BFormGroup class="p-2">
-        <BFormCheckbox v-model="form.activo" class="mb-0">
-          Activo
-        </BFormCheckbox>
-      </BFormGroup> -->
       <BFormGroup label="Cargo">
         <BFormInput v-model="form.cargo" trim />
       </BFormGroup>
@@ -104,51 +93,29 @@ const submit = async () => {
       <BFormGroup label="Correo" v-bind="errorState.correo">
         <BFormInput v-model="form.correo" trim />
       </BFormGroup>
-      <BFormGroup label="Grupo" v-bind="errorState.grupo" @click="model = true">
-        <BFormInput v-model="nombreGrupo" trim readonly class="cursor-pointer" />
-      </BFormGroup>
-      <BModal v-model="model">
-        seleccionar
-      </BModal>
-      <!-- <div class="mb-3">
-            <label class="form-label">Grupo</label>
-            <div class="form-control hstack gap-2 pe-2 h-38" @click="tabs = 1" type="button">
-              <template v-if="grupoSeleccionado">
-                <ILucideSquaresUnite class="text-yellow flex-shrink-0" />
-                <span v-text="grupoSeleccionado" class="text-truncate" />
-              </template>
-<ILucideChevronRight class="ms-auto" />
-</div>
-</div>
-<div class="mb-3">
-  <label class="form-label">Suplente</label>
-  <BFormSelect v-model="form.suplente" :options="suscriptores" textField="nombre" valueField="id" />
-</div> -->
-      <!-- </BTab>
-      <BTab> -->
-      <!-- <label class="form-label">Grupo</label>
-        <div v-if="gruposPendientes" class="p-5 text-center">
-          <BSpinner />
+      <SeleccionarGrupo v-model="form.grupo" #default="{ options, open }">
+        <BFormGroup label="Grupo" v-bind="errorState.grupo" @click="open">
+          <BFormSelect v-model="form.grupo" :options="options" no-events />
+        </BFormGroup>
+      </SeleccionarGrupo>
+      <BFormGroup label="Activo">
+        <div class="form-control-border">
+          <BFormCheckbox v-model="form.activo" class="mb-0">
+            {{ form.activo ? 'Sí' : 'No' }}
+          </BFormCheckbox>
         </div>
-        <RootTree v-else :childrenNames="['hijos']" v-model="form.grupo" selectable>
-          <TreeNode v-for="data in grupos" :data="data" :key="data.id">
-            <template #default="{ data }">
-              <ILucideSquaresUnite class="text-yellow flex-shrink-0" />
-              <span v-text="data.nombre" class="text-truncate" />
-            </template>
-          </TreeNode>
-        </RootTree> -->
-      <!-- </BTab>
-      </BTabs> -->
+      </BFormGroup>
+      <BFormGroup label="Suplente">
+        <BFormSelect v-model="form.suplente" :options="suscriptores" />
+      </BFormGroup>
+      <BFormButtons class="py-4">
+        <BButton type="submit" variant="primary w-90" :loading="loading" loading-fill>
+          Crear
+        </BButton>
+        <BButton variant="emphasis w-90" @click="back">
+          Cancelar
+        </BButton>
+      </BFormButtons>
     </BForm>
-    <!-- <template #footer>
-      <BButton v-if="tabs === 0" @click="submit" variant="primary">
-        Aceptar
-      </BButton>
-      <BButton v-else variant="primary" @click="tabs = 0">
-        <ILucideSquareCheckBig />
-        Listo
-      </BButton>
-    </template> -->
   </div>
 </template>

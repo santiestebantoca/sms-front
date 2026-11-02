@@ -32,20 +32,22 @@ watchEffect(() => active.value = props.suscriptorId)
             <template #default="{ data, isActive }">
               <BListGroupItem type="button" @click="setSuscriptorId(data.id)" class="text-truncate"
                 :class="{ active: isActive }">
-                <ILucideUser class="text-success-400" />
-                {{ data.nombre }}
-                <BBadge v-if="!data.activo" variant="danger">Inactivo</BBadge>
+                <ILucideUser v-if="data.activo" class="text-success-400" />
+                <ILucideUserX v-else class="text-danger" />
+                <span :class="{ 'text-danger': !data.activo }">{{ data.nombre }}</span>
               </BListGroupItem>
             </template>
           </TreeNode>
         </RootTree>
       </div>
     </div>
-    <div class="container ms-0 max-w-700">
-      <div v-if="showLista" class="mt-5 text-center">
-        Seleccione un suscriptor para mostrarlo aquí.
+    <div class="overflow-auto">
+      <div class="container ms-0 max-w-700">
+        <div v-if="showLista" class="mt-5 text-center">
+          Seleccione un suscriptor para mostrarlo aquí.
+        </div>
+        <router-view />
       </div>
-      <router-view />
     </div>
   </div>
 </template>

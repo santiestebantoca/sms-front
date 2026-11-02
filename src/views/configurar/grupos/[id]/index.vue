@@ -1,12 +1,14 @@
 <script lang="ts" setup>
-const props = defineProps({ grupoId: Number })
+const props = defineProps({
+  grupoId: Number
+})
 
 import GrupoCard from '@/components/features/configurar/grupos/GrupoCard.vue'
 import HijosCard from '@/components/features/configurar/grupos/GrupoHijosCard.vue'
 import SuscriptoresCard from '@/components/features/configurar/grupos/GrupoSuscriptoresCard.vue'
 import NotificadosCard from '@/components/features/configurar/grupos/GrupoNotificadosCard.vue'
 import { useGrupoQuery } from '@/stores/grupos'
-import { computed, provide } from 'vue';
+import { computed, provide } from 'vue'
 
 const grupoId = computed(() => props.grupoId)
 const { grupo, isLoading } = useGrupoQuery(grupoId)
