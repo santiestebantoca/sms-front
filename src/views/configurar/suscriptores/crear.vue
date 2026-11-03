@@ -62,7 +62,7 @@ const validate = () => {
   if (form.value.correo && !correo.test(form.value.correo)) errors.value.correo = 'Formato no válido.'
   return !Object.keys(errors.value).length
 }
-const submit = async () => {
+const submit = () => {
   if (!validate()) return
   crearSuscriptor(form.value)
     .then(nuevoSuscriptor => {

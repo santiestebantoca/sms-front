@@ -1,8 +1,27 @@
+// Auth grupos
+export interface AuthGroup {
+  id: number | string
+  role: string
+  description: string | null
+}
+
 // Usuarios
+export interface UsuarioDetalle {
+  id: number | string
+  first_name: string
+  last_name: string
+  username: string
+  registration_key: string | null
+  grupos: AuthGroup[]
+  modified_by: string | null
+  modified_on: string | null
+}
+
 export interface UsuarioCreate {
   first_name: string
   last_name: string
   username: string
+  grupos: (number | string)[]
 }
 
 export interface UsuarioUpdate extends UsuarioCreate {

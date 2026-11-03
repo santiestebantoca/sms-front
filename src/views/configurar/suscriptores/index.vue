@@ -34,7 +34,9 @@ watchEffect(() => active.value = props.suscriptorId)
                 :class="{ active: isActive }">
                 <ILucideUser v-if="data.activo" class="text-success-400" />
                 <ILucideUserX v-else class="text-danger" />
-                <span :class="{ 'text-danger': !data.activo }">{{ data.nombre }}</span>
+                <span :class="{ 'text-danger': !data.activo }">
+                  {{ data.nombre }}
+                </span>
               </BListGroupItem>
             </template>
           </TreeNode>

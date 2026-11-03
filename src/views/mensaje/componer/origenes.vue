@@ -11,7 +11,7 @@ const origenesTmp = ref<any[]>([])
 
 onMounted(() => model.value = true)
 
-const submit = async () => {
+const submit = () => {
   origenes.value = origenesTmp.value
   model.value = false
 }

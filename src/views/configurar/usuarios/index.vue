@@ -32,9 +32,11 @@ watchEffect(() => active.value = props.usuarioId)
             <template #default="{ data, isActive }">
               <BListGroupItem type="button" @click="setUsuarioId(data.id)" class="text-truncate"
                 :class="{ active: isActive }">
-                <ILucideUser class="flex-shrink-0 text-success-400" />
-                {{ data.name }}
-                <BBadge v-if="data.registration_key === 'blocked'" variant="danger">Bloqueado</BBadge>
+                <ILucideUser v-if="data.registration_key !== 'blocked'" class="text-success-400" />
+                <ILucideUserX v-else class="text-danger" />
+                <span :class="{ 'text-danger': data.registration_key === 'blocked' }">
+                  {{ data.name }}
+                </span>
               </BListGroupItem>
             </template>
           </TreeNode>

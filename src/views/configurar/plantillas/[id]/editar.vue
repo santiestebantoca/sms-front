@@ -38,7 +38,7 @@ const validate = () => {
   if (!form.value.texto) errors.value.texto = 'Este campo no puede estar vacío.'
   return !Object.keys(errors.value).length
 }
-const submit = async () => {
+const submit = () => {
   if (!validate()) return
   actualizarPlantilla(form.value)
     .then(() => model.value = false)

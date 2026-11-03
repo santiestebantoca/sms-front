@@ -279,6 +279,8 @@ const routesConfigurar = [
             component: () => import('@/views/configurar/usuarios/[id]/index.vue'),
             props: route => ({
               usuarioId: parseInt(route.params.usuarioId),
+              editar: { name: 'configurar-usuario-editar' },
+              eliminar: { name: 'configurar-usuario-eliminar' }
             }),
             children: [
               {

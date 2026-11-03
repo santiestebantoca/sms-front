@@ -1,91 +1,104 @@
 <script lang="ts" setup>
-const props = defineProps({ usuarioId: Number, back: Function })
+const props = defineProps({
+  usuarioId: Number,
+  back: Function
+})
 
+import { REGISTRATION_KEY_OPTIONS } from '@/constants'
 import { isValidationError } from '@/api/client'
-import { useUsuarioQuery, useUsuarioUpdate } from '@/stores/usuarios'
-import type { UsuarioUpdate } from '@/types/models'
-import { ref, computed, onMounted, watchEffect } from 'vue'
+import { useAuthGroupsQuery } from '@/stores/auth-groups'
+import { useUsuarioUpdate } from '@/stores/usuarios'
+import type { UsuarioUpdate, UsuarioDetalle } from '@/types/models'
+import { ref, computed, onMounted, inject, Ref } from 'vue'
 
 const model = ref(false)
+const usuario = inject<Ref<UsuarioDetalle>>('usuario:usuario')
 const form = ref<UsuarioUpdate>({
-  id: null,
-  first_name: null,
-  last_name: null,
-  username: null,
-  registration_key: null,
+  id: props.usuarioId,
+  first_name: usuario.value.first_name,
+  last_name: usuario.value.last_name,
+  username: usuario.value.username,
+  registration_key: usuario.value.registration_key,
+  grupos: usuario.value.grupos.map((d) => d.id),
 })
 const errors = ref<Record<string, any>>({})
-const { usuario, isPending: usuarioPendiente } = useUsuarioQuery(props.usuarioId)
+const errorState = computed(() => ({
+  first_name: {
+    state: errors.value.first_name ? false : null,
+    invalidFeedback: errors.value.first_name,
+    onInput: () => errors.value.first_name = null
+  },
+  last_name: {
+    state: errors.value.last_name ? false : null,
+    invalidFeedback: errors.value.last_name,
+    onInput: () => errors.value.last_name = null
+  },
+  username: {
+    state: errors.value.username ? false : null,
+    invalidFeedback: errors.value.username,
+    onInput: () => errors.value.username = null
+  },
+  registration_key: {
+    state: errors.value.registration_key ? false : null,
+    invalidFeedback: errors.value.registration_key,
+    onInput: () => errors.value.registration_key = null
+  },
+}))
 const { mutateAsync: actualizarUsuario, asyncStatus } = useUsuarioUpdate()
 const loading = computed(() => asyncStatus.value === 'loading')
+const { groups } = useAuthGroupsQuery()
 
-watchEffect(() => {
-  if (usuario.value) {
-    form.value.first_name = usuario.value.first_name
-    form.value.last_name = usuario.value.last_name
-    form.value.username = usuario.value.username
-    form.value.registration_key = usuario.value.registration_key
-  }
-})
 onMounted(() => model.value = true)
 
 const validate = () => {
   errors.value = {}
-  if (!form.value.first_name) errors.value.nombre = 'Este campo no puede estar vacío'
-  if (!form.value.last_name) errors.value.nombre = 'Este campo no puede estar vacío'
-  if (!form.value.username) errors.value.nombre = 'Este campo no puede estar vacío'
+  if (!form.value.first_name) errors.value.nombre = 'Este campo no puede estar vacío.'
+  if (!form.value.last_name) errors.value.nombre = 'Este campo no puede estar vacío.'
+  if (!form.value.username) errors.value.nombre = 'Este campo no puede estar vacío.'
   return !Object.keys(errors.value).length
 }
-
-const submit = async () => {
+const submit = () => {
   if (!validate()) return
-  try {
-    const payload: UsuarioUpdate = { id: usuario.value.id, ...form.value }
-    await actualizarUsuario(payload)
-    model.value = false
-  } catch (err) {
-    if (isValidationError(err)) errors.value = err.errors
-    errors.value.form = 'Error al actualizar el usuario.'
-  }
+  actualizarUsuario(form.value)
+    .then(() => { props.back() })
+    .catch(err => {
+      isValidationError(err) && (errors.value = err.errors)
+      errors.value.form = 'Error al actualizar el usuario.'
+    })
 }
 </script>
 
 <template>
   <BModal v-model="model" title="Editar usuario" @hidden="back">
-    <form @submit.prevent="submit">
-      <div class="mb-3">
-        <label class="form-label">Nombre</label>
-        <input class="form-control" v-model.trim="form.first_name" @input="errors.first_name = null" />
-        <div class="small text-danger" v-text="errors.first_name" />
-      </div>
-      <div class="mb-3">
-        <label class="form-label">Apellidos</label>
-        <input class="form-control" v-model.trim="form.last_name" @input="errors.last_name = null" />
-        <div class="small text-danger" v-text="errors.last_name" />
-      </div>
-      <div class="mb-3">
-        <label class="form-label">Nombre de usuario</label>
-        <input class="form-control" v-model.trim="form.username" @input="errors.username = null" />
-        <div class="small text-danger" v-text="errors.username" />
-      </div>
-      <div class="mb-3">
-        <label class="form-label">Clave de registro</label>
-        <input class="form-control" v-model.trim="form.registration_key" @input="errors.registration_key = null" />
-        <div class="small text-danger" v-text="errors.registration_key" />
-      </div>
-    </form>
+    <BForm id="form-usuario-editar" @submit.prevent="submit" density="3">
+      <BFormGroup label="Nombre" v-bind="errorState.first_name">
+        <BFormInput v-model="form.first_name" trim />
+      </BFormGroup>
+      <BFormGroup label="Apellidos" v-bind="errorState.last_name">
+        <BFormInput v-model="form.last_name" trim />
+      </BFormGroup>
+      <BFormGroup label="Nombre de usuario" v-bind="errorState.username">
+        <BFormInput v-model="form.username" trim />
+      </BFormGroup>
+      <BFormGroup v-slot="{ ariaDescribedby }" label="Grupos">
+        <BFormCheckboxGroup v-model="form.grupos" :aria-describedby="ariaDescribedby" class="form-control-border">
+          <BFormCheckbox v-for="group in groups" :value="group.id" class="mb-3">
+            <div class="text-capitalize"> {{ group.role }} </div>
+            <div class="small text-secondary"> {{ group.description }} </div>
+          </BFormCheckbox>
+        </BFormCheckboxGroup>
+      </BFormGroup>
+      <BFormGroup label="Estado del registro">
+        <BFormSelect v-model="form.registration_key" :options="REGISTRATION_KEY_OPTIONS" />
+      </BFormGroup>
+    </BForm>
     <template #footer>
-      <BButton @click="submit" variant="primary">
-        Aceptar
+      <BButton type="submit" form="form-usuario-editar" variant="primary w-90" :loading="loading" loading-fill>
+        Guardar
+      </BButton>
+      <BButton variant="emphasis w-90" @click="back">
+        Cancelar
       </BButton>
     </template>
   </BModal>
 </template>
-
-<style scoped>
-.form-label {
-  color: var(--bs-teal);
-  font-weight: 600;
-  font-size: .875em;
-}
-</style>

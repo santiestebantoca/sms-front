@@ -1,5 +1,9 @@
 <script lang="ts" setup>
-const props = defineProps({ usuarioId: Number, back: Function, forward: Function })
+const props = defineProps({
+  usuarioId: Number,
+  back: Function,
+  forward: Function
+})
 
 import { useUsuarioDelete } from '@/stores/usuarios'
 import { useToast } from 'bootstrap-vue-next'
@@ -31,20 +35,25 @@ const hidden = () => {
 <template>
   <BModal v-model="model" title="Eliminar usuario" @hidden="hidden">
     <p>
-      Esta acción eliminará permanentemente al usuario
-      y eliminará sus registros históricos asociados tales como,
-      mensajes enviados.
+      Se eliminarán permanentemente:
     </p>
-    <p class="text-danger fw-semibold">Esta acción no se puede deshacer.</p>
-    <p class="bg-light rounded p-2 mx-n1">
-      Si solo busca desactivar al usuario,
-      actualice el campo "Clave de registro" con el valor "blocked".
+    <ul>
+      <li>El usuario seleccionado y</li>
+      <li>sus mensajes enviados.</li>
+    </ul>
+    <p class="text-danger fw-semibold">
+      Esta acción no se puede deshacer.
+    </p>
+    <p>
+      Puede bloquear la autenticación del usuario, estableciendo su
+      "Estado del registro" con el valor "Bloqueado" en
+      <router-link :to="{ name: 'configurar-usuario-editar' }">Editar</router-link>.
     </p>
     <template #footer>
-      <BButton variant="secondary" @click="model = false">
+      <BButton variant="emphasis" @click="model = false">
         Cancelar
       </BButton>
-      <BButton variant="danger" @click="submit" :loading="loading" loading-fill class="w-90">
+      <BButton variant="danger w-90" @click="submit" :loading="loading" loading-fill>
         Eliminar
       </BButton>
     </template>
