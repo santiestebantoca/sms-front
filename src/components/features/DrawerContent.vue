@@ -16,13 +16,13 @@ const { hide: hideDrawer } = useToggle('drawer-left')
       <BNavItem v-for="{ to, icon, label, count } in options" :to="to" @click="hideDrawer">
         <UIcon :name="icon" class="me-2 mb-1" />
         {{ label }}
-        <BBadge v-if="count > 0" variant="warning" pill class="ms-2"> {{ count }} </BBadge>
+        <BBadge v-if="count > 0" pill class="ms-2"> {{ count }} </BBadge>
       </BNavItem>
     </template>
     <template v-else>
       <BNavItem v-for="{ to, icon, label, count } in options" :to="to" v-tippy="label">
         <UIcon :name="icon" />
-        <BBadge v-if="count > 0" dot-indicator variant="warning" />
+        <BBadge v-if="count > 0" dot-indicator variant="danger" />
       </BNavItem>
     </template>
   </BNav>
@@ -61,7 +61,7 @@ const { hide: hideDrawer } = useToggle('drawer-left')
         right: 0;
         bottom: 0;
         transform: none !important;
-        padding: 5px
+        padding: 6px !important;
       }
     }
   }

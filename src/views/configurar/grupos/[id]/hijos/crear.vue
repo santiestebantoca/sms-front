@@ -45,7 +45,7 @@ const submit = () => {
 
 <template>
   <BModal v-model="model" title="Nuevo grupo" @hidden="back">
-    <BForm id="form-hijo-crear" @submit.prevent="submit">
+    <BForm id="form-hijo-crear" @submit.prevent="submit" density="3">
       <BFormGroup label="Nombre" v-bind="errorState.nombre">
         <BFormInput v-model="form.nombre" trim />
       </BFormGroup>

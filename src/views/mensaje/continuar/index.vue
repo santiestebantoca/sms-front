@@ -1,5 +1,8 @@
 <script lang="ts" setup>
-const props = defineProps({ mensajePrevioId: Number, componer: Function })
+const props = defineProps({
+  mensajePrevioId: Number,
+  componer: Function
+})
 
 import ComposerTopBar from '@/components/features/mensaje/componer/ComposerTopBar.vue'
 import ListaDestinatarios from '@/components/features/mensaje/ListaDestinatarios.vue'
@@ -9,7 +12,7 @@ import { useMensajeSend, useMensajeQuery } from '@/stores/mensajes'
 import type { MensajePayload } from '@/types/models'
 import { useEnviosQuery } from '@/stores/envios'
 import { useToast } from 'bootstrap-vue-next'
-import { ref, watch, computed, watchEffect } from 'vue'
+import { ref, computed, watchEffect } from 'vue'
 
 const formDefault = {
   destinatarios: [],
@@ -20,9 +23,9 @@ const formDefault = {
 const form = ref<MensajePayload>({ ...formDefault })
 const errors = ref<Record<string, any>>({})
 const selButtons = ref({
-  text: '',
+  texto: '',
   click: () => verListaDestinatarios.value = true,
-  variant: 'flat-primary'
+  variant: 'flat-primary h-36'
 })
 const verPlantillas = ref(false)
 const { mutateAsync: enviarSms, asyncStatus: asyncStatusSms } = useMensajeSend()
@@ -46,40 +49,39 @@ watchEffect(() => {
 })
 watchEffect(() => {
   if (mensajePrevio.value && destinatarios.value)
-    selButtons.value.text = destinatarios.value.length === 1
+    selButtons.value.texto = destinatarios.value.length === 1
       ? '1 destinatario'
       : `${destinatarios.value.length} destinatarios`
 })
 
 const validate = () => {
   errors.value = {}
-  if (!form.value.destinatarios.length) errors.value.destinatarios = 'La lista de destinatarios no puede estar vacía'
-  if (!form.value.texto) errors.value.texto = 'El cuerpo del mensaje no puede estar vacío'
+  if (!form.value.destinatarios.length) errors.value.destinatarios = 'La lista de destinatarios no puede estar vacía.'
+  if (!form.value.texto) errors.value.texto = 'El cuerpo del mensaje no puede estar vacío.'
   return !Object.keys(errors.value).length
 }
-const submit = async () => {
-  if (validate()) {
-    try {
-      await enviarSms(form.value)
-      toast({ body: 'Mensaje enviado', variant: 'success' })
-      props.componer && props.componer()
-    } catch (err) {
-      toast({ body: 'Mensaje no enviado', variant: 'danger' })
-    }
-  }
-  else toast({
-    body: Object.values(errors.value)[0],
-    variant: 'warning',
-  })
+const submit = () => {
+  if (validate())
+    enviarSms(form.value)
+      .then(() => {
+        toast({ body: 'Mensaje enviado.', variant: 'success' }).show()
+        props.componer && props.componer()
+      })
+      .catch(err => {
+        toast({ body: 'Mensaje no enviado.', variant: 'danger' }).show()
+      })
+  else
+    toast({ body: Object.values(errors.value)[0], variant: 'warning', }).show()
 }
 const insertarPlantilla = (texto: string) => form.value.texto = (form.value.texto ?? '') + texto
-const guardarPlantilla = async (texto: string) => {
-  try {
-    await crearPlantilla({ texto })
-    toast({ body: 'Nueva plantilla creada.', variant: 'success' })
-  } catch (err) {
-    toast({ body: 'No se guardó la plantilla.', variant: 'danger' })
-  }
+const guardarPlantilla = (texto: string) => {
+  crearPlantilla({ texto })
+    .then(() => {
+      toast({ body: 'Nueva plantilla creada.', variant: 'success' }).show()
+    })
+    .catch(err => {
+      toast({ body: 'No se guardó la plantilla.', variant: 'danger' }).show()
+    })
 }
 </script>
 
@@ -92,23 +94,24 @@ const guardarPlantilla = async (texto: string) => {
         @update:continua="form.continua = $event" @toggle-plantillas="verPlantillas = !verPlantillas"
         @save-plantilla="guardarPlantilla(form.texto)">
         <template #type-buttons>
-          <BButton variant="flat-outline-success" class="btn-sm" disabled="disabled">
+          <span class="position-relative text-secondary" style="top:2px;">
             Destinatarios de la conversación
-          </BButton>
-          <BButton variant="flat-outline-dark" class="btn-sm ms-auto" @click="componer" v-tippy="'Descartar mensaje'">
-            <ILucideTrash class="text-danger" />
+          </span>
+          <BButton variant="flat border h-36 my-n1 ms-auto" @click="componer" v-tippy="'Descartar mensaje'"
+            style="padding-top: 5px;">
+            <ILucideTrash />
             Descartar
           </BButton>
         </template>
         <template #selection>
           <!-- Barra de resultados de selección -->
-          <div class="hstack flex-wrap overflow-hidden resultados">
-            <ILucideUsers class="flex-shrink-0 text-secondary me-2" />
+          <div class="hstack flex-wrap overflow-hidden h-36">
+            <ILucideChevronRight class="flex-shrink-0 me-1 text-secondary small" />
             <span v-if="cargandoMensajePrevio || cargandoDestinatarios">
               ...
             </span>
-            <BButton v-else :variant="selButtons.variant" class="btn-sm fs-6" @click="selButtons.click">
-              <span v-text="selButtons.text" />
+            <BButton v-else :variant="selButtons.variant" @click="selButtons.click" style="padding-top: 5px;">
+              {{ selButtons.texto }}
             </BButton>
           </div>
         </template>
@@ -144,13 +147,5 @@ textarea {
   width: 100%;
   resize: none;
   outline: none;
-}
-
-.resultados {
-  height: 34px;
-}
-
-.resultados span {
-  margin-bottom: 2px;
 }
 </style>

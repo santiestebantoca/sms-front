@@ -5,7 +5,7 @@ import { useAuthQuery } from '@/stores/auth/index'
 import { useMensajeUpdate } from '@/stores/mensajes'
 import { useClipboard } from '@vueuse/core'
 import { shortTime } from '@/composables/useDates'
-import { ref, computed, watch } from 'vue'
+import { ref, computed } from 'vue'
 import ListaDestinatarios from '@/components/features/mensaje/ListaDestinatarios.vue'
 
 const popover = ref(false)
@@ -13,12 +13,10 @@ const showDestinatarios = ref(null)
 const date = shortTime(props.data.en)
 const source = ref(props.data.texto)
 const to = ref({ name: 'sms-continuar', params: { mensajePrevioId: props.data.id } })
-const { mutateAsync: actualizarMensaje, asyncStatus } = useMensajeUpdate()
+const { mutateAsync: actualizarMensaje } = useMensajeUpdate()
 const { copy, copied, isSupported } = useClipboard({ source })
 const { authUser } = useAuthQuery()
 const ageno = computed(() => props.data.de !== authUser.value.name)
-const tippyText = ref('Menú del mensaje')
-const tippy = ref({ content: tippyText.value })
 const rootStyle = computed(() => ({
   '--bs-card-border-color': props.data.continua && ageno.value
     ? 'orange'
@@ -49,7 +47,7 @@ const noContinuar = () => actualizarMensaje({ id: props.data.id, continua: false
           <span v-text="data.de.split(' ')[0]" class="mx-1" />
         </div>
         <div v-text="data.texto" class="mb-3" />
-        <BButton @click="copy(source)" variant="flat-outline-success" class="btn-sm">
+        <BButton @click="copy(source)" variant="flat-success border" class="btn-sm">
           <ILucideSquareCheckBig v-if="copied" />
           <ILucideCopy v-else />
           {{ copied ? 'Copiado' : 'Copiar texto' }}
@@ -57,9 +55,9 @@ const noContinuar = () => actualizarMensaje({ id: props.data.id, continua: false
       </BPopover>
     </BCardText>
     <template #footer>
-      <BDropdown variant="link" no-caret v-tippy="tippy" @show="tippy.content = ''" @hide="tippy.content = tippyText">
+      <BDropdown variant="flat wh-36" no-caret v-tippy="'Menú del mensaje'">
         <template #button-content>
-          <ILucideEllipsis />
+          <ILucideEllipsis class="center" />
         </template>
         <template #tooltip-content>
           <span class="text-nowrap">Ver opciones</span>
@@ -77,9 +75,8 @@ const noContinuar = () => actualizarMensaje({ id: props.data.id, continua: false
           Ver notificados
         </BDropdownItem>
       </BDropdown>
-      <BButton v-if="data.continua" :to="to" v-tippy="'Continuar conversación'" variant="flat-outline-dark"
-        class="btn-sm ms-auto">
-        <ILucideArrowRight />
+      <BButton v-if="data.continua" :to="to" v-tippy="'Continuar conversación'" variant="flat wh-36 ms-auto">
+        <ILucideArrowRight class="center" />
       </BButton>
     </template>
   </BCard>
@@ -115,7 +112,6 @@ const noContinuar = () => actualizarMensaje({ id: props.data.id, continua: false
 }
 
 :deep(.card-footer) {
-  /* height: 42px; */
   display: flex;
   align-items: center;
   --bs-card-cap-padding-y: 4px;

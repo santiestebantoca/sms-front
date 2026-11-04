@@ -16,7 +16,7 @@ const submit = () => eliminarSuscriptor(props.suscriptorId)
   .then(() => model.value = false)
   .catch((err) => {
     console.log(err)
-    toast.create({ body: 'No se pudo ejecutar la acción.', variant: 'danger' })
+    toast.create({ body: 'No se pudo ejecutar la acción.', variant: 'danger' }).show()
   })
 </script>
 

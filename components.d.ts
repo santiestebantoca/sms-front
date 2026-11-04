@@ -33,6 +33,7 @@ declare module 'vue' {
     BFormRadio: typeof import('bootstrap-vue-next/components/BFormRadio')['BFormRadio']
     BFormSelect: typeof import('bootstrap-vue-next/components/BFormSelect')['BFormSelect']
     BFormTextarea: typeof import('bootstrap-vue-next/components/BFormTextarea')['BFormTextarea']
+    BListGroup: typeof import('bootstrap-vue-next/components/BListGroup')['BListGroup']
     BListGroupItem: typeof import('bootstrap-vue-next/components/BListGroup')['BListGroupItem']
     BModal: typeof import('bootstrap-vue-next/components/BModal')['BModal']
     BModalNext: typeof import('./src/components/commons/bootstrap-vue-next/BModalNext.vue')['default']
@@ -62,6 +63,7 @@ declare module 'vue' {
     GrupoSuscriptoresCard: typeof import('./src/components/features/configurar/grupos/GrupoSuscriptoresCard.vue')['default']
     Header: typeof import('./src/components/layout/Header.vue')['default']
     HeaderContent: typeof import('./src/components/features/HeaderContent.vue')['default']
+    IBiSendFill: typeof import('~icons/bi/send-fill')['default']
     ILucideArrowLeft: typeof import('~icons/lucide/arrow-left')['default']
     ILucideArrowRight: typeof import('~icons/lucide/arrow-right')['default']
     ILucideChevronDown: typeof import('~icons/lucide/chevron-down')['default']
@@ -83,7 +85,6 @@ declare module 'vue' {
     ILucideRefreshCw: typeof import('~icons/lucide/refresh-cw')['default']
     ILucideSave: typeof import('~icons/lucide/save')['default']
     ILucideSearch: typeof import('~icons/lucide/search')['default']
-    ILucideSend: typeof import('~icons/lucide/send')['default']
     ILucideSettings: typeof import('~icons/lucide/settings')['default']
     ILucideSquareCheckBig: typeof import('~icons/lucide/square-check-big')['default']
     ILucideSquaresUnite: typeof import('~icons/lucide/squares-unite')['default']
@@ -116,8 +117,6 @@ declare module 'vue' {
     UserCard: typeof import('./src/components/features/auth/impersonate/UserCard.vue')['default']
     UserMenuDropdown: typeof import('./src/components/features/UserMenuDropdown.vue')['default']
     UsersList: typeof import('./src/components/features/auth/impersonate/UsersList.vue')['default']
-    UsuarioCard: typeof import('./src/components/features/configurar/usuarios/UsuarioCard.vue')['default']
-    UsuarioRolesCard: typeof import('./src/components/features/configurar/usuarios/UsuarioRolesCard.vue')['default']
   }
   export interface GlobalDirectives {
     vBToggle: typeof import('bootstrap-vue-next/directives/BToggle')['vBToggle']

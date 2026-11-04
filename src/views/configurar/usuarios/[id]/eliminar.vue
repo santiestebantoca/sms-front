@@ -19,12 +19,12 @@ onMounted(() => model.value = true)
 
 const submit = () => eliminarUsuario(props.usuarioId)
   .then(() => {
-    toast.create({ body: 'Usuario eliminado.', variant: 'success' })
+    toast.create({ body: 'Usuario eliminado.', variant: 'success' }).show()
     deleted.value = true
     model.value = false
   })
   .catch((err) => {
-    toast.create({ body: 'No se pudo ejecutar la acción.', variant: 'danger' })
+    toast.create({ body: 'No se pudo ejecutar la acción.', variant: 'danger' }).show()
   })
 const hidden = () => {
   if (deleted.value) props.forward()
@@ -45,9 +45,9 @@ const hidden = () => {
       Esta acción no se puede deshacer.
     </p>
     <p>
-      Puede bloquear la autenticación del usuario, estableciendo su
-      "Estado del registro" con el valor "Bloqueado" en
-      <router-link :to="{ name: 'configurar-usuario-editar' }">Editar</router-link>.
+      Puede bloquear la autenticación del usuario,
+      <router-link :to="{ name: 'configurar-usuario-editar' }">
+        editando su clave de registro</router-link>.
     </p>
     <template #footer>
       <BButton variant="emphasis" @click="model = false">

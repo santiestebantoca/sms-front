@@ -14,28 +14,28 @@ const verListaDestinatarios = ref(false)
 const gruposIds = ref<Array<string | number>>([])
 const { notificados, isLoading: cargandoNotificados } = useNotificadosDeLosGruposQuery(gruposIds)
 const origenesButtons = computed(() => origenes.value.map((grupo) => ({
-  text: grupo.apodo || grupo.nombre,
-  do: () => quitarOrigen(grupo.id),
-  variant: 'flat-dark',
+  texto: grupo.apodo || grupo.nombre,
+  quitar: () => quitarOrigen(grupo.id),
+  variant: 'flat h-36',
   tippy: `${grupo.nombre} (Click para quitar)`,
 })))
 const notificadosButton = computed(() => notificados.value && ({
-  text: notificados.value.length === 0
+  texto: notificados.value.length === 0
     ? 'Ningún grupo notificado'
     : notificados.value.length === 1
       ? '1 grupo notificado'
       : `${notificados.value.length} grupos notificados`,
-  do: () => verListaNotificados.value = true,
-  variant: notificados.value.length === 0 ? 'flat-danger' : 'flat-primary'
+  notificados: () => verListaNotificados.value = true,
+  variant: (notificados.value.length === 0 ? 'flat-danger' : 'flat-primary') + ' h-36'
 }))
 const destinatariosButton = computed(() => notificados.value?.length && ({
-  text: destinatariosIds.value.length === 0
+  texto: destinatariosIds.value.length === 0
     ? 'Ningún destinatario' // Debe impedirse esta condición
     : destinatariosIds.value.length === 1
       ? '1 destinatario'
       : `${destinatariosIds.value.length} destinatarios`,
-  do: () => verListaDestinatarios.value = true,
-  variant: destinatariosIds.value.length === 0 ? 'flat-danger' : 'flat-primary'
+  destinatarios: () => verListaDestinatarios.value = true,
+  variant: (destinatariosIds.value.length === 0 ? 'flat-danger' : 'flat-primary') + ' h-36'
 }))
 
 watchEffect(() => gruposIds.value = origenes.value.map((grupo) => grupo.id))
@@ -70,26 +70,26 @@ const quitarOrigen = grupoId => {
 </script>
 
 <template>
-  <div class="hstack flex-wrap overflow-hidden">
+  <div class="hstack flex-wrap overflow-hidden h-36">
     <ILucideSquaresUnite class="flex-shrink-0 me-2 text-yellow" />
-    <BButton v-for="origen, index in origenesButtons" :key="index" :variant="origen.variant" class="btn-sm fs-6"
-      @click="origen.do" v-tippy="origen.tippy">
-      {{ origen.text }}
+    <BButton v-for="origen, index in origenesButtons" :key="index" :variant="origen.variant" @click="origen.quitar"
+      v-tippy="origen.tippy" style="padding-top: 5px;">
+      {{ origen.texto }}
     </BButton>
-    <ILucideChevronRight class="flex-shrink-0 mx-1" font-size="12" />
-    <ILucideSquaresUnite class="flex-shrink-0 mx-1" font-size="12" />
+    <ILucideChevronRight class="flex-shrink-0 mx-1 text-secondary small" />
     <template v-if="cargandoNotificados">
-      <span class="btn-label">...</span>
+      ...
     </template>
     <template v-else-if="notificados">
       <template v-if="notificadosButton">
-        <BButton class="btn-sm fs-6" :variant="notificadosButton.variant" @click="notificadosButton.do">
-          <span v-text="notificadosButton.text" class="btn-label" />
+        <BButton :variant="notificadosButton.variant" @click="notificadosButton.notificados" style="padding-top: 5px;">
+          {{ notificadosButton.texto }}
         </BButton>
       </template>
       <template v-if="destinatariosButton">
-        <BButton class="btn-sm fs-6" :variant="destinatariosButton.variant" @click="destinatariosButton.do">
-          <span v-text="destinatariosButton.text" class="btn-label" />
+        <BButton :variant="destinatariosButton.variant" @click="destinatariosButton.destinatarios"
+          style="padding-top: 5px;">
+          {{ destinatariosButton.texto }}
         </BButton>
       </template>
     </template>
@@ -99,9 +99,3 @@ const quitarOrigen = grupoId => {
   <ListaDestinatarios v-model:show="verListaDestinatarios" :notificados="notificados"
     v-model:destinatariosIds="destinatariosIds" />
 </template>
-
-<style scoped>
-.btn-label {
-  margin-bottom: 2px;
-}
-</style>

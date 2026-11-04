@@ -2,7 +2,13 @@
 const show = defineModel<boolean>('show')
 const destinatariosIds = defineModel<Array<string | number>>('destinatariosIds') // Subset de ids de notificados
 const props = defineProps<{
-  notificados?: Array<{ id: string | number; nombre?: string; telefono?: string; suscriptores?: Array<{ id: string | number; nombre?: string; telefono?: string }> }>
+  notificados?: Array<{
+    suscriptores?: Array<{
+      id: string | number
+      nombre?: string
+      telefono?: string
+    }>
+  }>
 }>()
 
 import { computed } from 'vue'
@@ -11,36 +17,21 @@ const destinatarios = computed(() => props.notificados?.flatMap(obj => obj.suscr
 </script>
 
 <template>
-  <BModal v-model="show" title="Destinatarios">
-    <div v-if="!destinatariosIds.length" class="alerted">
+  <BModal v-model="show" title="Destinatarios" no-footer>
+    <div v-if="!destinatariosIds.length" class="mx-n3 mt-n3 p-3 text-center small text-bg-danger">
       Seleccione al menos un destinatario
     </div>
-    <RootTree :childrenNames="['suscriptores']" list>
-      <TreeNode v-for="data in destinatarios" :data="data" :key="data.id">
-        <template #default="{ data }">
-          <input type="checkbox" v-model="destinatariosIds" :value="data.id" />
-          <span v-text="data.nombre" class="text-truncate" />
-          <span v-text="data.telefono" class="text-pink" />
-        </template>
-      </TreeNode>
-    </RootTree>
-    <template #footer>
-      <BButton variant="primary" @click="show = false">
-        <ILucideSquareCheckBig /> Listo
-      </BButton>
-    </template>
+    <BListGroup flush class="sms-tree">
+      <BListGroupItem v-for="data in destinatarios" :key="data.id" class="border-0">
+        <BFormCheckbox v-model="destinatariosIds" :value="data.id" class="d-inline me-2" />
+        <ILucideUser class="text-teal" />
+        <span class="text-truncate me-2">
+          {{ data.nombre }}
+        </span>
+        <span class="text-pink">
+          {{ data.telefono }}
+        </span>
+      </BListGroupItem>
+    </BListGroup>
   </BModal>
 </template>
-
-<style scoped>
-.alerted {
-  padding: 2px 16px 4px;
-  margin: 0 -16px;
-  background-color: var(--bs-danger);
-  color: #f2f2f2;
-  font-size: .875em;
-  font-weight: 600;
-  position: relative;
-  top: -16px;
-}
-</style>

@@ -19,7 +19,7 @@ const mobile = inject('app:mobile')
         <ILucideMenu class="center" />
       </BButton>
     </template>
-    <BNavbarBrand to="/home" class="brand" :class="{ 'fs-6 fw-semibold': mobile }">
+    <BNavbarBrand to="/home" class="brand">
       {{ title }}
     </BNavbarBrand>
     <template v-for="{ label, tooltip, icon, to, id } in options">

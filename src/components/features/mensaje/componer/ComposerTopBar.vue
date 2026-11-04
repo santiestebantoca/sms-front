@@ -10,9 +10,9 @@ const emit = defineEmits(['submit', 'update:continua', 'toggle-plantillas', 'sav
   <div class="composer-topbar">
     <!-- Top Bar 1 -->
     <div class="composer-topbar__main">
-      <BButton v-tippy="'Enviar mensaje'" variant="flat-outline-primary" class="py-3 px-4 composer-topbar__send"
+      <BButton v-tippy="'Enviar mensaje'" variant="flat-primary outline" class=" composer-topbar__send"
         @click="emit('submit')">
-        <ILucideSend class="fs-5" />
+        <IBiSendFill class="fs-5 center" />
       </BButton>
       <label class="ps-4 composer-topbar__para">Para</label>
       <div class="flex-fill">
@@ -24,17 +24,18 @@ const emit = defineEmits(['submit', 'update:continua', 'toggle-plantillas', 'sav
     </div>
     <!-- Top Bar 2 -->
     <div class="composer-topbar__footer">
-      <BFormCheckbox :model-value="continua" @update:model-value="v => emit('update:continua', v)">
+      <BFormCheckbox :model-value="continua" @update:model-value="v => emit('update:continua', v)" class="mb-0">
         Mensaje con continuación
       </BFormCheckbox>
       <!-- Plantillas -->
       <div class="mx-auto">
-        <BButton variant="flat-dark" class="py-1" @click="emit('toggle-plantillas')" v-tippy="'Ver plantillas'">
+        <BButton variant="flat" class="h-36" @click="emit('toggle-plantillas')" style="padding-top: 5px;"
+          v-tippy="'Ver plantillas'">
           <ILucideText /> Plantillas
         </BButton>
-        <BButton variant="flat-dark" class="py-1" :disabled="!saveEnabled" @click="emit('save-plantilla')"
+        <BButton variant="flat" class="wh-36" :disabled="!saveEnabled" @click="emit('save-plantilla')"
           v-tippy="'Guardar texto en plantillas'">
-          <ILucideSave />
+          <ILucideSave class="center" />
         </BButton>
       </div>
     </div>
@@ -51,7 +52,8 @@ const emit = defineEmits(['submit', 'update:continua', 'toggle-plantillas', 'sav
 }
 
 .composer-topbar__send {
-  height: 80px;
+  /* height: 80px; */
+  width: 76px;
 }
 
 .composer-topbar__para {

@@ -17,11 +17,11 @@ onMounted(() => model.value = true)
 
 const submit = () => eliminarPlantilla(props.plantillaId)
   .then(() => {
-    toast.create({ body: 'Plantilla eliminada.', variant: 'success' })
+    toast.create({ body: 'Plantilla eliminada.', variant: 'success' }).show()
     model.value = false
   })
   .catch((err) => {
-    toast.create({ body: 'No se pudo ejecutar la acción.', variant: 'danger' })
+    toast.create({ body: 'No se pudo ejecutar la acción.', variant: 'danger' }).show()
   })
 </script>
 

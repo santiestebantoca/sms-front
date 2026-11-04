@@ -1,6 +1,7 @@
 <script lang="ts" setup>
 const props = defineProps({ suscriptorId: Number, back: Function })
 
+import { MOVIL_PATRON, EMAIL_PATRON } from '@/constants';
 import { isValidationError } from '@/api/client'
 import { useSuscriptorQuery, useSuscriptorUpdate } from '@/stores/suscriptores'
 import type { SuscriptorUpdate } from '@/types/models'
@@ -47,13 +48,11 @@ watchEffect(() => {
 onMounted(() => model.value = true)
 
 const validate = () => {
-  const telefono = /^(\+53|53)?\d{8}$/
-  const correo = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/
   errors.value = {}
   if (!form.value.nombre) errors.value.nombre = 'Este campo no puede estar vacío'
   if (!form.value.telefono) errors.value.telefono = 'Este campo no puede estar vacío'
-  else if (!telefono.test(form.value.telefono)) errors.value.telefono = 'Formato no válido'
-  if (form.value.correo && !correo.test(form.value.correo)) errors.value.correo = 'Formato no válido'
+  else if (!MOVIL_PATRON.test(form.value.telefono)) errors.value.telefono = 'Formato no válido'
+  if (form.value.correo && !EMAIL_PATRON.test(form.value.correo)) errors.value.correo = 'Formato no válido'
   return !Object.keys(errors.value).length
 }
 const submit = () => {

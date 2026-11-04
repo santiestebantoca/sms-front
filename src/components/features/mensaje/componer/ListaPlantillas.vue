@@ -19,19 +19,19 @@ const close = () => model.value = false
 <template>
   <div v-if="model" class="widget px-3">
     <!-- Header -->
-    <div class="sticky-top pb-1">
-      <div class="hstack h-40">
-        <span class="small fw-semibold">PLANTILLAS</span>
-        <BButton variant="flat-dark" class="ms-auto btn-sm shift-x" @click="close">
-          <ILucideX />
+    <div class="pb-1">
+      <div class="hstack py-1 fw-semibold">
+        PLANTILLAS
+        <BButton variant="flat wh-34" class="ms-auto me-n2" @click="close">
+          <ILucideX class="center" />
         </BButton>
       </div>
       <div>
         <BSearchInput v-model="search" />
         <div class="text-end mt-2 small">
           <router-link :to="{ name: 'configurar-plantillas' }" class="text-decoration-none">
-            <ILucideSettings font-size="12px" />
-            <span class="gear-label"> Configurar plantillas</span>
+            <ILucideSettings class="position-relative mt-n1" />
+            Configurar plantillas
           </router-link>
         </div>
       </div>
@@ -50,51 +50,38 @@ const close = () => model.value = false
       No se encontraron plantillas que coincidan con el texto buscado
     </div>
     <div v-else class="py-4">
-      <BButton variant="flat-outline-dark" class="btn-card mb-3" v-for="item, index in plantillas" :key="index"
-        @click="$emit('select', item.texto)" v-tippy="tippy">
-        {{ item.texto }}
+      <BButton variant="flat border btn-card" v-for="{ texto, id } in plantillas" :key="id"
+        @click="$emit('select', texto)" v-tippy="tippy">
+        {{ texto }}
       </BButton>
     </div>
   </div>
 </template>
 
-<style scoped>
+<style scoped lang="scss">
 .widget {
   border-left: solid 1px var(--bs-gray-200);
   overflow-y: scroll;
-}
 
-.sticky-top {
-  background-color: white;
-  box-shadow: 0px 8px 10px 1px white;
-}
+  .btn-card {
+    text-align: start;
+    padding-left: calc(13px + 12px);
+    position: relative;
+    width: 100%;
+    margin-bottom: 16px;
 
-.shift-x {
-  transform: translateX(.5em);
-}
-
-.gear-label {
-  position: relative;
-  top: 1px;
-}
-
-.btn-card {
-  text-align: start;
-  padding-left: calc(13px + 12px);
-  position: relative;
-  width: 100%;
-}
-
-.btn-card::after {
-  position: absolute;
-  content: '';
-  top: 10px;
-  bottom: 10px;
-  left: 5px;
-  width: 3px;
-  border-radius: 4px;
-  background-color: var(--bs-teal);
-  background-image: var(--bs-gradient) !important;
-  transition: all .6s;
+    &::after {
+      position: absolute;
+      content: '';
+      top: 10px;
+      bottom: 10px;
+      left: 5px;
+      width: 3px;
+      border-radius: 4px;
+      background-color: var(--bs-teal);
+      background-image: var(--bs-gradient) !important;
+      transition: all .6s;
+    }
+  }
 }
 </style>

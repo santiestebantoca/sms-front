@@ -15,7 +15,7 @@ onMounted(() => model.value = true)
 const submit = () => eliminarGrupo(props.grupoId)
   .then(() => model.value = false)
   .catch((err) => {
-    toast.create({ body: 'No se pudo ejecutar la acción.', variant: 'danger' })
+    toast.create({ body: 'No se pudo ejecutar la acción.', variant: 'danger' }).show()
   })
 </script>
 

@@ -51,7 +51,7 @@ const submit = () => {
   if (!validate()) return
   crearUsuario(form.value)
     .then((nuevoUsuario) => {
-      toast.create({ body: 'Nuevo usuario creado.', variant: 'success' })
+      toast.create({ body: 'Nuevo usuario creado.', variant: 'success' }).show()
       props.forward(nuevoUsuario.id) // props.back()
     })
     .catch(err => {

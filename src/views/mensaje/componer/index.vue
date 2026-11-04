@@ -21,14 +21,6 @@ const tipoSelButtons = computed(() => [
     to: { name: 'sms-componer-origenes' },
     disabled: false
   },
-  {
-    text: 'Grupos',
-    disabled: true
-  },
-  {
-    text: 'Personas',
-    disabled: true
-  }
 ])
 const origenes = ref([])
 const verPlantillas = ref(false)
@@ -42,37 +34,36 @@ provide('componer:origenes', origenes) // compartido con la vista /origenes
 
 const validate = () => {
   errors.value = {}
-  if (!form.value.destinatarios.length) errors.value.destinatarios = 'La lista de destinatarios no puede estar vacía'
-  if (!form.value.texto) errors.value.texto = 'El cuerpo del mensaje no puede estar vacío'
+  if (!form.value.destinatarios.length) errors.value.destinatarios = 'La lista de destinatarios no puede estar vacía.'
+  if (!form.value.texto) errors.value.texto = 'El cuerpo del mensaje no puede estar vacío.'
   return !Object.keys(errors.value).length
 }
-const submit = async () => {
-  if (validate()) {
-    try {
-      await enviarSms(form.value)
-      toast({ body: 'Mensaje enviado', variant: 'success' })
-      resetState()
-    } catch (err) {
-      toast({ body: 'Mensaje no enviado', variant: 'danger' })
-    }
-  }
-  else toast({
-    body: Object.values(errors.value)[0],
-    variant: 'warning',
-  })
+const submit = () => {
+  if (validate())
+    enviarSms(form.value)
+      .then(() => {
+        toast({ body: 'Mensaje enviado.', variant: 'success' }).show()
+        resetState()
+      })
+      .catch(err => {
+        toast({ body: 'Mensaje no enviado.', variant: 'danger' }).show()
+      })
+  else
+    toast({ body: Object.values(errors.value)[0], variant: 'warning', }).show()
 }
 const resetState = () => {
   origenes.value = []
   form.value = { ...formDefault }
 }
 const insertarPlantilla = (texto: string) => form.value.texto = (form.value.texto ?? '') + texto
-const guardarPlantilla = async (texto: string) => {
-  try {
-    await crearPlantilla({ texto })
-    toast({ body: 'Nueva plantilla creada.', variant: 'success' })
-  } catch (err) {
-    toast({ body: 'No se guardó la plantilla.', variant: 'danger' })
-  }
+const guardarPlantilla = (texto: string) => {
+  crearPlantilla({ texto })
+    .then(() => {
+      toast({ body: 'Nueva plantilla creada.', variant: 'success' }).show()
+    })
+    .catch(err => {
+      toast({ body: 'No se guardó la plantilla.', variant: 'danger' }).show()
+    })
 }
 </script>
 
@@ -86,12 +77,14 @@ const guardarPlantilla = async (texto: string) => {
         @save-plantilla="guardarPlantilla(form.texto)">
         <template #type-buttons>
           <template v-for="btn in tipoSelButtons">
-            <BButton :to="btn.to" variant="flat-outline-success" class="btn-sm" :disabled="btn.disabled">
+            <BButton :to="btn.to" variant="flat-success outline h-36 my-n1" style="padding-top: 5px;"
+              :disabled="btn.disabled">
               {{ btn.text }}
             </BButton>
           </template>
-          <BButton variant="flat-outline-dark" class="btn-sm ms-auto" @click="resetState" v-tippy="'Descartar mensaje'">
-            <ILucideTrash class="text-danger" />
+          <BButton variant="flat outline h-36 my-n1 ms-auto" @click="resetState" v-tippy="'Descartar mensaje'"
+            style="padding-top: 5px;">
+            <ILucideTrash />
             Descartar
           </BButton>
         </template>
@@ -99,7 +92,9 @@ const guardarPlantilla = async (texto: string) => {
           <template v-if="origenes.length">
             <SeleccionarDesdeOrigenes v-model:origenes="origenes" v-model:destinatariosIds="form.destinatarios" />
           </template>
-          <div class="btn btn-sm fs-6" v-else>Nada seleccionado aún.</div>
+          <div class="btn btn-sm fs-6" v-else>
+            Nada seleccionado aún.
+          </div>
         </template>
       </ComposerTopBar>
       <textarea class="m-0 p-2 p-md-3 flex-fill overflow-auto" v-model.trim="form.texto" />

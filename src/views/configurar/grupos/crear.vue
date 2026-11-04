@@ -37,7 +37,7 @@ const submit = () => {
   if (!validate()) return
   crearGrupo(form.value)
     .then((nuevoGrupo) => {
-      toast.create({ body: 'Nuevo grupo creado.', variant: 'success' })
+      toast.create({ body: 'Nuevo grupo creado.', variant: 'success' }).show()
       props.forward(nuevoGrupo.id) // props.back()
     })
     .catch(err => {

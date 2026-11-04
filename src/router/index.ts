@@ -301,16 +301,7 @@ const routesConfigurar = [
                   forward: () => router.push({ name: 'configurar-usuarios' }),
                   back: () => router.push({ name: 'configurar-usuario' }),
                 })
-              },
-              {
-                path: 'roles/editar',
-                name: 'configurar-usuario-grupos-editar',
-                component: () => import('@/views/configurar/usuarios/[id]/grupos/editar.vue'),
-                props: route => ({
-                  usuarioId: parseInt(route.params.usuarioId),
-                  back: () => router.push({ name: 'configurar-usuario' }),
-                })
-              },
+              }
             ]
           }
         ]

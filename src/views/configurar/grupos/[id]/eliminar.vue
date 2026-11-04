@@ -19,12 +19,12 @@ onMounted(() => model.value = true)
 
 const submit = () => eliminarGrupo(props.grupoId)
   .then(() => {
-    toast.create({ body: 'Grupo eliminado.', variant: 'success' })
+    toast.create({ body: 'Grupo eliminado.', variant: 'success' }).show()
     deleted.value = true
     model.value = false
   })
   .catch((err) => {
-    toast.create({ body: 'No se pudo ejecutar la acción.', variant: 'danger' })
+    toast.create({ body: 'No se pudo ejecutar la acción.', variant: 'danger' }).show()
   })
 const hidden = () => {
   if (deleted.value) props.forward()

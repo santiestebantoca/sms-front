@@ -2,7 +2,6 @@
 const props = defineProps({ mensajeId: Number })
 
 import { useEnviosQuery } from '@/stores/envios'
-import { ref } from 'vue'
 
 const { destinatarios, isLoading, mensajeId } = useEnviosQuery()
 </script>
@@ -12,14 +11,12 @@ const { destinatarios, isLoading, mensajeId } = useEnviosQuery()
     <div v-if="isLoading" class="text-center py-4">
       <BSpinner />
     </div>
-    <RootTree v-else-if="destinatarios?.length">
-      <TreeNode v-for="data in destinatarios" :data="data" :key="data.id">
-        <template #default="{ data }">
-          <span v-text="data.nombre" />
-          <span v-text="'..\\' + data.grupo" class="text-yellow-700" />
-        </template>
-      </TreeNode>
-    </RootTree>
+    <BListGroup v-else-if="destinatarios?.length" flush>
+      <BListGroupItem v-for="destinatario in destinatarios" class="border-0">
+        {{ destinatario.nombre }}
+        <span class="text-yellow-700">..\{{ destinatario.grupo }}</span>
+      </BListGroupItem>
+    </BListGroup>
     <div v-else class="text-center py-4">
       <ILucideTriangleAlert class="me-3 mb-1 fs-5 text-warning" />
       No se encontraron destinatarios.

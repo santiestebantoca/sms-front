@@ -48,9 +48,9 @@ provide('usuario:usuario', usuario)
               </div>
             </div>
             <div class="w-100">
-              <label class="form-label">Estado del registro</label>
+              <label class="form-label">Clave de registro</label>
               <div>
-                {{ usuario.registration_key === 'blocked' ? 'Bloqueado' : (usuario.registration_key || 'Normal') }}
+                {{ usuario.registration_key === 'blocked' ? 'Bloqueado' : (usuario.registration_key || 'Activo') }}
               </div>
             </div>
             <template v-if="usuario.modified_by">

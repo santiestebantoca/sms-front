@@ -33,7 +33,7 @@ const submit = () => {
   if (!validate()) return
   crearPlantilla(form.value)
     .then(() => {
-      toast.create({ body: 'Nueva plantilla creada.', variant: 'success' })
+      toast.create({ body: 'Nueva plantilla creada.', variant: 'success' }).show()
       props.back()
     })
     .catch(err => {
