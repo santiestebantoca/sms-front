@@ -39,7 +39,11 @@ const validate = () => {
 }
 const submit = () => {
   if (!validate()) return
-  login(form.value).then(() => props.next())
+  login(form.value)
+    .then(() => props.next())
+    .catch(() => {
+      // El error se muestra en el BAlert mediante loginState.error.
+    })
 }
 const toggleType = () => type.value = type.value === 'password' ? 'text' : 'password'
 </script>
