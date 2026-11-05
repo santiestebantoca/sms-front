@@ -1,10 +1,12 @@
 <script lang="ts" setup>
 import AppPresentation from '@/components/features/app/AppPresentation.vue'
-import AppGlobalErrors from '@/components/features/app/AppGlobalErrors.vue'
+// import AppGlobalErrors from '@/components/features/app/AppGlobalErrors.vue'
 import AppIdle from '@/components/features/app/AppIdle.vue'
+import { useErroresGlobalesToast } from '@/composables/useErroresGlobalesToast'
 import { useBreakpoints, breakpointsBootstrapV5 } from '@vueuse/core'
 import { ref, provide } from 'vue'
 
+useErroresGlobalesToast()
 const breakpoints = useBreakpoints(breakpointsBootstrapV5)
 const mobile = breakpoints.smaller('md')
 provide('app:mobile', mobile)
@@ -22,6 +24,6 @@ const defaults = ref({
       <RouterView />
     </AppPresentation>
     <AppIdle :timeout="1440" :warning="0.7" @expired="$router.push({ name: 'auth-expired' })" />
-    <AppGlobalErrors />
+    <!-- <AppGlobalErrors /> -->
   </BApp>
 </template>
