@@ -42,9 +42,9 @@ const { groups } = useAuthGroupsQuery()
 
 const validate = () => {
   errors.value = {}
-  if (!form.value.first_name) errors.value.nombre = 'Este campo no puede estar vacío.'
-  if (!form.value.last_name) errors.value.nombre = 'Este campo no puede estar vacío.'
-  if (!form.value.username) errors.value.nombre = 'Este campo no puede estar vacío.'
+  if (!form.value.first_name) errors.value.first_name = 'Este campo no puede estar vacío.'
+  if (!form.value.last_name) errors.value.last_name = 'Este campo no puede estar vacío.'
+  if (!form.value.username) errors.value.username = 'Este campo no puede estar vacío.'
   return !Object.keys(errors.value).length
 }
 const submit = () => {
