@@ -6,10 +6,10 @@ const props = defineProps({
 import { isValidationError } from '@/api/client'
 import { usePlantillaCreate } from '@/stores/plantillas'
 import type { PlantillaCreate } from '@/types/models'
-import { useToast } from 'bootstrap-vue-next'
+import { useNotificaciones } from '@/composables/useNotificaciones'
 import { ref, computed } from 'vue'
 
-const toast = useToast()
+const { exito } = useNotificaciones()
 const form = ref<PlantillaCreate>({
   texto: null,
 })
@@ -33,7 +33,7 @@ const submit = () => {
   if (!validate()) return
   crearPlantilla(form.value)
     .then(() => {
-      toast.create({ body: 'Nueva plantilla creada.', variant: 'success' }).show()
+      exito('Nueva plantilla creada.')
       props.back()
     })
     .catch(err => {

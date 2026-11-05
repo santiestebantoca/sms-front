@@ -5,8 +5,8 @@ import SeleccionarDesdeOrigenes from '@/components/features/mensaje/componer/sel
 import { usePlantillaCreate } from '@/stores/plantillas'
 import { useMensajeSend } from '@/stores/mensajes'
 import type { MensajePayload } from '@/types/models'
-import { useToast } from 'bootstrap-vue-next'
-import { ref, watch, computed, provide, watchEffect } from 'vue'
+import { useNotificaciones } from '@/composables/useNotificaciones'
+import { ref, computed, provide } from 'vue'
 
 const formDefault = {
   destinatarios: [],
@@ -28,7 +28,7 @@ const { mutateAsync: enviarSms, asyncStatus: asyncStatusSms } = useMensajeSend()
 const enviandoSms = computed(() => asyncStatusSms.value === 'loading')
 const { mutateAsync: crearPlantilla, asyncStatus: asyncStatusPlantilla } = usePlantillaCreate()
 const creandoPlantilla = computed(() => asyncStatusPlantilla.value === 'loading')
-const { create: toast } = useToast()
+const { exito, aviso, errorDeApi } = useNotificaciones()
 
 provide('componer:origenes', origenes) // compartido con la vista /origenes
 
@@ -42,14 +42,14 @@ const submit = () => {
   if (validate())
     enviarSms(form.value)
       .then(() => {
-        toast({ body: 'Mensaje enviado.', variant: 'success' }).show()
+        exito('Mensaje enviado.')
         resetState()
       })
       .catch(err => {
-        toast({ body: 'Mensaje no enviado.', variant: 'danger' }).show()
+        errorDeApi(err, 'Mensaje no enviado.')
       })
   else
-    toast({ body: Object.values(errors.value)[0], variant: 'warning', }).show()
+    aviso(Object.values(errors.value)[0])
 }
 const resetState = () => {
   origenes.value = []
@@ -59,10 +59,10 @@ const insertarPlantilla = (texto: string) => form.value.texto = (form.value.text
 const guardarPlantilla = (texto: string) => {
   crearPlantilla({ texto })
     .then(() => {
-      toast({ body: 'Nueva plantilla creada.', variant: 'success' }).show()
+      exito('Nueva plantilla creada.')
     })
     .catch(err => {
-      toast({ body: 'No se guardó la plantilla.', variant: 'danger' }).show()
+      errorDeApi(err, 'No se guardó la plantilla.')
     })
 }
 </script>

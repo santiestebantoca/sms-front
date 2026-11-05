@@ -2,11 +2,11 @@
 const props = defineProps({ grupoId: Number, back: Function })
 
 import { useGrupoDelete } from '@/stores/grupos'
-import { useToast } from 'bootstrap-vue-next'
+import { useNotificaciones } from '@/composables/useNotificaciones'
 import { ref, computed, onMounted } from 'vue'
 
 const model = ref(false)
-const toast = useToast()
+const { errorDeApi } = useNotificaciones()
 const { mutateAsync: eliminarGrupo, asyncStatus } = useGrupoDelete()
 const loading = computed(() => asyncStatus.value === 'loading')
 
@@ -15,7 +15,7 @@ onMounted(() => model.value = true)
 const submit = () => eliminarGrupo(props.grupoId)
   .then(() => model.value = false)
   .catch((err) => {
-    toast.create({ body: 'No se pudo ejecutar la acción.', variant: 'danger' }).show()
+    errorDeApi(err, 'No se pudo ejecutar la acción.')
   })
 </script>
 

@@ -11,7 +11,7 @@ import { usePlantillaCreate } from '@/stores/plantillas'
 import { useMensajeSend, useMensajeQuery } from '@/stores/mensajes'
 import type { MensajePayload } from '@/types/models'
 import { useEnviosQuery } from '@/stores/envios'
-import { useToast } from 'bootstrap-vue-next'
+import { useNotificaciones } from '@/composables/useNotificaciones'
 import { ref, computed, watchEffect } from 'vue'
 
 const formDefault = {
@@ -32,7 +32,7 @@ const { mutateAsync: enviarSms, asyncStatus: asyncStatusSms } = useMensajeSend()
 const enviandoSms = computed(() => asyncStatusSms.value === 'loading')
 const { mutateAsync: crearPlantilla, asyncStatus: asyncStatusPlantilla } = usePlantillaCreate()
 const creandoPlantilla = computed(() => asyncStatusPlantilla.value === 'loading')
-const { create: toast } = useToast()
+const { exito, aviso, errorDeApi } = useNotificaciones()
 const { data: mensajePrevio, isLoading: cargandoMensajePrevio } = useMensajeQuery(props.mensajePrevioId)
 const { destinatarios, isLoading: cargandoDestinatarios } = useEnviosQuery(props.mensajePrevioId)
 const verListaDestinatarios = ref(false)
@@ -64,23 +64,23 @@ const submit = () => {
   if (validate())
     enviarSms(form.value)
       .then(() => {
-        toast({ body: 'Mensaje enviado.', variant: 'success' }).show()
+        exito('Mensaje enviado.')
         props.componer && props.componer()
       })
       .catch(err => {
-        toast({ body: 'Mensaje no enviado.', variant: 'danger' }).show()
+        errorDeApi(err, 'Mensaje no enviado.')
       })
   else
-    toast({ body: Object.values(errors.value)[0], variant: 'warning', }).show()
+    aviso(Object.values(errors.value)[0])
 }
 const insertarPlantilla = (texto: string) => form.value.texto = (form.value.texto ?? '') + texto
 const guardarPlantilla = (texto: string) => {
   crearPlantilla({ texto })
     .then(() => {
-      toast({ body: 'Nueva plantilla creada.', variant: 'success' }).show()
+      exito('Nueva plantilla creada.')
     })
     .catch(err => {
-      toast({ body: 'No se guardó la plantilla.', variant: 'danger' }).show()
+      errorDeApi(err, 'No se guardó la plantilla.')
     })
 }
 </script>

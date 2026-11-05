@@ -12,10 +12,10 @@ import {
   useSuscriptorCreate
 } from '@/stores/suscriptores'
 import type { SuscriptorCreate } from '@/types/models'
-import { useToast } from 'bootstrap-vue-next'
+import { useNotificaciones } from '@/composables/useNotificaciones'
 import { ref, computed } from 'vue'
 
-const toast = useToast()
+const { exito } = useNotificaciones()
 const form = ref<SuscriptorCreate>({
   nombre: null,
   cargo: null,
@@ -65,7 +65,7 @@ const submit = () => {
   if (!validate()) return
   crearSuscriptor(form.value)
     .then(nuevoSuscriptor => {
-      toast.create({ body: 'Nuevo suscriptor creado.', variant: 'success' }).show()
+      exito('Nuevo suscriptor creado.')
       props.forward(nuevoSuscriptor.id) // props.back()
     })
     .catch(err => {

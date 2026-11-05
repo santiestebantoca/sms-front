@@ -8,10 +8,10 @@ import { isValidationError } from '@/api/client'
 import { useAuthGroupsQuery } from '@/stores/auth-groups'
 import { useUsuarioCreate } from '@/stores/usuarios'
 import type { UsuarioCreate } from '@/types/models'
-import { useToast } from 'bootstrap-vue-next'
+import { useNotificaciones } from '@/composables/useNotificaciones'
 import { ref, computed } from 'vue'
 
-const toast = useToast()
+const { exito } = useNotificaciones()
 const form = ref<UsuarioCreate>({
   first_name: null,
   last_name: null,
@@ -51,7 +51,7 @@ const submit = () => {
   if (!validate()) return
   crearUsuario(form.value)
     .then((nuevoUsuario) => {
-      toast.create({ body: 'Nuevo usuario creado.', variant: 'success' }).show()
+      exito('Nuevo usuario creado.')
       props.forward(nuevoUsuario.id) // props.back()
     })
     .catch(err => {

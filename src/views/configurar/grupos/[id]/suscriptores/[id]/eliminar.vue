@@ -2,11 +2,11 @@
 const props = defineProps({ suscriptorId: Number, back: Function })
 
 import { useSuscriptorDelete } from '@/stores/suscriptores'
-import { useToast } from 'bootstrap-vue-next'
+import { useNotificaciones } from '@/composables/useNotificaciones'
 import { ref, computed, onMounted } from 'vue'
 
 const model = ref(false)
-const toast = useToast()
+const { errorDeApi } = useNotificaciones()
 const { mutateAsync: eliminarSuscriptor, asyncStatus } = useSuscriptorDelete()
 const loading = computed(() => asyncStatus.value === 'loading')
 
@@ -15,8 +15,7 @@ onMounted(() => model.value = true)
 const submit = () => eliminarSuscriptor(props.suscriptorId)
   .then(() => model.value = false)
   .catch((err) => {
-    console.log(err)
-    toast.create({ body: 'No se pudo ejecutar la acción.', variant: 'danger' }).show()
+    errorDeApi(err, 'No se pudo ejecutar la acción.')
   })
 </script>
 

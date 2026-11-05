@@ -7,10 +7,10 @@ const props = defineProps({
 import { isValidationError } from '@/api/client'
 import { useGrupoCreate } from '@/stores/grupos'
 import type { GrupoCreate } from '@/types/models'
-import { useToast } from 'bootstrap-vue-next'
+import { useNotificaciones } from '@/composables/useNotificaciones'
 import { ref, computed } from 'vue'
 
-const toast = useToast()
+const { exito } = useNotificaciones()
 const form = ref<GrupoCreate>({
   nombre: null,
   apodo: null,
@@ -37,7 +37,7 @@ const submit = () => {
   if (!validate()) return
   crearGrupo(form.value)
     .then((nuevoGrupo) => {
-      toast.create({ body: 'Nuevo grupo creado.', variant: 'success' }).show()
+      exito('Nuevo grupo creado.')
       props.forward(nuevoGrupo.id) // props.back()
     })
     .catch(err => {

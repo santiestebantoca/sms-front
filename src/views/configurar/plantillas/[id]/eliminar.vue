@@ -5,11 +5,11 @@ const props = defineProps({
 })
 
 import { usePlantillaDelete } from '@/stores/plantillas'
-import { useToast } from 'bootstrap-vue-next'
+import { useNotificaciones } from '@/composables/useNotificaciones'
 import { ref, computed, onMounted } from 'vue'
 
 const model = ref(false)
-const toast = useToast()
+const { exito, errorDeApi } = useNotificaciones()
 const { mutateAsync: eliminarPlantilla, asyncStatus } = usePlantillaDelete()
 const loading = computed(() => asyncStatus.value === 'loading')
 
@@ -17,11 +17,11 @@ onMounted(() => model.value = true)
 
 const submit = () => eliminarPlantilla(props.plantillaId)
   .then(() => {
-    toast.create({ body: 'Plantilla eliminada.', variant: 'success' }).show()
+    exito('Plantilla eliminada.')
     model.value = false
   })
   .catch((err) => {
-    toast.create({ body: 'No se pudo ejecutar la acción.', variant: 'danger' }).show()
+    errorDeApi(err, 'No se pudo ejecutar la acción.')
   })
 </script>
 
