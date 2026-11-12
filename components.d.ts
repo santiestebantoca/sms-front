@@ -11,9 +11,7 @@ export {}
 /* prettier-ignore */
 declare module 'vue' {
   export interface GlobalComponents {
-    AppGlobalErrors: typeof import('./src/components/features/app/AppGlobalErrors.vue')['default']
     AppIdle: typeof import('./src/components/features/app/AppIdle.vue')['default']
-    AppLoading: typeof import('./src/components/features/app/AppLoading.vue')['default']
     AppPresentation: typeof import('./src/components/features/app/AppPresentation.vue')['default']
     BAccordionItem: typeof import('bootstrap-vue-next/components/BAccordion')['BAccordionItem']
     BAlert: typeof import('bootstrap-vue-next/components/BAlert')['BAlert']
@@ -49,7 +47,6 @@ declare module 'vue' {
     BSpinner: typeof import('bootstrap-vue-next/components/BSpinner')['BSpinner']
     BTab: typeof import('bootstrap-vue-next/components/BTabs')['BTab']
     BTabs: typeof import('bootstrap-vue-next/components/BTabs')['BTabs']
-    BToast: typeof import('bootstrap-vue-next/components/BToast')['BToast']
     ClampText: typeof import('./src/components/commons/ClampText.vue')['default']
     ComposerTopBar: typeof import('./src/components/features/mensaje/componer/ComposerTopBar.vue')['default']
     DateRangePicker: typeof import('./src/components/commons/DateRangePicker.vue')['default']

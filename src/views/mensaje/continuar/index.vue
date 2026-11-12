@@ -14,13 +14,12 @@ import { useEnviosQuery } from '@/stores/envios'
 import { useNotificaciones } from '@/composables/useNotificaciones'
 import { ref, computed, watchEffect } from 'vue'
 
-const formDefault = {
+const form = ref<MensajePayload>({
   destinatarios: [],
   texto: null,
   continua: false,
   previo: null
-}
-const form = ref<MensajePayload>({ ...formDefault })
+})
 const errors = ref<Record<string, any>>({})
 const selButtons = ref({
   texto: '',

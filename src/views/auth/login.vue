@@ -6,11 +6,10 @@ import type { LoginCredentials } from '@/types/models'
 import { ref, computed, watchEffect } from 'vue'
 
 const type = ref<'password' | 'text'>('password')
-const formDefault = {
+const form = ref<LoginCredentials>({
   username: null,
   password: null,
-}
-const form = ref<LoginCredentials>({ ...formDefault })
+})
 const errors = ref<Record<string, any>>({})
 const errorState = computed(() => ({
   username: {
