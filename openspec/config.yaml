@@ -1,0 +1,55 @@
+schema: spec-driven
+
+context: |
+  Proyecto: SPA interna de ETECSA para gestionar notificaciones SMS.
+  Stack: Vue 3.5 + TypeScript, Vite 8, Vue Router 5 (hash history), Pinia 4 + Pinia Colada,
+  Axios, Bootstrap 5 + BootstrapVueNext, SCSS. No hay tests ni CI en el repositorio.
+
+  Backend: REST externo, no vive en este repo. La sesión se transporta por cookie
+  (withCredentials: true). El backend es la autoridad real de autenticación y permisos;
+  el frontend solo oculta navegación.
+
+  Arquitectura por capas:
+    views/ -> stores/ (Pinia Colada: useXxxQuery / useXxxMutation)
+           -> lib/query-keys.ts -> api/*.ts -> api/client/client.ts (Axios).
+  Las vistas no llaman Axios ni fetch. Los componentes no contienen lógica de negocio pesada.
+  Los modales de crear/editar/eliminar son rutas hijas y navegan con back/forward.
+
+  Convenciones:
+    - UI y dominio en español, sin i18n. Rutas y nombres en kebab-case español.
+    - IDs tratados como number | string.
+    - Toda query usa una clave de src/lib/query-keys.ts; nunca claves ad-hoc.
+    - Mutaciones: cancelQueries en onMutate, invalidateQueries en onSuccess.
+      No hay actualizaciones optimistas.
+    - Errores 422 se muestran en el formulario; 401/403/404/500/red se muestran
+      globalmente mediante el interceptor y un toast. No duplicar el manejo.
+    - No editar archivos generados: components.d.ts, dist/, node_modules/.
+    - No tocar .env* ni agregar secretos, IPs, tokens o credenciales.
+    - No actualizar dependencias ni package.json sin autorización explícita.
+    - Archivos core sensibles: src/main.ts, src/App.vue, src/router/index.ts,
+      src/api/client/*, src/lib/query-keys.ts, src/types/models.ts,
+      src/constants/*, src/composables/useNotificaciones.ts,
+      src/composables/useErroresGlobalesToast.ts, src/components/features/app/AppIdle.vue,
+      src/components/layout/Layout.vue, src/layouts/*, vite.config.ts, tsconfig.json,
+      eslint.config.js, index.html.
+
+  Verificación mínima antes de entregar: npm run typecheck y npm run build_sms.
+  Si npm run lint falla por configuración, reportarlo sin cambiarla.
+
+  Specs AS-IS detalladas: specs/_baseline/ (referencia histórica con rutas, endpoints,
+  contratos y deuda conocida). La fuente de verdad del comportamiento es openspec/specs/.
+
+rules:
+  proposal:
+    - Indicar el alcance y lo que queda fuera de alcance.
+    - Justificar cualquier cambio en archivos core, dependencias o configuración de build.
+  specs:
+    - Escribir los requisitos en español e incluir la palabra SHALL o MUST en inglés.
+    - Cada requisito debe tener al menos un escenario con WHEN/THEN.
+    - Describir comportamiento observable, no detalles internos de implementación.
+  design:
+    - Respetar la arquitectura por capas y los patrones existentes.
+    - No introducir librerías de UI ni dependencias nuevas.
+  tasks:
+    - Dividir el trabajo en pasos pequeños y verificables.
+    - Incluir npm run typecheck y npm run build_sms como verificación final.
