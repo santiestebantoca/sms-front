@@ -99,7 +99,7 @@ const submit = () => {
       </SeleccionarGrupo>
       <BFormGroup label="Activo">
         <div class="form-control-border">
-          <BFormCheckbox v-model="form.activo" class="mb-0">
+          <BFormCheckbox v-model="form.activo" :unchecked-value="false" class="mb-0">
             {{ form.activo ? 'Sí' : 'No' }}
           </BFormCheckbox>
         </div>

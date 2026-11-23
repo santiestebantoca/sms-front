@@ -14,6 +14,7 @@ const form = ref<SuscriptorUpdate>({
   cargo: null,
   telefono: null,
   correo: null,
+  activo: true,
 })
 const errors = ref<Record<string, any>>({})
 const errorState = computed(() => ({
@@ -43,6 +44,7 @@ watchEffect(() => {
     form.value.cargo = suscriptor.value.cargo
     form.value.telefono = suscriptor.value.telefono
     form.value.correo = suscriptor.value.correo
+    form.value.activo = suscriptor.value.activo
   }
 })
 onMounted(() => model.value = true)
@@ -80,6 +82,13 @@ const submit = () => {
       </BFormGroup>
       <BFormGroup label="Correo" v-bind="errorState.correo">
         <BFormInput v-model="form.correo" trim />
+      </BFormGroup>
+      <BFormGroup label="Activo">
+        <div class="form-control-border">
+          <BFormCheckbox v-model="form.activo" :unchecked-value="false" class="mb-0">
+            {{ form.activo ? 'Sí' : 'No' }}
+          </BFormCheckbox>
+        </div>
       </BFormGroup>
     </BForm>
     <template #footer>
